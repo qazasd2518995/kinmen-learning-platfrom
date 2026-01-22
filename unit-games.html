@@ -498,6 +498,38 @@
       box-shadow: var(--shadow-md), var(--glow-gold);
     }
 
+    /* 手機版點擊選擇樣式 */
+    .sorting-item.selected {
+      border-color: var(--kinmen-gold);
+      background: var(--kinmen-gold-light);
+      transform: scale(1.05);
+      box-shadow: var(--shadow-md), var(--glow-gold);
+    }
+
+    .sorting-category.waiting {
+      border-color: var(--kinmen-gold);
+      border-style: dashed;
+      animation: categoryPulse 1s ease-in-out infinite;
+    }
+
+    @keyframes categoryPulse {
+      0%, 100% { background: var(--bg-card); }
+      50% { background: rgba(212, 168, 75, 0.1); }
+    }
+
+    .sorting-category.wrong {
+      border-color: var(--kinmen-red);
+      animation: categoryShake 0.5s ease-out;
+    }
+
+    @keyframes categoryShake {
+      0%, 100% { transform: translateX(0); }
+      20% { transform: translateX(-5px); }
+      40% { transform: translateX(5px); }
+      60% { transform: translateX(-3px); }
+      80% { transform: translateX(3px); }
+    }
+
     .sorting-category-title {
       font-weight: 700;
       text-align: center;
@@ -620,14 +652,27 @@
     .maze-wrapper {
       position: relative;
       display: inline-block;
+      width: 400px;
+      height: 400px;
     }
 
     .maze-svg {
-      width: 400px;
-      height: 400px;
+      width: 100%;
+      height: 100%;
       border-radius: var(--radius-lg);
       box-shadow: var(--shadow-lg);
       background: var(--bg-card);
+    }
+
+    .maze-canvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      border-radius: var(--radius-lg);
+      touch-action: none;
+      cursor: crosshair;
     }
 
     .maze-target-fruit {
@@ -644,16 +689,6 @@
     @keyframes fruitPulse {
       0%, 100% { transform: scale(1); }
       50% { transform: scale(1.2); }
-    }
-
-    .maze-canvas {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      cursor: crosshair;
-      border-radius: var(--radius-lg);
     }
 
     .maze-controls {
@@ -1266,6 +1301,47 @@
 
     /* Mobile (<768px) */
     @media (max-width: 767px) {
+      /* 遊戲選單 - 水平滾動 */
+      .game-selector {
+        display: flex;
+        overflow-x: auto;
+        gap: 10px;
+        padding-bottom: 8px;
+        margin-bottom: 16px;
+        scroll-snap-type: x mandatory;
+        -webkit-overflow-scrolling: touch;
+      }
+
+      .game-selector::-webkit-scrollbar {
+        height: 4px;
+      }
+
+      .game-selector::-webkit-scrollbar-thumb {
+        background: var(--kinmen-gold);
+        border-radius: 2px;
+      }
+
+      .game-card {
+        flex: 0 0 auto;
+        min-width: 120px;
+        padding: 12px;
+        scroll-snap-align: start;
+      }
+
+      .game-card-icon {
+        width: 40px;
+        height: 40px;
+        margin-bottom: 8px;
+      }
+
+      .game-card-title {
+        font-size: 0.9rem;
+      }
+
+      .game-card-desc {
+        font-size: 0.75rem;
+      }
+
       /* 連連看手機版 - 保持左右排列但縮小 */
       .matching-container {
         flex-direction: row;
@@ -1290,12 +1366,31 @@
         margin-top: 16px;
       }
 
-      .game-selector {
-        grid-template-columns: repeat(2, 1fr);
+      /* 分類遊戲手機版 - 點擊模式 */
+      .sorting-items {
+        padding: 16px;
+        min-height: 80px;
+      }
+
+      .sorting-item {
+        padding: 10px 16px;
+        font-size: 0.9rem;
       }
 
       .sorting-categories {
         grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+      }
+
+      .sorting-category {
+        min-height: 100px;
+        padding: 12px;
+      }
+
+      .sorting-category-title {
+        font-size: 0.85rem;
+        padding: 6px;
+        margin-bottom: 8px;
       }
 
       .bingo-grid {
@@ -1339,7 +1434,7 @@
         font-size: 0.75rem;
       }
 
-      .maze-svg {
+      .maze-wrapper {
         width: 300px;
         height: 300px;
       }
@@ -1347,6 +1442,15 @@
       .maze-question {
         font-size: 1rem;
         padding: 10px 16px;
+      }
+
+      .maze-controls {
+        gap: 10px;
+      }
+
+      .maze-btn {
+        padding: 10px 20px;
+        font-size: 0.9rem;
       }
     }
 
@@ -1853,6 +1957,7 @@
 
     let sortingItems = [];
     let sortedCount = 0;
+    let selectedSortingItem = null; // 手機版點擊選擇用
 
     function initSorting() {
       document.getElementById('restart-sorting').addEventListener('click', startSorting);
@@ -1861,14 +1966,20 @@
 
     function startSorting() {
       sortedCount = 0;
+      selectedSortingItem = null;
       document.getElementById('sorting-complete').classList.remove('visible');
 
+      // 手機版減少數量
+      const isMobile = window.innerWidth < 768;
+      const itemCount = isMobile ? 8 : 12;
+
       // 選擇有顏色映射的詞彙
-      sortingItems = vocabulary.filter(v => colorMapping[v.chinese]).slice(0, 12);
+      sortingItems = vocabulary.filter(v => colorMapping[v.chinese]).slice(0, itemCount);
       sortingItems = sortingItems.sort(() => Math.random() - 0.5);
 
       // 清除分類區
       document.querySelectorAll('.sorting-category-items').forEach(el => el.innerHTML = '');
+      document.querySelectorAll('.sorting-category').forEach(el => el.classList.remove('selected'));
 
       // 渲染待分類項目
       const container = document.getElementById('sorting-items');
@@ -1882,6 +1993,7 @@
         el.dataset.color = colorMapping[item.chinese];
         el.dataset.id = item.id;
 
+        // 桌面版拖曳
         el.addEventListener('dragstart', (e) => {
           el.classList.add('dragging');
           e.dataTransfer.setData('text/plain', JSON.stringify({
@@ -1895,11 +2007,15 @@
           el.classList.remove('dragging');
         });
 
+        // 手機版點擊選擇
+        el.addEventListener('click', () => selectSortingItem(el, item));
+
         container.appendChild(el);
       });
 
       // 設定放置區
       document.querySelectorAll('.sorting-category').forEach(category => {
+        // 桌面版拖曳
         category.addEventListener('dragover', (e) => {
           e.preventDefault();
           category.classList.add('dragover');
@@ -1914,33 +2030,73 @@
           category.classList.remove('dragover');
 
           const data = JSON.parse(e.dataTransfer.getData('text/plain'));
-          const acceptColors = category.dataset.accept.split(',');
+          placeSortingItem(category, data);
+        });
 
-          if (acceptColors.includes(data.color)) {
-            // 正確分類
-            const itemEl = document.querySelector(`.sorting-item[data-id="${data.id}"]`);
-            if (itemEl && !itemEl.classList.contains('placed')) {
-              itemEl.classList.add('placed');
-              itemEl.draggable = false;
-
-              const clone = itemEl.cloneNode(true);
-              category.querySelector('.sorting-category-items').appendChild(clone);
-              itemEl.remove();
-
-              sortedCount++;
-              updateSortingScore();
-
-              if (sortedCount === sortingItems.length) {
-                setTimeout(() => {
-                  document.getElementById('sorting-complete').classList.add('visible');
-                }, 500);
-              }
-            }
+        // 手機版點擊放置
+        category.addEventListener('click', () => {
+          if (selectedSortingItem) {
+            placeSortingItem(category, selectedSortingItem);
           }
         });
       });
 
       updateSortingScore();
+    }
+
+    // 手機版選擇項目
+    function selectSortingItem(el, item) {
+      if (el.classList.contains('placed')) return;
+
+      // 取消之前的選擇
+      document.querySelectorAll('.sorting-item').forEach(i => i.classList.remove('selected'));
+      document.querySelectorAll('.sorting-category').forEach(c => c.classList.remove('waiting'));
+
+      el.classList.add('selected');
+      selectedSortingItem = {
+        id: item.id,
+        chinese: item.chinese,
+        color: colorMapping[item.chinese]
+      };
+
+      // 提示可放置的分類區
+      document.querySelectorAll('.sorting-category').forEach(c => c.classList.add('waiting'));
+    }
+
+    // 放置項目到分類區
+    function placeSortingItem(category, data) {
+      const acceptColors = category.dataset.accept.split(',');
+
+      if (acceptColors.includes(data.color)) {
+        // 正確分類
+        const itemEl = document.querySelector(`.sorting-item[data-id="${data.id}"]`);
+        if (itemEl && !itemEl.classList.contains('placed')) {
+          itemEl.classList.add('placed');
+          itemEl.classList.remove('selected');
+          itemEl.draggable = false;
+
+          const clone = itemEl.cloneNode(true);
+          category.querySelector('.sorting-category-items').appendChild(clone);
+          itemEl.remove();
+
+          sortedCount++;
+          updateSortingScore();
+
+          // 清除選擇狀態
+          selectedSortingItem = null;
+          document.querySelectorAll('.sorting-category').forEach(c => c.classList.remove('waiting'));
+
+          if (sortedCount === sortingItems.length) {
+            setTimeout(() => {
+              document.getElementById('sorting-complete').classList.add('visible');
+            }, 500);
+          }
+        }
+      } else if (selectedSortingItem) {
+        // 錯誤分類 - 閃爍提示
+        category.classList.add('wrong');
+        setTimeout(() => category.classList.remove('wrong'), 500);
+      }
     }
 
     function updateSortingScore() {
@@ -2217,8 +2373,12 @@
       // 設定 canvas 尺寸
       function resizeMazeCanvas() {
         const rect = mazeSvg.getBoundingClientRect();
-        mazeCanvas.width = rect.width;
-        mazeCanvas.height = rect.height;
+        // 設定實際繪圖尺寸為固定值，CSS 負責縮放顯示
+        mazeCanvas.width = 400;
+        mazeCanvas.height = 400;
+        // 保存顯示尺寸供座標轉換用
+        mazeCanvas.dataset.displayWidth = rect.width;
+        mazeCanvas.dataset.displayHeight = rect.height;
       }
 
       resizeMazeCanvas();
@@ -2230,22 +2390,38 @@
       mazeCanvas.addEventListener('mouseup', stopDrawing);
       mazeCanvas.addEventListener('mouseleave', stopDrawing);
 
-      // 觸控事件
+      // 觸控事件 - 使用 passive: false 確保可以 preventDefault
       mazeCanvas.addEventListener('touchstart', (e) => {
         e.preventDefault();
-        startDrawing(e.touches[0]);
-      });
+        const touch = e.touches[0];
+        startDrawing(touch);
+      }, { passive: false });
+
       mazeCanvas.addEventListener('touchmove', (e) => {
         e.preventDefault();
-        draw(e.touches[0]);
-      });
-      mazeCanvas.addEventListener('touchend', stopDrawing);
+        const touch = e.touches[0];
+        draw(touch);
+      }, { passive: false });
+
+      mazeCanvas.addEventListener('touchend', stopDrawing, { passive: false });
+      mazeCanvas.addEventListener('touchcancel', stopDrawing, { passive: false });
 
       document.getElementById('maze-clear').addEventListener('click', clearMaze);
       document.getElementById('maze-next').addEventListener('click', nextMaze);
       document.getElementById('restart-maze').addEventListener('click', restartMaze);
 
       updateMazeTarget();
+    }
+
+    // 取得正確的繪圖座標（處理 CSS 縮放）
+    function getCanvasCoords(e) {
+      const rect = mazeCanvas.getBoundingClientRect();
+      const scaleX = mazeCanvas.width / rect.width;
+      const scaleY = mazeCanvas.height / rect.height;
+      return {
+        x: (e.clientX - rect.left) * scaleX,
+        y: (e.clientY - rect.top) * scaleY
+      };
     }
 
     function startDrawing(e) {
@@ -2255,14 +2431,14 @@
       mazeCtx.lineWidth = 4;
       mazeCtx.lineCap = 'round';
       mazeCtx.lineJoin = 'round';
-      const rect = mazeCanvas.getBoundingClientRect();
-      mazeCtx.moveTo(e.clientX - rect.left, e.clientY - rect.top);
+      const coords = getCanvasCoords(e);
+      mazeCtx.moveTo(coords.x, coords.y);
     }
 
     function draw(e) {
       if (!isDrawing) return;
-      const rect = mazeCanvas.getBoundingClientRect();
-      mazeCtx.lineTo(e.clientX - rect.left, e.clientY - rect.top);
+      const coords = getCanvasCoords(e);
+      mazeCtx.lineTo(coords.x, coords.y);
       mazeCtx.stroke();
     }
 
