@@ -1662,8 +1662,119 @@
         font-size: 0.8rem;
       }
 
+      /* 攤位選擇 - 手機版水平滾動 */
+      .market-area {
+        padding: 16px;
+        margin-bottom: 16px;
+      }
+
+      .market-title {
+        font-size: 1.1rem;
+        margin-bottom: 12px;
+      }
+
       .stall-grid {
-        grid-template-columns: repeat(2, 1fr);
+        display: flex;
+        overflow-x: auto;
+        gap: 12px;
+        padding-bottom: 8px;
+        scroll-snap-type: x mandatory;
+        -webkit-overflow-scrolling: touch;
+      }
+
+      .stall-grid::-webkit-scrollbar {
+        height: 4px;
+      }
+
+      .stall-grid::-webkit-scrollbar-track {
+        background: var(--bg-secondary);
+        border-radius: 2px;
+      }
+
+      .stall-grid::-webkit-scrollbar-thumb {
+        background: var(--kinmen-gold);
+        border-radius: 2px;
+      }
+
+      .stall-item {
+        flex: 0 0 auto;
+        width: 100px;
+        padding: 12px;
+        scroll-snap-align: start;
+      }
+
+      .stall-item .stall-emoji {
+        font-size: 1.75rem;
+      }
+
+      .stall-item .stall-name {
+        font-size: 0.8rem;
+      }
+
+      /* 對話區 - 手機版優化 */
+      .dialogue-area {
+        padding: 16px;
+        margin-bottom: 16px;
+      }
+
+      .dialogue-area.active {
+        /* 顯示時自動滾動到對話區 */
+        scroll-margin-top: 70px;
+      }
+
+      .dialogue-header {
+        gap: 12px;
+        margin-bottom: 12px;
+        padding-bottom: 12px;
+      }
+
+      .dialogue-avatar {
+        width: 45px;
+        height: 45px;
+        font-size: 1rem;
+      }
+
+      .dialogue-info h3 {
+        font-size: 1rem;
+      }
+
+      .dialogue-info p {
+        font-size: 0.8rem;
+      }
+
+      .dialogue-messages {
+        max-height: 200px;
+        padding: 12px;
+        margin-bottom: 12px;
+      }
+
+      .message-avatar {
+        width: 32px;
+        height: 32px;
+        font-size: 0.75rem;
+      }
+
+      .message-bubble {
+        padding: 10px 12px;
+        font-size: 0.9rem;
+      }
+
+      .message-bubble .chinese {
+        font-size: 1rem;
+      }
+
+      .message-bubble .pinyin {
+        font-size: 0.75rem;
+      }
+
+      /* 選項按鈕 - 手機版 */
+      .reply-options {
+        gap: 8px;
+      }
+
+      .reply-btn {
+        padding: 10px 14px;
+        font-size: 0.85rem;
       }
 
       .complete-stats {
@@ -2039,8 +2150,16 @@
       document.getElementById('current-item-name').textContent = `正在購買：${item.chinese}`;
 
       // 顯示對話區
-      document.getElementById('dialogue-area').classList.add('active');
+      const dialogueArea = document.getElementById('dialogue-area');
+      dialogueArea.classList.add('active');
       document.getElementById('checkout-area').classList.remove('active');
+
+      // 手機版自動滾動到對話區
+      if (window.innerWidth < 768) {
+        setTimeout(() => {
+          dialogueArea.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }, 100);
+      }
 
       // 開始對話
       startDialogue(listItem);
