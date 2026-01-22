@@ -1,0 +1,1088 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>回顧與反思 - 金聲玉語</title>
+  <meta name="description" content="回顧金門話學習成果，反思學習經驗">
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;600;700&family=Noto+Serif+TC:wght@500;600;700;900&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --header-height: 56px;
+      --content-height: calc(100dvh - var(--header-height) - 8px);
+      --dashboard-gap: 1rem;
+
+      --kinmen-gold: #D4A84B;
+      --kinmen-gold-light: #F5E6C8;
+      --kinmen-gold-dark: #8B6914;
+      --kinmen-red: #C84B31;
+      --kinmen-red-light: #E8B4A8;
+      --kinmen-ocean: #5B8FA8;
+      --kinmen-ocean-light: #C5DDE8;
+      --kinmen-green: #7D9D6D;
+      --kinmen-green-light: #D4E5CC;
+      --bg-primary: #FDF6F0;
+      --bg-secondary: #F5E8E0;
+      --bg-card: #FFFFFF;
+      --text-primary: #3D3229;
+      --text-secondary: #6B5D52;
+      --text-accent: #8B6914;
+      --deco-brick: #B85A4A;
+      --shadow-sm: 0 2px 8px rgba(61, 50, 41, 0.08);
+      --shadow-md: 0 4px 16px rgba(61, 50, 41, 0.12);
+      --shadow-lg: 0 8px 32px rgba(61, 50, 41, 0.16);
+      --glow-gold: 0 0 20px rgba(212, 168, 75, 0.3);
+      --glow-ocean: 0 0 20px rgba(91, 143, 168, 0.3);
+      --glow-green: 0 0 20px rgba(125, 157, 109, 0.3);
+      --duration-fast: 150ms;
+      --duration-normal: 250ms;
+      --duration-slow: 400ms;
+      --spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+      --radius-sm: 8px;
+      --radius-md: 12px;
+      --radius-lg: 20px;
+      --radius-xl: 32px;
+      --font-display: 'Noto Serif TC', serif;
+      --font-body: 'Noto Sans TC', sans-serif;
+      --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    html { font-size: 16px; }
+    body {
+      font-family: var(--font-body);
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+    button { font-family: inherit; border: none; background: none; cursor: pointer; }
+    a { text-decoration: none; color: inherit; }
+
+    /* 背景 */
+    .bg-pattern {
+      position: fixed; inset: 0; pointer-events: none; z-index: 0; opacity: 0.08;
+      background-image:
+        repeating-linear-gradient(45deg, var(--deco-brick) 0, var(--deco-brick) 2px, transparent 2px, transparent 20px),
+        repeating-linear-gradient(-45deg, var(--deco-brick) 0, var(--deco-brick) 2px, transparent 2px, transparent 20px);
+    }
+    .bg-gradient {
+      position: fixed; inset: 0; pointer-events: none; z-index: 0;
+      background:
+        radial-gradient(ellipse 80% 50% at 20% 0%, rgba(212, 168, 75, 0.15) 0%, transparent 50%),
+        radial-gradient(ellipse 60% 40% at 80% 100%, rgba(91, 143, 168, 0.1) 0%, transparent 50%);
+    }
+    .roof-deco {
+      position: fixed; top: 0; left: 0; right: 0; height: 8px;
+      background: linear-gradient(90deg, var(--kinmen-gold) 0%, var(--kinmen-red) 25%, var(--kinmen-gold) 50%, var(--kinmen-red) 75%, var(--kinmen-gold) 100%);
+      z-index: 100;
+    }
+
+    /* 頂部導航 */
+    .nav-header {
+      position: sticky; top: 8px; z-index: 50;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 12px 24px;
+      background: rgba(253, 246, 240, 0.95);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(139, 105, 20, 0.1);
+    }
+    .nav-left { display: flex; align-items: center; gap: 16px; }
+    .back-btn {
+      display: flex; align-items: center; gap: 8px;
+      padding: 8px 16px; border-radius: var(--radius-md);
+      color: var(--text-secondary); font-weight: 500;
+      transition: all 0.25s var(--ease-out);
+    }
+    .back-btn:hover { background: var(--bg-secondary); color: var(--text-primary); }
+    .back-btn svg { width: 20px; height: 20px; }
+    .page-title {
+      font-family: var(--font-display);
+      font-size: 1.25rem; font-weight: 700;
+      color: var(--text-accent);
+    }
+
+    /* 主內容 */
+    main {
+      position: relative; z-index: 1;
+      max-width: 1400px; margin: 0 auto;
+      padding: 24px;
+    }
+
+    /* 問題選擇器（上方導航） */
+    .question-selector {
+      display: flex;
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    .question-tab {
+      flex: 1;
+      background: var(--bg-card);
+      border-radius: var(--radius-lg);
+      padding: 20px 24px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      box-shadow: var(--shadow-sm);
+      border: 2px solid transparent;
+      transition: all var(--duration-normal) var(--ease-out);
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .question-tab::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, var(--kinmen-gold), var(--kinmen-ocean));
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform var(--duration-normal) var(--ease-out);
+    }
+
+    .question-tab:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-lg);
+      border-color: var(--kinmen-gold-light);
+    }
+
+    .question-tab:hover::before {
+      transform: scaleX(1);
+    }
+
+    .question-tab.active {
+      background: linear-gradient(135deg, var(--kinmen-gold) 0%, var(--kinmen-gold-dark) 100%);
+      border-color: transparent;
+      box-shadow: var(--shadow-lg), var(--glow-gold);
+      transform: translateY(-2px);
+    }
+
+    .question-tab.active::before {
+      display: none;
+    }
+
+    .question-tab.active .tab-number,
+    .question-tab.active .tab-title,
+    .question-tab.active .tab-desc {
+      color: white;
+    }
+
+    .question-tab.active .tab-icon {
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    .tab-icon {
+      width: 48px;
+      height: 48px;
+      background: var(--bg-secondary);
+      border-radius: var(--radius-md);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      transition: all var(--duration-normal) var(--ease-out);
+    }
+
+    .question-tab:hover .tab-icon {
+      background: var(--kinmen-gold-light);
+      transform: scale(1.1);
+    }
+
+    .tab-icon svg {
+      width: 24px;
+      height: 24px;
+      color: var(--kinmen-gold-dark);
+    }
+
+    .question-tab.active .tab-icon svg {
+      color: white;
+    }
+
+    .tab-content {
+      flex: 1;
+    }
+
+    .tab-number {
+      font-size: 0.75rem;
+      color: var(--text-secondary);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 2px;
+    }
+
+    .tab-title {
+      font-family: var(--font-display);
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 2px;
+    }
+
+    .tab-desc {
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+    }
+
+    /* 內容區域 */
+    .content-area {
+      display: none;
+      background: var(--bg-card);
+      border-radius: var(--radius-xl);
+      padding: 32px;
+      box-shadow: var(--shadow-md);
+      animation: fadeIn 0.4s var(--ease-out);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .content-area::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, var(--kinmen-gold), var(--kinmen-ocean), var(--kinmen-green));
+    }
+
+    .content-area.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .content-header {
+      text-align: center;
+      margin-bottom: 32px;
+    }
+
+    .content-title {
+      font-family: var(--font-display);
+      font-size: 1.75rem;
+      color: var(--text-accent);
+      margin-bottom: 8px;
+    }
+
+    .content-subtitle {
+      color: var(--text-secondary);
+      font-size: 1rem;
+    }
+
+    /* 詞彙回顧格子 */
+    .vocab-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+
+    .vocab-item {
+      padding: 20px 16px;
+      background: var(--bg-secondary);
+      border-radius: var(--radius-md);
+      text-align: center;
+      transition: all var(--duration-normal) var(--ease-out);
+      cursor: pointer;
+      border: 2px solid transparent;
+      position: relative;
+    }
+
+    .vocab-item:hover {
+      background: var(--kinmen-gold-light);
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-md), var(--glow-gold);
+      border-color: var(--kinmen-gold);
+    }
+
+    .vocab-item.revealed {
+      background: var(--kinmen-green-light);
+      border-color: var(--kinmen-green);
+    }
+
+    .vocab-item.revealed::after {
+      content: '✓';
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      width: 20px;
+      height: 20px;
+      background: var(--kinmen-green);
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.7rem;
+      font-weight: 700;
+    }
+
+    .vocab-chinese {
+      font-weight: 600;
+      font-size: 1.25rem;
+      margin-bottom: 6px;
+    }
+
+    .vocab-pinyin {
+      font-size: 0.875rem;
+      color: var(--text-secondary);
+      opacity: 0;
+      transform: translateY(-4px);
+      transition: all var(--duration-normal);
+      font-style: italic;
+    }
+
+    .vocab-item.revealed .vocab-pinyin,
+    .vocab-item:hover .vocab-pinyin {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* 思考區塊 */
+    .think-box {
+      background: linear-gradient(135deg, var(--bg-secondary) 0%, rgba(245, 232, 224, 0.5) 100%);
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      border-left: 4px solid var(--kinmen-gold);
+    }
+
+    .think-label {
+      font-weight: 600;
+      color: var(--text-accent);
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 1.0625rem;
+    }
+
+    .think-label svg {
+      width: 22px;
+      height: 22px;
+      color: var(--kinmen-gold);
+    }
+
+    .think-textarea {
+      width: 100%;
+      min-height: 140px;
+      padding: 16px;
+      border: 2px solid rgba(139, 105, 20, 0.15);
+      border-radius: var(--radius-md);
+      font-family: inherit;
+      font-size: 1rem;
+      resize: vertical;
+      transition: all var(--duration-normal) var(--ease-out);
+      background: var(--bg-card);
+    }
+
+    .think-textarea:focus {
+      outline: none;
+      border-color: var(--kinmen-gold);
+      box-shadow: var(--shadow-md), var(--glow-gold);
+    }
+
+    .think-textarea::placeholder {
+      color: var(--text-secondary);
+      opacity: 0.6;
+    }
+
+    /* 知識補充 */
+    .info-box {
+      background: linear-gradient(135deg, var(--kinmen-ocean-light) 0%, rgba(197, 221, 232, 0.5) 100%);
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      border-left: 4px solid var(--kinmen-ocean);
+      margin-bottom: 24px;
+    }
+
+    .info-title {
+      font-weight: 600;
+      color: var(--kinmen-ocean);
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 1.125rem;
+    }
+
+    .info-title svg {
+      width: 24px;
+      height: 24px;
+    }
+
+    .info-content {
+      color: var(--text-primary);
+      line-height: 1.9;
+    }
+
+    .info-content p {
+      margin-bottom: 12px;
+      padding: 8px 12px;
+      background: rgba(255, 255, 255, 0.5);
+      border-radius: var(--radius-sm);
+      transition: all var(--duration-fast);
+    }
+
+    .info-content p:hover {
+      background: rgba(255, 255, 255, 0.8);
+      transform: translateX(4px);
+    }
+
+    .info-content p:last-child {
+      margin-bottom: 0;
+    }
+
+    .info-content strong {
+      color: var(--kinmen-ocean);
+    }
+
+    /* 意義列表 */
+    .meaning-list {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    .meaning-item {
+      background: var(--bg-secondary);
+      border-radius: var(--radius-md);
+      padding: 20px;
+      transition: all var(--duration-normal) var(--ease-out);
+      border: 2px solid transparent;
+    }
+
+    .meaning-item:hover {
+      background: var(--kinmen-gold-light);
+      border-color: var(--kinmen-gold);
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-md);
+    }
+
+    .meaning-icon {
+      width: 40px;
+      height: 40px;
+      background: linear-gradient(135deg, var(--kinmen-gold) 0%, var(--kinmen-gold-dark) 100%);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 12px;
+      font-size: 1.25rem;
+    }
+
+    .meaning-title {
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 6px;
+    }
+
+    .meaning-desc {
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+
+    /* 完成區 */
+    .complete-section {
+      display: none;
+      text-align: center;
+      padding: 60px 40px;
+      background: linear-gradient(180deg, var(--bg-card) 0%, var(--kinmen-green-light) 100%);
+      border-radius: var(--radius-xl);
+      box-shadow: var(--shadow-lg);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .complete-section::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 5px;
+      background: linear-gradient(90deg, var(--kinmen-green) 0%, var(--kinmen-gold) 50%, var(--kinmen-green) 100%);
+    }
+
+    .complete-section.active {
+      display: block;
+      animation: fadeIn 0.5s var(--ease-out);
+    }
+
+    .complete-icon {
+      width: 100px;
+      height: 100px;
+      margin: 0 auto 24px;
+      background: linear-gradient(135deg, var(--kinmen-green) 0%, #5A8A4A 100%);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: var(--shadow-lg), var(--glow-green);
+      animation: iconBounce 0.6s var(--spring);
+    }
+
+    @keyframes iconBounce {
+      0% { transform: scale(0); }
+      60% { transform: scale(1.2); }
+      100% { transform: scale(1); }
+    }
+
+    .complete-icon svg {
+      width: 50px;
+      height: 50px;
+      color: white;
+    }
+
+    .complete-title {
+      font-family: var(--font-display);
+      font-size: 2rem;
+      color: var(--kinmen-green);
+      margin-bottom: 16px;
+    }
+
+    .complete-message {
+      font-size: 1.125rem;
+      color: var(--text-secondary);
+      margin-bottom: 32px;
+      line-height: 1.8;
+    }
+
+    .complete-btn {
+      padding: 16px 48px;
+      background: linear-gradient(135deg, var(--kinmen-gold) 0%, var(--kinmen-gold-dark) 100%);
+      color: white;
+      font-size: 1.125rem;
+      font-weight: 600;
+      border-radius: var(--radius-md);
+      transition: all var(--duration-normal) var(--ease-out);
+      box-shadow: var(--shadow-md);
+      display: inline-block;
+    }
+
+    .complete-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-lg), var(--glow-gold);
+    }
+
+    /* 導航按鈕 */
+    .nav-buttons {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 32px;
+      padding-top: 24px;
+      border-top: 2px solid var(--bg-secondary);
+    }
+
+    .nav-btn {
+      padding: 12px 24px;
+      border-radius: var(--radius-md);
+      font-weight: 600;
+      transition: all var(--duration-normal) var(--ease-out);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .nav-btn.prev {
+      background: var(--bg-secondary);
+      color: var(--text-secondary);
+    }
+
+    .nav-btn.prev:hover:not(:disabled) {
+      background: var(--bg-card);
+      color: var(--text-primary);
+      box-shadow: var(--shadow-md);
+    }
+
+    .nav-btn.prev:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+
+    .nav-btn.next {
+      background: linear-gradient(135deg, var(--kinmen-gold) 0%, var(--kinmen-gold-dark) 100%);
+      color: white;
+      box-shadow: var(--shadow-md);
+    }
+
+    .nav-btn.next:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-lg), var(--glow-gold);
+    }
+
+    .nav-btn svg {
+      width: 18px;
+      height: 18px;
+    }
+
+    /* ========================================
+       響應式 - Desktop (>=1200px)
+       ======================================== */
+    @media (min-width: 1200px) {
+      body {
+        height: 100vh;
+        height: 100dvh;
+        overflow: hidden;
+      }
+
+      main {
+        height: var(--content-height);
+        max-width: 100%;
+        padding: var(--dashboard-gap);
+        display: flex;
+        flex-direction: column;
+        gap: var(--dashboard-gap);
+        overflow: hidden;
+      }
+
+      .question-selector {
+        flex-shrink: 0;
+        margin-bottom: 0;
+      }
+
+      .content-area {
+        flex: 1;
+        overflow-y: auto;
+        padding: 32px 40px;
+      }
+
+      .content-area.active {
+        display: flex;
+        flex-direction: column;
+      }
+
+      .content-header {
+        flex-shrink: 0;
+      }
+
+      .content-body {
+        flex: 1;
+        overflow-y: auto;
+      }
+
+      .vocab-grid {
+        grid-template-columns: repeat(6, 1fr);
+      }
+
+      .meaning-list {
+        grid-template-columns: repeat(4, 1fr);
+      }
+
+      .complete-section {
+        flex: 1;
+        display: none;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .complete-section.active {
+        display: flex;
+      }
+    }
+
+    /* Desktop Large (>=1400px) */
+    @media (min-width: 1400px) {
+      .question-tab {
+        padding: 24px 28px;
+      }
+
+      .tab-title {
+        font-size: 1.1rem;
+      }
+
+      .content-area {
+        padding: 40px 56px;
+      }
+
+      .content-title {
+        font-size: 2rem;
+      }
+
+      .vocab-grid {
+        grid-template-columns: repeat(8, 1fr);
+        gap: 20px;
+      }
+
+      .vocab-item {
+        padding: 24px 20px;
+      }
+
+      .vocab-chinese {
+        font-size: 1.5rem;
+      }
+    }
+
+    /* Tablet & Mobile */
+    @media (max-width: 1199px) {
+      .question-selector {
+        flex-direction: column;
+        gap: 12px;
+      }
+
+      .question-tab {
+        padding: 16px 20px;
+      }
+
+      .meaning-list {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 767px) {
+      .vocab-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 12px;
+      }
+
+      .vocab-item {
+        padding: 16px 12px;
+      }
+
+      .vocab-chinese {
+        font-size: 1.1rem;
+      }
+
+      .tab-desc {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="bg-pattern"></div>
+  <div class="bg-gradient"></div>
+  <div class="roof-deco"></div>
+
+  <header class="nav-header">
+    <div class="nav-left">
+      <a href="index.html" class="back-btn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="19" y1="12" x2="5" y2="12"/>
+          <polyline points="12 19 5 12 12 5"/>
+        </svg>
+        返回
+      </a>
+      <h1 class="page-title">回顧與反思</h1>
+    </div>
+  </header>
+
+  <main>
+    <!-- 問題選擇器 -->
+    <div class="question-selector">
+      <div class="question-tab active" data-tab="1">
+        <div class="tab-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
+            <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+          </svg>
+        </div>
+        <div class="tab-content">
+          <div class="tab-number">問題一</div>
+          <div class="tab-title">詞彙回顧</div>
+          <div class="tab-desc">還記得多少金門話？</div>
+        </div>
+      </div>
+
+      <div class="question-tab" data-tab="2">
+        <div class="tab-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"/>
+            <line x1="12" y1="16" x2="12" y2="12"/>
+            <line x1="12" y1="8" x2="12.01" y2="8"/>
+          </svg>
+        </div>
+        <div class="tab-content">
+          <div class="tab-number">問題二</div>
+          <div class="tab-title">文化探索</div>
+          <div class="tab-desc">為什麼叫「巴剎」？</div>
+        </div>
+      </div>
+
+      <div class="question-tab" data-tab="3">
+        <div class="tab-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+            <polyline points="22 4 12 14.01 9 11.01"/>
+          </svg>
+        </div>
+        <div class="tab-content">
+          <div class="tab-number">問題三</div>
+          <div class="tab-title">學習意義</div>
+          <div class="tab-desc">為什麼要學金門話？</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 問題一：詞彙回顧 -->
+    <div class="content-area active" data-content="1">
+      <div class="content-header">
+        <h2 class="content-title">還記得幾個水果的金門話呢？</h2>
+        <p class="content-subtitle">點擊下方的詞彙卡片，看看你還記得多少！各組討論後列五個。</p>
+      </div>
+
+      <div class="content-body">
+        <div class="vocab-grid" id="vocab-grid"></div>
+
+        <div class="think-box">
+          <div class="think-label">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12 20h9"/>
+              <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/>
+            </svg>
+            寫下你記得的五個水果金門話
+          </div>
+          <textarea class="think-textarea" placeholder="例如：王梨 (ông-lâi)、柑 (kam)..."></textarea>
+        </div>
+
+        <div class="nav-buttons">
+          <button class="nav-btn prev" disabled>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="15 18 9 12 15 6"/>
+            </svg>
+            上一題
+          </button>
+          <button class="nav-btn next" data-next="2">
+            下一題
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="9 18 15 12 9 6"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 問題二：文化探索 -->
+    <div class="content-area" data-content="2">
+      <div class="content-header">
+        <h2 class="content-title">為什麼金門話的市場叫做「巴剎」呢？</h2>
+        <p class="content-subtitle">了解金門話中的外來語和獨特的僑鄉文化</p>
+      </div>
+
+      <div class="content-body">
+        <div class="info-box">
+          <div class="info-title">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10"/>
+              <line x1="12" y1="16" x2="12" y2="12"/>
+              <line x1="12" y1="8" x2="12.01" y2="8"/>
+            </svg>
+            知識補充
+          </div>
+          <div class="info-content">
+            <p>「巴剎」（Pasar）這個詞來自<strong>馬來語</strong>，意思是「市場」。</p>
+            <p>金門因為地理位置靠近東南亞，歷史上有很多金門人到南洋（新加坡、馬來西亞等地）經商或工作，他們把當地的語言帶回金門，「巴剎」就是其中之一。</p>
+            <p>這也反映了金門獨特的<strong>僑鄉文化</strong>，金門話中融合了許多東南亞語言的詞彙。</p>
+          </div>
+        </div>
+
+        <div class="think-box">
+          <div class="think-label">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12 20h9"/>
+              <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/>
+            </svg>
+            你還知道哪些金門話中的外來語嗎？
+          </div>
+          <textarea class="think-textarea" placeholder="寫下你知道的金門話外來語..."></textarea>
+        </div>
+
+        <div class="nav-buttons">
+          <button class="nav-btn prev" data-prev="1">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="15 18 9 12 15 6"/>
+            </svg>
+            上一題
+          </button>
+          <button class="nav-btn next" data-next="3">
+            下一題
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="9 18 15 12 9 6"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 問題三：學習意義 -->
+    <div class="content-area" data-content="3">
+      <div class="content-header">
+        <h2 class="content-title">我們為什麼要學金門話？</h2>
+        <p class="content-subtitle">思考學習母語的意義與價值</p>
+      </div>
+
+      <div class="content-body">
+        <div class="meaning-list">
+          <div class="meaning-item">
+            <div class="meaning-icon">🏛️</div>
+            <div class="meaning-title">傳承文化</div>
+            <div class="meaning-desc">金門話是金門獨特的文化遺產，學習它能幫助我們了解祖先的生活和智慧。</div>
+          </div>
+          <div class="meaning-item">
+            <div class="meaning-icon">👴</div>
+            <div class="meaning-title">與長輩溝通</div>
+            <div class="meaning-desc">許多長輩習慣用金門話交流，學會金門話能讓我們更好地與阿公阿嬤聊天。</div>
+          </div>
+          <div class="meaning-item">
+            <div class="meaning-icon">🏠</div>
+            <div class="meaning-title">認識家鄉</div>
+            <div class="meaning-desc">透過語言，我們能更深入認識金門的歷史、風俗和特色。</div>
+          </div>
+          <div class="meaning-item">
+            <div class="meaning-icon">🛡️</div>
+            <div class="meaning-title">保護瀕危語言</div>
+            <div class="meaning-desc">使用金門話的人越來越少，學習和使用金門話是保護這個珍貴語言的方式。</div>
+          </div>
+        </div>
+
+        <div class="think-box">
+          <div class="think-label">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10"/>
+              <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/>
+              <line x1="12" y1="17" x2="12.01" y2="17"/>
+            </svg>
+            想一想：學習金門話對你來說有什麼意義？
+          </div>
+          <textarea class="think-textarea" placeholder="為什麼學習金門話很重要？對你來說有什麼意義？"></textarea>
+        </div>
+
+        <div class="nav-buttons">
+          <button class="nav-btn prev" data-prev="2">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="15 18 9 12 15 6"/>
+            </svg>
+            上一題
+          </button>
+          <button class="nav-btn next" data-complete="true">
+            完成學習
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="20 6 9 17 4 12"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 完成區 -->
+    <section class="complete-section" id="complete-section">
+      <div class="complete-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="20 6 9 17 4 12"/>
+        </svg>
+      </div>
+      <h2 class="complete-title">恭喜完成學習！</h2>
+      <p class="complete-message">你已經完成了今天的金門話學習！<br>記得多多練習，讓金門話成為你的日常語言之一！</p>
+      <a href="index.html" class="complete-btn">返回首頁</a>
+    </section>
+  </main>
+
+  <script type="module">
+    // 載入詞彙
+    async function init() {
+      try {
+        const response = await fetch('data/vocabulary.json');
+        const data = await response.json();
+
+        // 只顯示水果
+        const fruits = data.vocabulary.filter(v => v.category === 'fruit');
+        renderVocabGrid(fruits);
+
+        setupTabNavigation();
+      } catch (error) {
+        console.error('載入失敗:', error);
+      }
+    }
+
+    function renderVocabGrid(fruits) {
+      const container = document.getElementById('vocab-grid');
+      container.innerHTML = '';
+
+      fruits.forEach(fruit => {
+        const el = document.createElement('div');
+        el.className = 'vocab-item';
+        el.innerHTML = `
+          <div class="vocab-chinese">${fruit.chinese}</div>
+          <div class="vocab-pinyin">${fruit.pinyin}</div>
+        `;
+
+        el.addEventListener('click', () => {
+          el.classList.toggle('revealed');
+        });
+
+        container.appendChild(el);
+      });
+    }
+
+    function setupTabNavigation() {
+      const tabs = document.querySelectorAll('.question-tab');
+      const contents = document.querySelectorAll('.content-area');
+      const completeSection = document.getElementById('complete-section');
+
+      // 點擊 tab 切換
+      tabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+          const tabId = tab.dataset.tab;
+          switchTab(tabId);
+        });
+      });
+
+      // 上一題/下一題按鈕
+      document.querySelectorAll('.nav-btn.prev').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const prevId = btn.dataset.prev;
+          if (prevId) switchTab(prevId);
+        });
+      });
+
+      document.querySelectorAll('.nav-btn.next').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const nextId = btn.dataset.next;
+          const isComplete = btn.dataset.complete;
+
+          if (isComplete) {
+            // 顯示完成畫面
+            contents.forEach(c => c.classList.remove('active'));
+            tabs.forEach(t => t.classList.remove('active'));
+            completeSection.classList.add('active');
+          } else if (nextId) {
+            switchTab(nextId);
+          }
+        });
+      });
+
+      function switchTab(tabId) {
+        // 隱藏完成區
+        completeSection.classList.remove('active');
+
+        // 切換 tab
+        tabs.forEach(t => {
+          t.classList.toggle('active', t.dataset.tab === tabId);
+        });
+
+        // 切換內容
+        contents.forEach(c => {
+          c.classList.toggle('active', c.dataset.content === tabId);
+        });
+      }
+    }
+
+    init();
+  </script>
+</body>
+</html>

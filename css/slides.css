@@ -1,0 +1,499 @@
+/* ========================================
+   投影片區域樣式
+   ======================================== */
+
+.main-content {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: calc(var(--header-height) + 24px) 24px calc(var(--footer-height) + 24px);
+  position: relative;
+  z-index: 1;
+  min-height: 100vh;
+}
+
+.slide-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  max-width: 1400px;
+  height: calc(100vh - var(--header-height) - var(--footer-height) - 48px);
+  position: relative;
+}
+
+/* 左右導航大面積點擊區 */
+.slide-nav-area {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+  opacity: 0;
+  transition: opacity 0.3s var(--ease-out);
+}
+
+.slide-nav-area:hover {
+  opacity: 1;
+}
+
+.prev-area {
+  left: 0;
+  justify-content: flex-start;
+  padding-left: 8px;
+}
+
+.next-area {
+  right: 0;
+  justify-content: flex-end;
+  padding-right: 8px;
+}
+
+.nav-arrow {
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: white;
+  border-radius: 50%;
+  box-shadow: var(--shadow-lg);
+  color: var(--text-primary);
+  transition: all 0.2s var(--ease-out);
+}
+
+.nav-arrow svg {
+  width: 24px;
+  height: 24px;
+}
+
+.slide-nav-area:hover .nav-arrow {
+  transform: scale(1.1);
+  box-shadow: var(--shadow-xl);
+  background: var(--kinmen-gold-light);
+}
+
+.slide-nav-area:active .nav-arrow {
+  transform: scale(0.95);
+}
+
+/* 投影片框架 */
+.slide-wrapper {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  max-width: calc(100% - 160px);
+  height: 100%;
+  position: relative;
+}
+
+.slide-frame {
+  position: relative;
+  width: 100%;
+  max-width: 1200px;
+  aspect-ratio: 16 / 9;
+  background: white;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-xl);
+  overflow: hidden;
+
+  /* 精緻邊框效果 */
+  border: 1px solid rgba(93, 78, 55, 0.08);
+}
+
+/* 投影片圖片 */
+.slide-image {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  background: white;
+  opacity: 0;
+  transition: opacity 0.4s var(--ease-out);
+}
+
+.slide-image.loaded {
+  opacity: 1;
+}
+
+/* 投影片切換動畫 */
+.slide-image.slide-enter {
+  animation: slideEnter 0.4s var(--ease-out) forwards;
+}
+
+.slide-image.slide-exit {
+  animation: slideExit 0.3s var(--ease-out) forwards;
+}
+
+@keyframes slideEnter {
+  from {
+    opacity: 0;
+    transform: translateX(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideExit {
+  from {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateX(-30px);
+  }
+}
+
+.slide-image.slide-enter-reverse {
+  animation: slideEnterReverse 0.4s var(--ease-out) forwards;
+}
+
+.slide-image.slide-exit-reverse {
+  animation: slideExitReverse 0.3s var(--ease-out) forwards;
+}
+
+@keyframes slideEnterReverse {
+  from {
+    opacity: 0;
+    transform: translateX(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideExitReverse {
+  from {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateX(30px);
+  }
+}
+
+/* 互動疊加層 */
+.interaction-layer {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.interaction-layer > * {
+  pointer-events: auto;
+}
+
+/* 載入動畫 */
+.loading-indicator {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  background: rgba(253, 246, 240, 0.9);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s var(--ease-out);
+}
+
+.loading-indicator.visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.loading-spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid var(--deco-blue-light);
+  border-top-color: var(--kinmen-ocean);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.loading-indicator span {
+  font-size: 0.9375rem;
+  color: var(--text-secondary);
+}
+
+/* 螢光筆畫布 */
+.highlighter-canvas {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 5;
+}
+
+.highlighter-canvas.active {
+  pointer-events: auto;
+  cursor: crosshair;
+}
+
+.highlighter-canvas.eraser-mode {
+  cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23666' stroke-width='2'%3E%3Ccircle cx='12' cy='12' r='10' fill='white' stroke='%23999'/%3E%3C/svg%3E") 12 12, auto;
+}
+
+/* ========================================
+   語音播放按鈕
+   ======================================== */
+.audio-btn {
+  position: absolute;
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(139, 105, 20, 0.12);
+  border: 2px solid rgba(139, 105, 20, 0.2);
+  border-radius: 50%;
+  color: var(--text-accent);
+  cursor: pointer;
+  transition: all 0.2s var(--ease-out);
+  z-index: 10;
+}
+
+.audio-btn:hover {
+  background: rgba(139, 105, 20, 0.2);
+  border-color: var(--text-accent);
+  transform: scale(1.1);
+  box-shadow: var(--shadow-md);
+}
+
+.audio-btn:active {
+  transform: scale(0.95);
+}
+
+.audio-btn svg {
+  width: 22px;
+  height: 22px;
+}
+
+/* 播放中狀態 */
+.audio-btn.playing {
+  background: var(--kinmen-gold);
+  border-color: var(--kinmen-gold);
+  color: white;
+  animation: pulse 1s ease-in-out infinite;
+}
+
+.audio-btn.playing::after {
+  content: '';
+  position: absolute;
+  inset: -4px;
+  border: 2px solid var(--kinmen-gold);
+  border-radius: 50%;
+  animation: sound-wave 1s ease-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+}
+
+@keyframes sound-wave {
+  0% {
+    transform: scale(1);
+    opacity: 0.6;
+  }
+  100% {
+    transform: scale(1.4);
+    opacity: 0;
+  }
+}
+
+/* 音檔未載入/錯誤狀態 */
+.audio-btn.disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.audio-btn.disabled:hover {
+  transform: none;
+  box-shadow: none;
+}
+
+/* ========================================
+   觸控手勢支援
+   ======================================== */
+.slide-frame {
+  touch-action: pan-y pinch-zoom;
+}
+
+/* 滑動提示 */
+.swipe-hint {
+  position: absolute;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  background: rgba(93, 78, 55, 0.8);
+  color: white;
+  border-radius: var(--radius-md);
+  font-size: 0.875rem;
+  opacity: 0;
+  animation: swipeHintShow 0.5s ease-out 2s forwards;
+  pointer-events: none;
+}
+
+@keyframes swipeHintShow {
+  0% {
+    opacity: 0;
+    transform: translateX(-50%) translateY(10px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+}
+
+.swipe-hint svg {
+  width: 20px;
+  height: 20px;
+  animation: swipeArrow 1.5s ease-in-out infinite;
+}
+
+@keyframes swipeArrow {
+  0%, 100% {
+    transform: translateX(0);
+  }
+  50% {
+    transform: translateX(8px);
+  }
+}
+
+/* ========================================
+   響應式調整
+   ======================================== */
+@media (max-width: 1024px) {
+  .slide-nav-area {
+    width: 60px;
+  }
+
+  .slide-wrapper {
+    max-width: calc(100% - 120px);
+  }
+
+  .nav-arrow {
+    width: 40px;
+    height: 40px;
+  }
+
+  .nav-arrow svg {
+    width: 20px;
+    height: 20px;
+  }
+}
+
+@media (max-width: 768px) {
+  .main-content {
+    padding: calc(var(--header-height) + 16px) 16px calc(var(--footer-height) + 16px);
+  }
+
+  .slide-nav-area {
+    display: none;
+  }
+
+  .slide-wrapper {
+    max-width: 100%;
+  }
+
+  .slide-frame {
+    border-radius: var(--radius-md);
+  }
+
+  .audio-btn {
+    width: 48px;
+    height: 48px;
+  }
+
+  .audio-btn svg {
+    width: 24px;
+    height: 24px;
+  }
+}
+
+@media (max-width: 480px) {
+  .main-content {
+    padding: calc(var(--header-height) + 8px) 8px calc(var(--footer-height) + 8px);
+  }
+
+  .slide-frame {
+    border-radius: var(--radius-sm);
+  }
+}
+
+/* ========================================
+   頁面縮圖預覽（可選）
+   ======================================== */
+.thumbnail-strip {
+  position: fixed;
+  bottom: calc(var(--footer-height) + 16px);
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 8px;
+  padding: 8px;
+  background: white;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-lg);
+  max-width: 90%;
+  overflow-x: auto;
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.3s var(--ease-out);
+}
+
+.thumbnail-strip.visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.thumbnail {
+  width: 80px;
+  height: 45px;
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  cursor: pointer;
+  border: 2px solid transparent;
+  transition: all 0.2s var(--ease-out);
+  flex-shrink: 0;
+}
+
+.thumbnail img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.thumbnail:hover {
+  border-color: var(--deco-blue);
+  transform: scale(1.05);
+}
+
+.thumbnail.active {
+  border-color: var(--kinmen-ocean);
+  box-shadow: 0 0 0 2px var(--kinmen-ocean-light);
+}

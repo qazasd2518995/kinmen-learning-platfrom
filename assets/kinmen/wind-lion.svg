@@ -1,0 +1,65 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
+  <!-- 風獅爺 - 金門守護神 -->
+  <defs>
+    <linearGradient id="lionGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#D4A84B"/>
+      <stop offset="100%" style="stop-color:#8B6914"/>
+    </linearGradient>
+    <linearGradient id="maneGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#C84B31"/>
+      <stop offset="100%" style="stop-color:#8B3A25"/>
+    </linearGradient>
+  </defs>
+
+  <!-- 底座 -->
+  <ellipse cx="50" cy="92" rx="35" ry="6" fill="#5D4E37" opacity="0.2"/>
+
+  <!-- 身體 -->
+  <path d="M30 85 Q25 70 28 55 Q30 45 35 40 L65 40 Q70 45 72 55 Q75 70 70 85 Z" fill="url(#lionGrad)"/>
+
+  <!-- 前腿 -->
+  <path d="M35 85 Q33 75 35 70 Q38 68 40 70 Q42 75 40 85 Z" fill="url(#lionGrad)"/>
+  <path d="M60 85 Q58 75 60 70 Q63 68 65 70 Q67 75 65 85 Z" fill="url(#lionGrad)"/>
+
+  <!-- 頭部 -->
+  <circle cx="50" cy="35" r="22" fill="url(#lionGrad)"/>
+
+  <!-- 鬃毛 -->
+  <path d="M28 35 Q22 25 28 18 Q35 12 50 10 Q65 12 72 18 Q78 25 72 35 Q68 28 50 25 Q32 28 28 35 Z" fill="url(#maneGrad)"/>
+
+  <!-- 耳朵 -->
+  <ellipse cx="32" cy="22" rx="6" ry="8" fill="url(#lionGrad)"/>
+  <ellipse cx="68" cy="22" rx="6" ry="8" fill="url(#lionGrad)"/>
+  <ellipse cx="32" cy="22" rx="3" ry="5" fill="#F2B5B5"/>
+  <ellipse cx="68" cy="22" rx="3" ry="5" fill="#F2B5B5"/>
+
+  <!-- 眼睛 -->
+  <ellipse cx="42" cy="32" rx="5" ry="6" fill="white"/>
+  <ellipse cx="58" cy="32" rx="5" ry="6" fill="white"/>
+  <circle cx="43" cy="33" r="3" fill="#5D4E37"/>
+  <circle cx="59" cy="33" r="3" fill="#5D4E37"/>
+  <circle cx="44" cy="32" r="1" fill="white"/>
+  <circle cx="60" cy="32" r="1" fill="white"/>
+
+  <!-- 眉毛 -->
+  <path d="M37 26 Q42 24 47 26" stroke="#5D4E37" stroke-width="2" fill="none" stroke-linecap="round"/>
+  <path d="M53 26 Q58 24 63 26" stroke="#5D4E37" stroke-width="2" fill="none" stroke-linecap="round"/>
+
+  <!-- 鼻子 -->
+  <ellipse cx="50" cy="40" rx="4" ry="3" fill="#5D4E37"/>
+
+  <!-- 嘴巴 - 微笑 -->
+  <path d="M42 46 Q50 52 58 46" stroke="#5D4E37" stroke-width="2" fill="none" stroke-linecap="round"/>
+
+  <!-- 獠牙 -->
+  <path d="M44 46 L43 50 L46 47" fill="white"/>
+  <path d="M56 46 L57 50 L54 47" fill="white"/>
+
+  <!-- 裝飾花紋 -->
+  <circle cx="50" cy="60" r="3" fill="#C84B31"/>
+  <path d="M45 65 Q50 70 55 65" stroke="#C84B31" stroke-width="2" fill="none"/>
+
+  <!-- 尾巴 -->
+  <path d="M72 70 Q85 60 80 45 Q78 50 75 48" stroke="url(#lionGrad)" stroke-width="6" fill="none" stroke-linecap="round"/>
+  <ellipse cx="80" cy="43" rx="5" ry="8" fill="url(#maneGrad)"/>
+</svg>

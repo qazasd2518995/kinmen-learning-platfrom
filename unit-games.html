@@ -1,0 +1,2423 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>遊戲與活動 - 金聲玉語</title>
+  <meta name="description" content="金門話學習遊戲：連連看、分類、迷宮、賓果">
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;600;700&family=Noto+Serif+TC:wght@500;600;700;900&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      /* Dashboard 變數 */
+      --header-height: 56px;
+      --content-height: calc(100dvh - var(--header-height) - 8px);
+      --dashboard-gap: 1rem;
+
+      /* 動態字體 */
+      --h1-size: clamp(1.5rem, 3vw, 2.5rem);
+      --h2-size: clamp(1.25rem, 2.5vw, 2rem);
+      --body-size: clamp(0.875rem, 1.2vw, 1rem);
+
+      /* 原有變數 */
+      --kinmen-gold: #D4A84B;
+      --kinmen-gold-light: #F5E6C8;
+      --kinmen-gold-dark: #8B6914;
+      --kinmen-red: #C84B31;
+      --kinmen-red-light: #E8B4A8;
+      --kinmen-red-lighter: #FDF2F0;
+      --kinmen-ocean: #5B8FA8;
+      --kinmen-ocean-light: #C5DDE8;
+      --kinmen-ocean-lighter: #E8F4F8;
+      --kinmen-green: #7D9D6D;
+      --kinmen-green-light: #D4E5CC;
+      --kinmen-green-lighter: #EDF5E8;
+      --kinmen-purple: #9B7BB8;
+      --kinmen-brown: #8B7355;
+      --bg-primary: #FDF6F0;
+      --bg-secondary: #F5E8E0;
+      --bg-card: #FFFFFF;
+      --text-primary: #3D3229;
+      --text-secondary: #6B5D52;
+      --text-accent: #8B6914;
+      --deco-brick: #B85A4A;
+      --shadow-sm: 0 2px 8px rgba(61, 50, 41, 0.08);
+      --shadow-md: 0 4px 16px rgba(61, 50, 41, 0.12);
+      --shadow-lg: 0 8px 32px rgba(61, 50, 41, 0.16);
+      --shadow-xl: 0 16px 48px rgba(61, 50, 41, 0.2);
+      --shadow-lift-sm: 0 4px 12px rgba(61, 50, 41, 0.15);
+      --shadow-lift-md: 0 8px 24px rgba(61, 50, 41, 0.18);
+      --glow-gold: 0 0 20px rgba(212, 168, 75, 0.3);
+      --glow-ocean: 0 0 20px rgba(91, 143, 168, 0.3);
+      --glow-green: 0 0 20px rgba(125, 157, 109, 0.3);
+      --radius-sm: 8px;
+      --radius-md: 12px;
+      --radius-lg: 20px;
+      --radius-xl: 32px;
+      --font-display: 'Noto Serif TC', serif;
+      --font-body: 'Noto Sans TC', sans-serif;
+      --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+      --spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+      --duration-fast: 150ms;
+      --duration-normal: 250ms;
+      --duration-slow: 400ms;
+      --duration-slower: 600ms;
+    }
+
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    html { font-size: 16px; }
+    body {
+      font-family: var(--font-body);
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+    button { font-family: inherit; border: none; background: none; cursor: pointer; }
+    a { text-decoration: none; color: inherit; }
+
+    /* 背景 */
+    .bg-pattern {
+      position: fixed; inset: 0; pointer-events: none; z-index: 0; opacity: 0.08;
+      background-image:
+        repeating-linear-gradient(45deg, var(--deco-brick) 0, var(--deco-brick) 2px, transparent 2px, transparent 20px),
+        repeating-linear-gradient(-45deg, var(--deco-brick) 0, var(--deco-brick) 2px, transparent 2px, transparent 20px);
+    }
+    .bg-gradient {
+      position: fixed; inset: 0; pointer-events: none; z-index: 0;
+      background:
+        radial-gradient(ellipse 80% 50% at 20% 0%, rgba(212, 168, 75, 0.15) 0%, transparent 50%),
+        radial-gradient(ellipse 60% 40% at 80% 100%, rgba(91, 143, 168, 0.1) 0%, transparent 50%);
+    }
+    .roof-deco {
+      position: fixed; top: 0; left: 0; right: 0; height: 8px;
+      background: linear-gradient(90deg, var(--kinmen-gold) 0%, var(--kinmen-red) 25%, var(--kinmen-gold) 50%, var(--kinmen-red) 75%, var(--kinmen-gold) 100%);
+      z-index: 100;
+    }
+
+    /* 頂部導航 */
+    .nav-header {
+      position: sticky; top: 8px; z-index: 50;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 12px 24px;
+      background: rgba(253, 246, 240, 0.9);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(139, 105, 20, 0.1);
+    }
+    .nav-left { display: flex; align-items: center; gap: 16px; }
+    .back-btn {
+      display: flex; align-items: center; gap: 8px;
+      padding: 8px 16px; border-radius: var(--radius-md);
+      color: var(--text-secondary); font-weight: 500;
+      transition: all 0.25s var(--ease-out);
+    }
+    .back-btn:hover { background: var(--bg-secondary); color: var(--text-primary); }
+    .back-btn svg { width: 20px; height: 20px; }
+    .page-title {
+      font-family: var(--font-display);
+      font-size: 1.25rem; font-weight: 700;
+      color: var(--text-accent);
+    }
+
+    /* 主內容 */
+    main {
+      position: relative; z-index: 1;
+      max-width: 1200px; margin: 0 auto;
+      padding: 24px;
+    }
+
+    /* 遊戲選擇 */
+    .game-selector {
+      display: flex;
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+
+    .game-card {
+      flex: 1;
+      background: var(--bg-card);
+      border-radius: var(--radius-lg);
+      padding: 20px 24px;
+      text-align: center;
+      box-shadow: var(--shadow-sm);
+      border: 2px solid transparent;
+      transition: all var(--duration-normal) var(--ease-out);
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .game-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, var(--kinmen-gold), var(--kinmen-ocean));
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform var(--duration-normal) var(--ease-out);
+    }
+
+    .game-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-lg);
+      border-color: var(--kinmen-gold-light);
+    }
+
+    .game-card:hover::before {
+      transform: scaleX(1);
+    }
+
+    .game-card.active {
+      border-color: transparent;
+      background: linear-gradient(135deg, var(--kinmen-gold) 0%, var(--kinmen-gold-dark) 100%);
+      box-shadow: var(--shadow-lg), var(--glow-gold);
+      transform: translateY(-2px);
+    }
+
+    .game-card.active::before {
+      display: none;
+    }
+
+    .game-card-icon {
+      width: 56px; height: 56px;
+      margin: 0 auto 12px;
+      display: flex; align-items: center; justify-content: center;
+      background: var(--bg-secondary);
+      border-radius: var(--radius-md);
+      font-size: 2rem;
+      transition: all var(--duration-normal) var(--ease-out);
+    }
+
+    .game-card:hover .game-card-icon {
+      transform: scale(1.1);
+      background: var(--kinmen-gold-light);
+    }
+
+    .game-card.active .game-card-icon {
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+    }
+
+    .game-card-title {
+      font-family: var(--font-display);
+      font-size: 1.125rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 4px;
+      transition: color var(--duration-normal) var(--ease-out);
+    }
+
+    .game-card.active .game-card-title {
+      color: white;
+    }
+
+    .game-card-desc {
+      font-size: 0.875rem;
+      color: var(--text-secondary);
+      transition: color var(--duration-normal) var(--ease-out);
+    }
+
+    .game-card.active .game-card-desc {
+      color: rgba(255, 255, 255, 0.85);
+    }
+
+    /* 遊戲區域 */
+    .game-area {
+      display: none;
+      background: var(--bg-card);
+      border-radius: var(--radius-xl);
+      padding: 32px;
+      box-shadow: var(--shadow-lg);
+      animation: fadeIn 0.4s var(--ease-out);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .game-area::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, var(--kinmen-gold), var(--kinmen-ocean), var(--kinmen-green));
+    }
+
+    .game-area.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .game-header {
+      text-align: center;
+      margin-bottom: 24px;
+    }
+
+    .game-title {
+      font-family: var(--font-display);
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--text-accent);
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    .game-instruction {
+      color: var(--text-secondary);
+      font-size: 0.9375rem;
+    }
+
+    /* ========================================
+       連連看遊戲
+       ======================================== */
+    .matching-container {
+      display: flex;
+      justify-content: space-around;
+      align-items: flex-start;
+      gap: 40px;
+      padding: 20px;
+      position: relative;
+      min-height: 400px;
+    }
+
+    .matching-column {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .matching-item {
+      padding: 16px 32px;
+      background: var(--bg-secondary);
+      border-radius: var(--radius-md);
+      font-size: 1.25rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all var(--duration-normal) var(--ease-out);
+      border: 3px solid transparent;
+      min-width: 150px;
+      text-align: center;
+      position: relative;
+    }
+
+    .matching-item:hover:not(.matched) {
+      background: var(--kinmen-gold-light);
+      transform: scale(1.05);
+      box-shadow: var(--shadow-md), var(--glow-gold);
+    }
+
+    .matching-item:active:not(.matched) {
+      transform: scale(0.98);
+    }
+
+    .matching-item.selected {
+      border-color: var(--kinmen-gold);
+      background: var(--kinmen-gold-light);
+      box-shadow: var(--shadow-md), var(--glow-gold);
+      transform: scale(1.05);
+    }
+
+    .matching-item.matched {
+      background: var(--kinmen-green-lighter);
+      border-color: var(--kinmen-green);
+      cursor: default;
+      animation: matchedPop 0.5s var(--spring);
+    }
+
+    .matching-item.matched::after {
+      content: '✓';
+      position: absolute;
+      top: -8px;
+      right: -8px;
+      width: 24px;
+      height: 24px;
+      background: var(--kinmen-green);
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.75rem;
+      animation: checkPop 0.4s var(--spring);
+    }
+
+    @keyframes matchedPop {
+      0% { transform: scale(1); }
+      30% { transform: scale(1.1); }
+      100% { transform: scale(1); }
+    }
+
+    @keyframes checkPop {
+      0% { transform: scale(0); opacity: 0; }
+      50% { transform: scale(1.3); }
+      100% { transform: scale(1); opacity: 1; }
+    }
+
+    .matching-item.wrong {
+      animation: matchingShake 0.5s var(--ease-out);
+      border-color: var(--kinmen-red);
+      background: var(--kinmen-red-lighter);
+    }
+
+    @keyframes matchingShake {
+      0%, 100% { transform: translateX(0); }
+      15% { transform: translateX(-8px); }
+      30% { transform: translateX(8px); }
+      45% { transform: translateX(-6px); }
+      60% { transform: translateX(6px); }
+      75% { transform: translateX(-3px); }
+      90% { transform: translateX(3px); }
+    }
+
+    .matching-svg {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+    }
+
+    .matching-line {
+      stroke: var(--kinmen-green);
+      stroke-width: 3;
+      fill: none;
+      stroke-dasharray: 1000;
+      stroke-dashoffset: 1000;
+      animation: drawLine 0.5s ease-out forwards;
+    }
+
+    @keyframes drawLine {
+      to { stroke-dashoffset: 0; }
+    }
+
+    .matching-score {
+      text-align: center;
+      margin-top: 24px;
+      font-size: 1.125rem;
+      color: var(--text-secondary);
+      font-weight: 500;
+    }
+
+    /* ========================================
+       分類遊戲
+       ======================================== */
+    .sorting-container {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    .sorting-items {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      justify-content: center;
+      padding: 24px;
+      background: linear-gradient(135deg, var(--bg-secondary) 0%, rgba(245, 232, 224, 0.5) 100%);
+      border-radius: var(--radius-lg);
+      min-height: 100px;
+      border: 2px solid rgba(107, 93, 82, 0.1);
+    }
+
+    .sorting-item {
+      padding: 12px 20px;
+      background: var(--bg-card);
+      border-radius: var(--radius-md);
+      font-weight: 600;
+      cursor: grab;
+      box-shadow: var(--shadow-sm);
+      transition: all var(--duration-normal) var(--ease-out);
+      user-select: none;
+      border: 2px solid transparent;
+    }
+
+    .sorting-item:hover {
+      transform: scale(1.08) translateY(-2px);
+      box-shadow: var(--shadow-lg), var(--glow-gold);
+      border-color: var(--kinmen-gold);
+    }
+
+    .sorting-item:active {
+      transform: scale(1.05);
+      cursor: grabbing;
+    }
+
+    .sorting-item.dragging {
+      opacity: 0.7;
+      cursor: grabbing;
+      transform: scale(1.1) rotate(2deg);
+      box-shadow: var(--shadow-xl);
+    }
+
+    .sorting-item.placed {
+      cursor: default;
+      animation: itemPlaced 0.4s var(--spring);
+    }
+
+    @keyframes itemPlaced {
+      0% { transform: scale(1.1); }
+      50% { transform: scale(0.95); }
+      100% { transform: scale(1); }
+    }
+
+    .sorting-categories {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 16px;
+    }
+
+    .sorting-category {
+      background: var(--bg-card);
+      border-radius: var(--radius-lg);
+      padding: 16px;
+      min-height: 150px;
+      border: 3px dashed rgba(139, 105, 20, 0.3);
+      transition: all var(--duration-normal) var(--ease-out);
+    }
+
+    .sorting-category.dragover {
+      border-color: var(--kinmen-gold);
+      border-style: solid;
+      background: var(--kinmen-gold-light);
+      transform: scale(1.02);
+      box-shadow: var(--shadow-md), var(--glow-gold);
+    }
+
+    .sorting-category-title {
+      font-weight: 700;
+      text-align: center;
+      padding: 8px;
+      margin-bottom: 12px;
+      border-radius: var(--radius-sm);
+    }
+
+    .sorting-category[data-color="green"] .sorting-category-title { background: #D4E5CC; color: #4A7C3E; }
+    .sorting-category[data-color="red"] .sorting-category-title { background: #F5D5D0; color: #C84B31; }
+    .sorting-category[data-color="yellow"] .sorting-category-title { background: #FFF3C4; color: #8B6914; }
+    .sorting-category[data-color="white"] .sorting-category-title { background: #F0F0F0; color: #666; }
+    .sorting-category[data-color="brown"] .sorting-category-title { background: #E5D5C5; color: #6B5344; }
+    .sorting-category[data-color="purple"] .sorting-category-title { background: #E8D5F0; color: #7B5B8C; }
+
+    .sorting-category-items {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .sorting-category-items .sorting-item {
+      font-size: 0.875rem;
+      padding: 8px 12px;
+    }
+
+    /* ========================================
+       迷宮遊戲
+       ======================================== */
+    .maze-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 24px;
+    }
+
+    .maze-question {
+      font-family: var(--font-display);
+      font-size: 1.25rem;
+      color: var(--text-accent);
+      text-align: center;
+      padding: 12px 24px;
+      background: var(--kinmen-gold-light);
+      border-radius: var(--radius-md);
+      border: 2px solid var(--kinmen-gold);
+    }
+
+    .maze-question #maze-target {
+      color: var(--kinmen-red);
+      font-weight: 700;
+    }
+
+    .maze-game-layout {
+      display: flex;
+      gap: 24px;
+      align-items: flex-start;
+    }
+
+    /* 左側蔬果選單 */
+    .maze-sidebar {
+      background: var(--bg-card);
+      border-radius: var(--radius-lg);
+      padding: 16px;
+      box-shadow: var(--shadow-md);
+      min-width: 100px;
+    }
+
+    .maze-sidebar-title {
+      font-family: var(--font-display);
+      font-size: 1rem;
+      color: var(--text-accent);
+      text-align: center;
+      margin-bottom: 16px;
+      padding-bottom: 12px;
+      border-bottom: 2px dashed var(--kinmen-gold-light);
+    }
+
+    .maze-fruit-list {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .maze-fruit-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      padding: 12px;
+      background: var(--bg-secondary);
+      border-radius: var(--radius-md);
+      transition: all var(--duration-normal) var(--ease-out);
+      border: 2px solid transparent;
+    }
+
+    .maze-fruit-item:hover {
+      background: var(--kinmen-gold-light);
+      border-color: var(--kinmen-gold);
+      transform: scale(1.05);
+    }
+
+    .maze-fruit-item.active {
+      background: var(--kinmen-gold-light);
+      border-color: var(--kinmen-gold);
+      box-shadow: var(--shadow-md), var(--glow-gold);
+    }
+
+    .maze-fruit-item svg {
+      width: 50px;
+      height: 60px;
+    }
+
+    .maze-fruit-item span {
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    /* 迷宮主體 */
+    .maze-wrapper {
+      position: relative;
+      display: inline-block;
+    }
+
+    .maze-svg {
+      width: 400px;
+      height: 400px;
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-lg);
+      background: var(--bg-card);
+    }
+
+    .maze-target-fruit {
+      cursor: pointer;
+    }
+
+    .maze-target-fruit.highlight ellipse,
+    .maze-target-fruit.highlight path {
+      animation: fruitPulse 1s ease-in-out infinite;
+      transform-origin: center;
+      transform-box: fill-box;
+    }
+
+    @keyframes fruitPulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.2); }
+    }
+
+    .maze-canvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      cursor: crosshair;
+      border-radius: var(--radius-lg);
+    }
+
+    .maze-controls {
+      display: flex;
+      gap: 16px;
+    }
+
+    .maze-btn {
+      padding: 12px 28px;
+      background: linear-gradient(135deg, var(--kinmen-gold) 0%, var(--kinmen-gold-dark) 100%);
+      color: white;
+      border-radius: var(--radius-md);
+      font-weight: 600;
+      transition: all var(--duration-normal) var(--ease-out);
+      box-shadow: var(--shadow-md);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .maze-btn::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(255,255,255,0.2) 0%, transparent 50%);
+      opacity: 0;
+      transition: opacity var(--duration-fast);
+    }
+
+    .maze-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-lg), var(--glow-gold);
+    }
+
+    .maze-btn:hover::before {
+      opacity: 1;
+    }
+
+    .maze-btn:active {
+      transform: scale(0.98);
+    }
+
+    .maze-btn.secondary {
+      background: var(--bg-card);
+      color: var(--text-secondary);
+      border: 2px solid var(--bg-secondary);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .maze-btn.secondary:hover {
+      background: var(--bg-secondary);
+      border-color: var(--kinmen-gold-light);
+      color: var(--text-primary);
+      box-shadow: var(--shadow-md);
+    }
+
+    /* ========================================
+       賓果遊戲
+       ======================================== */
+    .bingo-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 24px;
+    }
+
+    .bingo-question {
+      font-family: var(--font-display);
+      font-size: 1.25rem;
+      color: var(--text-accent);
+      padding: 16px 32px;
+      background: linear-gradient(135deg, var(--kinmen-gold-light) 0%, rgba(245, 230, 200, 0.5) 100%);
+      border-radius: var(--radius-lg);
+      border: 2px solid rgba(212, 168, 75, 0.3);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .bingo-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      max-width: 400px;
+    }
+
+    .bingo-cell {
+      aspect-ratio: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--bg-card);
+      border: 3px solid var(--kinmen-gold-light);
+      border-radius: var(--radius-md);
+      font-size: 1.5rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all var(--duration-normal) var(--ease-out);
+      position: relative;
+    }
+
+    .bingo-cell:hover:not(.correct):not(.wrong) {
+      border-color: var(--kinmen-gold);
+      transform: scale(1.08);
+      box-shadow: var(--shadow-md), var(--glow-gold);
+    }
+
+    .bingo-cell:active:not(.correct):not(.wrong) {
+      transform: scale(0.98);
+    }
+
+    .bingo-cell.marked {
+      background: linear-gradient(135deg, var(--kinmen-gold) 0%, var(--kinmen-gold-dark) 100%);
+      color: white;
+      border-color: var(--kinmen-gold-dark);
+      box-shadow: var(--shadow-md);
+    }
+
+    .bingo-cell.correct {
+      background: linear-gradient(135deg, var(--kinmen-green) 0%, #5A8A4A 100%);
+      border-color: var(--kinmen-green);
+      color: white;
+      animation: bingoCorrect 0.5s var(--spring);
+      box-shadow: var(--shadow-md), var(--glow-green);
+    }
+
+    .bingo-cell.correct::after {
+      content: '✓';
+      position: absolute;
+      top: -6px;
+      right: -6px;
+      width: 22px;
+      height: 22px;
+      background: white;
+      color: var(--kinmen-green);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.75rem;
+      box-shadow: var(--shadow-sm);
+      animation: checkPop 0.4s var(--spring);
+    }
+
+    @keyframes bingoCorrect {
+      0% { transform: scale(1); }
+      30% { transform: scale(1.15); }
+      100% { transform: scale(1); }
+    }
+
+    .bingo-cell.wrong {
+      background: var(--kinmen-red-lighter);
+      border-color: var(--kinmen-red);
+      animation: bingoWrong 0.5s var(--ease-out);
+    }
+
+    @keyframes bingoWrong {
+      0%, 100% { transform: translateX(0); }
+      15% { transform: translateX(-6px); }
+      30% { transform: translateX(6px); }
+      45% { transform: translateX(-4px); }
+      60% { transform: translateX(4px); }
+    }
+
+    .bingo-cell.bingo-line {
+      animation: bingoLineGlow 1s ease-in-out infinite alternate;
+    }
+
+    @keyframes bingoLineGlow {
+      0% { box-shadow: var(--shadow-md), var(--glow-green); }
+      100% { box-shadow: var(--shadow-lg), 0 0 30px rgba(125, 157, 109, 0.5); }
+    }
+
+    .bingo-status {
+      font-size: 1.125rem;
+      color: var(--text-secondary);
+      font-weight: 500;
+    }
+
+    .bingo-controls {
+      display: flex;
+      gap: 16px;
+    }
+
+    /* ========================================
+       完成畫面
+       ======================================== */
+    .game-complete {
+      display: none;
+      text-align: center;
+      padding: 48px;
+      background: linear-gradient(180deg, transparent 0%, var(--kinmen-green-lighter) 100%);
+      border-radius: var(--radius-lg);
+      margin-top: 24px;
+    }
+
+    .game-complete.visible {
+      display: block;
+      animation: completeAppear 0.5s var(--spring);
+    }
+
+    @keyframes completeAppear {
+      0% { opacity: 0; transform: scale(0.9) translateY(20px); }
+      100% { opacity: 1; transform: scale(1) translateY(0); }
+    }
+
+    .complete-icon {
+      width: 80px;
+      height: 80px;
+      margin: 0 auto 24px;
+      background: linear-gradient(135deg, var(--kinmen-green) 0%, #5A8A4A 100%);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      box-shadow: var(--shadow-lg), var(--glow-green);
+      animation: iconBounce 0.6s var(--spring) 0.2s both;
+    }
+    .complete-icon svg {
+      width: 40px;
+      height: 40px;
+    }
+
+    @keyframes iconBounce {
+      0% { transform: scale(0); opacity: 0; }
+      50% { transform: scale(1.2); }
+      100% { transform: scale(1); opacity: 1; }
+    }
+
+    .complete-title {
+      font-family: var(--font-display);
+      font-size: 1.75rem;
+      color: var(--kinmen-green);
+      margin-bottom: 8px;
+    }
+
+    .complete-message {
+      color: var(--text-secondary);
+      margin-bottom: 24px;
+    }
+
+    .restart-btn {
+      padding: 14px 32px;
+      background: linear-gradient(135deg, var(--kinmen-gold) 0%, var(--kinmen-gold-dark) 100%);
+      color: white;
+      border-radius: var(--radius-md);
+      font-weight: 600;
+      transition: all var(--duration-normal) var(--ease-out);
+      box-shadow: var(--shadow-md);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .restart-btn::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(255,255,255,0.2) 0%, transparent 50%);
+      opacity: 0;
+      transition: opacity var(--duration-fast);
+    }
+
+    .restart-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-lg), var(--glow-gold);
+    }
+
+    .restart-btn:hover::before {
+      opacity: 1;
+    }
+
+    .restart-btn:active {
+      transform: scale(0.98);
+    }
+
+    /* ========================================
+       響應式 - Desktop Dashboard (>=1200px)
+       ======================================== */
+    @media (min-width: 1200px) {
+      body {
+        height: 100vh;
+        height: 100dvh;
+        overflow: hidden;
+      }
+
+      main {
+        height: var(--content-height);
+        max-width: 100%;
+        display: flex;
+        flex-direction: column;
+        gap: var(--dashboard-gap);
+        padding: var(--dashboard-gap);
+        overflow: hidden;
+      }
+
+      /* 遊戲選擇在上方水平排列 */
+      .game-selector {
+        display: flex;
+        flex-direction: row;
+        gap: 16px;
+        flex-shrink: 0;
+        margin-bottom: 0;
+      }
+
+      .game-card {
+        flex: 1;
+        padding: 16px 24px;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        gap: 14px;
+        text-align: left;
+      }
+
+      .game-card-icon {
+        width: 48px;
+        height: 48px;
+        margin: 0;
+        flex-shrink: 0;
+      }
+
+      .game-card-icon svg {
+        width: 26px;
+        height: 26px;
+      }
+
+      .game-card-content {
+        flex: 1;
+      }
+
+      .game-card-title {
+        font-size: 1rem;
+        margin-bottom: 2px;
+      }
+
+      .game-card-desc {
+        font-size: 0.8rem;
+      }
+
+      /* 遊戲區域 */
+      .game-area {
+        flex: 1;
+        display: none;
+        flex-direction: column;
+        padding: 24px;
+        overflow: hidden;
+      }
+
+      .game-area.active {
+        display: flex;
+      }
+
+      .game-header {
+        margin-bottom: 20px;
+        flex-shrink: 0;
+      }
+
+      .game-title {
+        font-size: 1.5rem;
+      }
+
+      .game-instruction {
+        font-size: 1rem;
+      }
+
+      /* 連連看遊戲適配 */
+      .matching-container {
+        flex: 1;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 60px;
+        overflow: hidden;
+      }
+
+      .matching-column {
+        max-height: 100%;
+        overflow-y: auto;
+        scrollbar-width: thin;
+      }
+
+      .matching-item {
+        padding: 16px 28px;
+        font-size: 1.25rem;
+        min-width: 180px;
+      }
+
+      .matching-score {
+        font-size: 1.25rem;
+      }
+
+      /* 分類遊戲適配 */
+      .sorting-container {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+      }
+
+      .sorting-items {
+        margin-bottom: 20px;
+        flex-shrink: 0;
+        padding: 28px;
+      }
+
+      .sorting-item {
+        padding: 14px 24px;
+        font-size: 1.1rem;
+      }
+
+      .sorting-categories {
+        flex: 1;
+        overflow-y: auto;
+        gap: 16px;
+      }
+
+      .sorting-category {
+        min-height: 120px;
+        padding: 20px;
+      }
+
+      .sorting-category-title {
+        font-size: 1.1rem;
+        padding: 10px;
+      }
+
+      /* 迷宮遊戲適配 */
+      .maze-container {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        overflow: hidden;
+      }
+
+      .maze-question {
+        font-size: 1.35rem;
+      }
+
+      .maze-game-layout {
+        gap: 20px;
+      }
+
+      .maze-sidebar {
+        min-width: 90px;
+        padding: 12px;
+      }
+
+      .maze-sidebar-title {
+        font-size: 0.9rem;
+      }
+
+      .maze-fruit-item {
+        padding: 10px;
+      }
+
+      .maze-fruit-item svg {
+        width: 45px;
+        height: 55px;
+      }
+
+      .maze-fruit-item span {
+        font-size: 0.8rem;
+      }
+
+      .maze-svg {
+        width: min(450px, 55vh);
+        height: min(450px, 55vh);
+      }
+
+      .maze-wrapper {
+        max-width: min(450px, 55vh);
+        max-height: min(450px, 55vh);
+      }
+
+      /* 賓果遊戲適配 */
+      .bingo-container {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        overflow: hidden;
+      }
+
+      .bingo-question {
+        font-size: 1.5rem;
+        padding: 20px 40px;
+      }
+
+      .bingo-grid {
+        max-width: min(500px, 60vh);
+        gap: 16px;
+      }
+
+      .bingo-cell {
+        font-size: 1.75rem;
+        padding: 20px;
+      }
+
+      .bingo-status {
+        font-size: 1.25rem;
+      }
+
+      /* 遊戲完成畫面 */
+      .game-complete {
+        padding: 48px;
+      }
+
+      .game-complete.visible {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .complete-icon {
+        width: 80px;
+        height: 80px;
+        margin-bottom: 20px;
+      }
+
+      .complete-icon svg {
+        width: 44px;
+        height: 44px;
+      }
+
+      .complete-title {
+        font-size: 2rem;
+      }
+
+      .complete-message {
+        font-size: 1.1rem;
+      }
+
+      .restart-btn {
+        padding: 16px 36px;
+        font-size: 1.1rem;
+      }
+    }
+
+    /* Desktop Large (>=1400px) */
+    @media (min-width: 1400px) {
+      .game-card {
+        padding: 18px 28px;
+        gap: 16px;
+      }
+
+      .game-card-icon {
+        width: 52px;
+        height: 52px;
+      }
+
+      .game-card-title {
+        font-size: 1.1rem;
+      }
+
+      .game-card-desc {
+        font-size: 0.875rem;
+      }
+
+      .matching-container {
+        gap: 80px;
+      }
+
+      .matching-item {
+        padding: 18px 32px;
+        font-size: 1.35rem;
+        min-width: 200px;
+      }
+
+      .maze-svg {
+        width: min(500px, 60vh);
+        height: min(500px, 60vh);
+      }
+
+      .maze-wrapper {
+        max-width: min(500px, 60vh);
+        max-height: min(500px, 60vh);
+      }
+
+      .bingo-grid {
+        max-width: min(550px, 65vh);
+        gap: 20px;
+      }
+
+      .bingo-cell {
+        font-size: 2rem;
+      }
+    }
+
+    /* Tablet (768px - 1199px) */
+    @media (min-width: 768px) and (max-width: 1199px) {
+      main {
+        padding: 24px;
+      }
+
+      .game-selector {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 12px;
+      }
+
+      .game-area {
+        padding: 24px;
+      }
+
+      .sorting-categories {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    /* Mobile (<768px) */
+    @media (max-width: 767px) {
+      .matching-container {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .game-selector {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .sorting-categories {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .bingo-grid {
+        max-width: 300px;
+      }
+
+      /* 迷宮遊戲手機版 */
+      .maze-game-layout {
+        flex-direction: column;
+        align-items: center;
+        gap: 16px;
+      }
+
+      .maze-sidebar {
+        flex-direction: row;
+        min-width: auto;
+        width: 100%;
+        max-width: 350px;
+      }
+
+      .maze-sidebar-title {
+        display: none;
+      }
+
+      .maze-fruit-list {
+        flex-direction: row;
+        justify-content: center;
+        width: 100%;
+      }
+
+      .maze-fruit-item {
+        padding: 8px 12px;
+      }
+
+      .maze-fruit-item svg {
+        width: 35px;
+        height: 45px;
+      }
+
+      .maze-fruit-item span {
+        font-size: 0.75rem;
+      }
+
+      .maze-svg {
+        width: 300px;
+        height: 300px;
+      }
+
+      .maze-question {
+        font-size: 1rem;
+        padding: 10px 16px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .game-selector {
+        grid-template-columns: 1fr;
+      }
+
+      .game-area {
+        padding: 20px;
+      }
+
+      .maze-svg {
+        width: 280px;
+        height: 280px;
+      }
+
+      .maze-fruit-item svg {
+        width: 30px;
+        height: 40px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="bg-pattern"></div>
+  <div class="bg-gradient"></div>
+  <div class="roof-deco"></div>
+
+  <header class="nav-header">
+    <div class="nav-left">
+      <a href="index.html" class="back-btn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="19" y1="12" x2="5" y2="12"/>
+          <polyline points="12 19 5 12 12 5"/>
+        </svg>
+        返回
+      </a>
+      <h1 class="page-title">遊戲與活動</h1>
+    </div>
+  </header>
+
+  <main>
+    <!-- 遊戲選擇 -->
+    <div class="game-selector">
+      <div class="game-card active" data-game="matching">
+        <div class="game-card-icon">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
+            <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+          </svg>
+        </div>
+        <div class="game-card-content">
+          <h3 class="game-card-title">連連看</h3>
+          <p class="game-card-desc">漢字配對拼音</p>
+        </div>
+      </div>
+
+      <div class="game-card" data-game="sorting">
+        <div class="game-card-icon">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="3" y="3" width="7" height="7"/>
+            <rect x="14" y="3" width="7" height="7"/>
+            <rect x="14" y="14" width="7" height="7"/>
+            <rect x="3" y="14" width="7" height="7"/>
+          </svg>
+        </div>
+        <div class="game-card-content">
+          <h3 class="game-card-title">分色水</h3>
+          <p class="game-card-desc">蔬果按顏色分類</p>
+        </div>
+      </div>
+
+      <div class="game-card" data-game="maze">
+        <div class="game-card-icon">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M3 3h18v18H3z"/>
+            <path d="M3 9h12v6H9v6"/>
+            <path d="M15 3v12h6"/>
+          </svg>
+        </div>
+        <div class="game-card-content">
+          <h3 class="game-card-title">迷宮</h3>
+          <p class="game-card-desc">幫阿公買菜</p>
+        </div>
+      </div>
+
+      <div class="game-card" data-game="bingo">
+        <div class="game-card-icon">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="3" y="3" width="18" height="18" rx="2"/>
+            <line x1="9" y1="3" x2="9" y2="21"/>
+            <line x1="15" y1="3" x2="15" y2="21"/>
+            <line x1="3" y1="9" x2="21" y2="9"/>
+            <line x1="3" y1="15" x2="21" y2="15"/>
+          </svg>
+        </div>
+        <div class="game-card-content">
+          <h3 class="game-card-title">水果賓果</h3>
+          <p class="game-card-desc">看提示找水果</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- 連連看遊戲 -->
+    <div id="matching-area" class="game-area active">
+      <div class="game-header">
+        <h2 class="game-title">連連看</h2>
+        <p class="game-instruction">點選左邊的漢字，再點選右邊對應的拼音</p>
+      </div>
+
+      <div class="matching-container" id="matching-container">
+        <svg class="matching-svg" id="matching-svg"></svg>
+        <div class="matching-column" id="matching-left"></div>
+        <div class="matching-column" id="matching-right"></div>
+      </div>
+
+      <div class="matching-score" id="matching-score">已配對：0 / 5</div>
+
+      <div class="game-complete" id="matching-complete">
+        <div class="complete-icon">
+          <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+            <polyline points="20 6 9 17 4 12"/>
+          </svg>
+        </div>
+        <h3 class="complete-title">太棒了！</h3>
+        <p class="complete-message">你已經完成所有配對！</p>
+        <button class="restart-btn" id="restart-matching">再玩一次</button>
+      </div>
+    </div>
+
+    <!-- 分類遊戲 -->
+    <div id="sorting-area" class="game-area">
+      <div class="game-header">
+        <h2 class="game-title">分色水</h2>
+        <p class="game-instruction">將蔬果拖曳到對應的顏色分類中</p>
+      </div>
+
+      <div class="sorting-container">
+        <div class="sorting-items" id="sorting-items"></div>
+
+        <div class="sorting-categories" id="sorting-categories">
+          <div class="sorting-category" data-color="green" data-accept="green">
+            <div class="sorting-category-title">青色</div>
+            <div class="sorting-category-items"></div>
+          </div>
+          <div class="sorting-category" data-color="red" data-accept="red,yellow">
+            <div class="sorting-category-title">紅/黃色</div>
+            <div class="sorting-category-items"></div>
+          </div>
+          <div class="sorting-category" data-color="white" data-accept="white">
+            <div class="sorting-category-title">白色</div>
+            <div class="sorting-category-items"></div>
+          </div>
+          <div class="sorting-category" data-color="brown" data-accept="brown">
+            <div class="sorting-category-title">棕色</div>
+            <div class="sorting-category-items"></div>
+          </div>
+          <div class="sorting-category" data-color="purple" data-accept="purple">
+            <div class="sorting-category-title">紫色</div>
+            <div class="sorting-category-items"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="matching-score" id="sorting-score">已分類：0 / 12</div>
+
+      <div class="game-complete" id="sorting-complete">
+        <div class="complete-icon">
+          <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+            <polyline points="20 6 9 17 4 12"/>
+          </svg>
+        </div>
+        <h3 class="complete-title">分類完成！</h3>
+        <p class="complete-message">你已經學會分辨蔬果的顏色了！</p>
+        <button class="restart-btn" id="restart-sorting">再玩一次</button>
+      </div>
+    </div>
+
+    <!-- 迷宮遊戲 -->
+    <div id="maze-area" class="game-area">
+      <div class="game-header">
+        <h2 class="game-title">迷宮遊戲</h2>
+        <p class="game-instruction">阿公講愛買... 用滑鼠畫出路線，幫阿公買到正確的蔬果！</p>
+      </div>
+
+      <div class="maze-container">
+        <div class="maze-question" id="maze-question">請幫阿公找到 <span id="maze-target">番茄</span>！</div>
+
+        <div class="maze-game-layout">
+          <!-- 左側蔬果選單 -->
+          <div class="maze-sidebar">
+            <div class="maze-sidebar-title">阿公講愛買...</div>
+            <div class="maze-fruit-list">
+              <div class="maze-fruit-item" data-fruit="玉米">
+                <svg viewBox="0 0 80 100">
+                  <!-- 玉米 -->
+                  <ellipse cx="40" cy="55" rx="22" ry="35" fill="#F4D03F"/>
+                  <ellipse cx="40" cy="55" rx="18" ry="30" fill="#F7DC6F"/>
+                  <!-- 玉米粒紋理 -->
+                  <g fill="#E9B824" opacity="0.6">
+                    <circle cx="32" cy="40" r="3"/><circle cx="40" cy="38" r="3"/><circle cx="48" cy="40" r="3"/>
+                    <circle cx="30" cy="50" r="3"/><circle cx="38" cy="48" r="3"/><circle cx="46" cy="50" r="3"/><circle cx="52" cy="52" r="3"/>
+                    <circle cx="32" cy="60" r="3"/><circle cx="40" cy="58" r="3"/><circle cx="48" cy="60" r="3"/>
+                    <circle cx="34" cy="70" r="3"/><circle cx="42" cy="68" r="3"/><circle cx="46" cy="72" r="3"/>
+                  </g>
+                  <!-- 葉子 -->
+                  <path d="M25 25 Q20 10 30 5 Q35 15 40 20 Q45 15 50 5 Q60 10 55 25 Q45 22 40 25 Q35 22 25 25Z" fill="#2ECC71"/>
+                  <path d="M30 20 Q25 5 35 0 Q38 12 40 18" fill="#27AE60"/>
+                  <path d="M50 20 Q55 5 45 0 Q42 12 40 18" fill="#27AE60"/>
+                </svg>
+                <span>玉米</span>
+              </div>
+              <div class="maze-fruit-item" data-fruit="芭樂">
+                <svg viewBox="0 0 80 90">
+                  <!-- 芭樂 -->
+                  <ellipse cx="40" cy="50" rx="28" ry="32" fill="#A8D948"/>
+                  <ellipse cx="40" cy="50" rx="24" ry="28" fill="#C4E96E"/>
+                  <!-- 內部 -->
+                  <ellipse cx="40" cy="52" rx="16" ry="18" fill="#FFB6C1"/>
+                  <ellipse cx="40" cy="52" rx="12" ry="14" fill="#FF9EAA"/>
+                  <!-- 籽 -->
+                  <g fill="#8B4513">
+                    <circle cx="36" cy="48" r="1.5"/><circle cx="44" cy="48" r="1.5"/>
+                    <circle cx="34" cy="54" r="1.5"/><circle cx="40" cy="52" r="1.5"/><circle cx="46" cy="54" r="1.5"/>
+                    <circle cx="36" cy="58" r="1.5"/><circle cx="44" cy="58" r="1.5"/>
+                  </g>
+                  <!-- 蒂頭 -->
+                  <ellipse cx="40" cy="20" rx="4" ry="3" fill="#5D4E37"/>
+                  <path d="M36 20 Q40 12 44 20" fill="#2ECC71"/>
+                </svg>
+                <span>芭樂</span>
+              </div>
+              <div class="maze-fruit-item" data-fruit="番茄">
+                <svg viewBox="0 0 80 85">
+                  <!-- 番茄 -->
+                  <ellipse cx="40" cy="50" rx="30" ry="28" fill="#E74C3C"/>
+                  <ellipse cx="40" cy="48" rx="26" ry="24" fill="#EC7063"/>
+                  <!-- 高光 -->
+                  <ellipse cx="30" cy="40" rx="8" ry="6" fill="#F1948A" opacity="0.6"/>
+                  <!-- 蒂頭 -->
+                  <path d="M28 26 Q32 22 36 24 Q38 20 40 18 Q42 20 44 24 Q48 22 52 26 Q48 30 44 28 Q42 32 40 30 Q38 32 36 28 Q32 30 28 26Z" fill="#27AE60"/>
+                  <rect x="38" y="12" width="4" height="8" fill="#2ECC71" rx="1"/>
+                </svg>
+                <span>番茄</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- 迷宮主體 -->
+          <div class="maze-wrapper">
+            <svg class="maze-svg" id="maze-svg" viewBox="0 0 400 400">
+              <!-- 背景 -->
+              <rect x="0" y="0" width="400" height="400" fill="#FDF6F0"/>
+              <!-- 迷宮牆壁將由 JavaScript 繪製 -->
+              <g id="maze-walls"></g>
+              <!-- 蔬果和裝飾 -->
+              <g id="maze-items"></g>
+            </svg>
+            <canvas class="maze-canvas" id="maze-canvas"></canvas>
+          </div>
+        </div>
+
+        <div class="maze-controls">
+          <button class="maze-btn secondary" id="maze-clear">清除路線</button>
+          <button class="maze-btn" id="maze-next">下一題</button>
+        </div>
+      </div>
+
+      <div class="game-complete" id="maze-complete">
+        <div class="complete-icon">
+          <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+            <polyline points="20 6 9 17 4 12"/>
+          </svg>
+        </div>
+        <h3 class="complete-title">迷宮完成！</h3>
+        <p class="complete-message">阿公成功買到所有蔬果了！</p>
+        <button class="restart-btn" id="restart-maze">再玩一次</button>
+      </div>
+    </div>
+
+    <!-- 賓果遊戲 -->
+    <div id="bingo-area" class="game-area">
+      <div class="game-header">
+        <h2 class="game-title">水果賓果</h2>
+        <p class="game-instruction">根據提示找出正確的水果，連成一線就賓果！</p>
+      </div>
+
+      <div class="bingo-container">
+        <div class="bingo-question" id="bingo-question">找出：k 開頭的水果</div>
+
+        <div class="bingo-grid" id="bingo-grid"></div>
+
+        <div class="bingo-status" id="bingo-status">已找到：0 / 3</div>
+
+        <div class="bingo-controls">
+          <button class="maze-btn secondary" id="bingo-hint">提示</button>
+          <button class="maze-btn" id="bingo-next">下一題</button>
+        </div>
+      </div>
+
+      <div class="game-complete" id="bingo-complete">
+        <div class="complete-icon">
+          <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+            <polyline points="20 6 9 17 4 12"/>
+          </svg>
+        </div>
+        <h3 class="complete-title">賓果！</h3>
+        <p class="complete-message">你已經完成所有賓果挑戰！</p>
+        <button class="restart-btn" id="restart-bingo">再玩一次</button>
+      </div>
+    </div>
+  </main>
+
+  <script type="module">
+    import { getLocalProgress, initProgress } from './js/api.js';
+
+    let vocabulary = [];
+
+    // 初始化
+    async function init() {
+      try {
+        const response = await fetch('data/vocabulary.json');
+        const data = await response.json();
+        vocabulary = data.vocabulary;
+
+        setupGameSelector();
+        initMatching();
+        initSorting();
+        initMaze();
+        initBingo();
+      } catch (error) {
+        console.error('載入失敗:', error);
+      }
+    }
+
+    // 遊戲選擇
+    function setupGameSelector() {
+      const cards = document.querySelectorAll('.game-card');
+      const areas = document.querySelectorAll('.game-area');
+
+      cards.forEach(card => {
+        card.addEventListener('click', () => {
+          const game = card.dataset.game;
+          cards.forEach(c => c.classList.toggle('active', c === card));
+          areas.forEach(area => area.classList.toggle('active', area.id === `${game}-area`));
+        });
+      });
+    }
+
+    // ========================================
+    // 連連看遊戲
+    // ========================================
+    let matchingPairs = [];
+    let matchedCount = 0;
+    let selectedLeft = null;
+
+    function initMatching() {
+      document.getElementById('restart-matching').addEventListener('click', startMatching);
+      startMatching();
+    }
+
+    function startMatching() {
+      // 隨機選擇 5 個詞彙
+      const shuffled = [...vocabulary].sort(() => Math.random() - 0.5);
+      matchingPairs = shuffled.slice(0, 5);
+      matchedCount = 0;
+      selectedLeft = null;
+
+      // 清除畫線
+      document.getElementById('matching-svg').innerHTML = '';
+      document.getElementById('matching-complete').classList.remove('visible');
+
+      // 渲染左側（漢字）
+      const leftCol = document.getElementById('matching-left');
+      leftCol.innerHTML = '';
+      matchingPairs.forEach((item, i) => {
+        const el = document.createElement('div');
+        el.className = 'matching-item';
+        el.textContent = item.chinese;
+        el.dataset.id = item.id;
+        el.dataset.side = 'left';
+        el.addEventListener('click', () => selectMatchingItem(el, 'left'));
+        leftCol.appendChild(el);
+      });
+
+      // 渲染右側（拼音）- 打亂順序
+      const rightCol = document.getElementById('matching-right');
+      rightCol.innerHTML = '';
+      const shuffledPairs = [...matchingPairs].sort(() => Math.random() - 0.5);
+      shuffledPairs.forEach((item, i) => {
+        const el = document.createElement('div');
+        el.className = 'matching-item';
+        el.textContent = item.pinyin;
+        el.dataset.id = item.id;
+        el.dataset.side = 'right';
+        el.addEventListener('click', () => selectMatchingItem(el, 'right'));
+        rightCol.appendChild(el);
+      });
+
+      updateMatchingScore();
+    }
+
+    function selectMatchingItem(el, side) {
+      if (el.classList.contains('matched')) return;
+
+      if (side === 'left') {
+        // 取消之前的選擇
+        document.querySelectorAll('#matching-left .matching-item').forEach(item => {
+          item.classList.remove('selected');
+        });
+        el.classList.add('selected');
+        selectedLeft = el;
+      } else if (side === 'right' && selectedLeft) {
+        // 檢查配對
+        if (selectedLeft.dataset.id === el.dataset.id) {
+          // 正確配對
+          selectedLeft.classList.remove('selected');
+          selectedLeft.classList.add('matched');
+          el.classList.add('matched');
+
+          // 畫線連接
+          drawMatchingLine(selectedLeft, el);
+
+          matchedCount++;
+          updateMatchingScore();
+
+          if (matchedCount === matchingPairs.length) {
+            setTimeout(() => {
+              document.getElementById('matching-complete').classList.add('visible');
+            }, 500);
+          }
+        } else {
+          // 錯誤配對
+          el.classList.add('wrong');
+          setTimeout(() => el.classList.remove('wrong'), 500);
+        }
+        selectedLeft.classList.remove('selected');
+        selectedLeft = null;
+      }
+    }
+
+    function drawMatchingLine(leftEl, rightEl) {
+      const svg = document.getElementById('matching-svg');
+      const container = document.getElementById('matching-container');
+      const containerRect = container.getBoundingClientRect();
+
+      const leftRect = leftEl.getBoundingClientRect();
+      const rightRect = rightEl.getBoundingClientRect();
+
+      const x1 = leftRect.right - containerRect.left;
+      const y1 = leftRect.top + leftRect.height / 2 - containerRect.top;
+      const x2 = rightRect.left - containerRect.left;
+      const y2 = rightRect.top + rightRect.height / 2 - containerRect.top;
+
+      const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+      line.setAttribute('x1', x1);
+      line.setAttribute('y1', y1);
+      line.setAttribute('x2', x2);
+      line.setAttribute('y2', y2);
+      line.classList.add('matching-line');
+      svg.appendChild(line);
+    }
+
+    function updateMatchingScore() {
+      document.getElementById('matching-score').textContent = `已配對：${matchedCount} / ${matchingPairs.length}`;
+    }
+
+    // ========================================
+    // 分類遊戲
+    // ========================================
+    const colorMapping = {
+      '苦瓜': 'green',
+      '高麗菜': 'green',
+      '刺瓜仔': 'green',
+      '金瓜': 'yellow',
+      '柑': 'yellow',
+      '王梨': 'yellow',
+      '草莓': 'red',
+      '番茄': 'red',
+      '蘋果': 'red',
+      '菜頭': 'white',
+      '菜花': 'white',
+      '蕃薯': 'brown',
+      '菌碻': 'brown',
+      '葡萄': 'purple',
+      '茄仔': 'purple'
+    };
+
+    let sortingItems = [];
+    let sortedCount = 0;
+
+    function initSorting() {
+      document.getElementById('restart-sorting').addEventListener('click', startSorting);
+      startSorting();
+    }
+
+    function startSorting() {
+      sortedCount = 0;
+      document.getElementById('sorting-complete').classList.remove('visible');
+
+      // 選擇有顏色映射的詞彙
+      sortingItems = vocabulary.filter(v => colorMapping[v.chinese]).slice(0, 12);
+      sortingItems = sortingItems.sort(() => Math.random() - 0.5);
+
+      // 清除分類區
+      document.querySelectorAll('.sorting-category-items').forEach(el => el.innerHTML = '');
+
+      // 渲染待分類項目
+      const container = document.getElementById('sorting-items');
+      container.innerHTML = '';
+
+      sortingItems.forEach(item => {
+        const el = document.createElement('div');
+        el.className = 'sorting-item';
+        el.textContent = item.chinese;
+        el.draggable = true;
+        el.dataset.color = colorMapping[item.chinese];
+        el.dataset.id = item.id;
+
+        el.addEventListener('dragstart', (e) => {
+          el.classList.add('dragging');
+          e.dataTransfer.setData('text/plain', JSON.stringify({
+            id: item.id,
+            chinese: item.chinese,
+            color: colorMapping[item.chinese]
+          }));
+        });
+
+        el.addEventListener('dragend', () => {
+          el.classList.remove('dragging');
+        });
+
+        container.appendChild(el);
+      });
+
+      // 設定放置區
+      document.querySelectorAll('.sorting-category').forEach(category => {
+        category.addEventListener('dragover', (e) => {
+          e.preventDefault();
+          category.classList.add('dragover');
+        });
+
+        category.addEventListener('dragleave', () => {
+          category.classList.remove('dragover');
+        });
+
+        category.addEventListener('drop', (e) => {
+          e.preventDefault();
+          category.classList.remove('dragover');
+
+          const data = JSON.parse(e.dataTransfer.getData('text/plain'));
+          const acceptColors = category.dataset.accept.split(',');
+
+          if (acceptColors.includes(data.color)) {
+            // 正確分類
+            const itemEl = document.querySelector(`.sorting-item[data-id="${data.id}"]`);
+            if (itemEl && !itemEl.classList.contains('placed')) {
+              itemEl.classList.add('placed');
+              itemEl.draggable = false;
+
+              const clone = itemEl.cloneNode(true);
+              category.querySelector('.sorting-category-items').appendChild(clone);
+              itemEl.remove();
+
+              sortedCount++;
+              updateSortingScore();
+
+              if (sortedCount === sortingItems.length) {
+                setTimeout(() => {
+                  document.getElementById('sorting-complete').classList.add('visible');
+                }, 500);
+              }
+            }
+          }
+        });
+      });
+
+      updateSortingScore();
+    }
+
+    function updateSortingScore() {
+      document.getElementById('sorting-score').textContent = `已分類：${sortedCount} / ${sortingItems.length}`;
+    }
+
+    // ========================================
+    // 迷宮遊戲
+    // ========================================
+    let mazeCanvas, mazeCtx;
+    let isDrawing = false;
+    let mazeTargets = ['番茄', '玉米', '芭樂'];
+    let currentMazeIndex = 0;
+
+    // 迷宮生成器 - 使用深度優先搜索算法
+    // DFS 生成的是「完美迷宮」，任意兩點之間一定有唯一路徑
+    function generateMaze(cols, rows) {
+      // 初始化網格，每個格子有四面牆
+      const grid = [];
+      for (let y = 0; y < rows; y++) {
+        grid[y] = [];
+        for (let x = 0; x < cols; x++) {
+          grid[y][x] = {
+            x, y,
+            top: true,
+            right: true,
+            bottom: true,
+            left: true,
+            visited: false
+          };
+        }
+      }
+
+      // 深度優先搜索生成迷宮
+      const stack = [];
+      const startCell = grid[rows - 1][0]; // 從左下角開始
+      startCell.visited = true;
+      stack.push(startCell);
+
+      while (stack.length > 0) {
+        const current = stack[stack.length - 1];
+        const neighbors = getUnvisitedNeighbors(current, grid, cols, rows);
+
+        if (neighbors.length > 0) {
+          const next = neighbors[Math.floor(Math.random() * neighbors.length)];
+          removeWallBetween(current, next);
+          next.visited = true;
+          stack.push(next);
+        } else {
+          stack.pop();
+        }
+      }
+
+      // 開放入口
+      grid[rows - 1][0].left = false;
+
+      return grid;
+    }
+
+    function getUnvisitedNeighbors(cell, grid, cols, rows) {
+      const neighbors = [];
+      const { x, y } = cell;
+
+      if (y > 0 && !grid[y - 1][x].visited) neighbors.push(grid[y - 1][x]);
+      if (y < rows - 1 && !grid[y + 1][x].visited) neighbors.push(grid[y + 1][x]);
+      if (x > 0 && !grid[y][x - 1].visited) neighbors.push(grid[y][x - 1]);
+      if (x < cols - 1 && !grid[y][x + 1].visited) neighbors.push(grid[y][x + 1]);
+
+      return neighbors;
+    }
+
+    function removeWallBetween(a, b) {
+      const dx = b.x - a.x;
+      const dy = b.y - a.y;
+
+      if (dx === 1) { a.right = false; b.left = false; }
+      if (dx === -1) { a.left = false; b.right = false; }
+      if (dy === 1) { a.bottom = false; b.top = false; }
+      if (dy === -1) { a.top = false; b.bottom = false; }
+    }
+
+    function renderMaze(grid, cellSize, padding) {
+      const wallsGroup = document.getElementById('maze-walls');
+      const itemsGroup = document.getElementById('maze-items');
+      wallsGroup.innerHTML = '';
+      itemsGroup.innerHTML = '';
+
+      const rows = grid.length;
+      const cols = grid[0].length;
+
+      // 繪製牆壁
+      let wallsPath = '';
+
+      for (let y = 0; y < rows; y++) {
+        for (let x = 0; x < cols; x++) {
+          const cell = grid[y][x];
+          const px = padding + x * cellSize;
+          const py = padding + y * cellSize;
+
+          if (cell.top) {
+            wallsPath += `M${px},${py} L${px + cellSize},${py} `;
+          }
+          if (cell.left) {
+            wallsPath += `M${px},${py} L${px},${py + cellSize} `;
+          }
+        }
+      }
+
+      // 繪製右邊和底邊外牆
+      for (let y = 0; y < rows; y++) {
+        const cell = grid[y][cols - 1];
+        if (cell.right) {
+          const px = padding + cols * cellSize;
+          const py = padding + y * cellSize;
+          wallsPath += `M${px},${py} L${px},${py + cellSize} `;
+        }
+      }
+      for (let x = 0; x < cols; x++) {
+        const cell = grid[rows - 1][x];
+        if (cell.bottom) {
+          const px = padding + x * cellSize;
+          const py = padding + rows * cellSize;
+          wallsPath += `M${px},${py} L${px + cellSize},${py} `;
+        }
+      }
+
+      const pathEl = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+      pathEl.setAttribute('d', wallsPath);
+      pathEl.setAttribute('stroke', '#333');
+      pathEl.setAttribute('stroke-width', '3');
+      pathEl.setAttribute('stroke-linecap', 'round');
+      pathEl.setAttribute('fill', 'none');
+      wallsGroup.appendChild(pathEl);
+
+      // 使用 DOM API 創建 SVG 元素，避免 innerHTML 解析問題
+      const svgNS = 'http://www.w3.org/2000/svg';
+
+      // 繪製起點標記 (在左側入口旁邊)
+      // 起點標記 - 放在入口左側
+      // 入口在左下角 (0, 6)，格子中心 y = 25 + 6*50 + 25 = 350
+      const startText = document.createElementNS(svgNS, 'text');
+      startText.setAttribute('x', '12');
+      startText.setAttribute('y', String(padding + (rows - 1) * cellSize + cellSize / 2));
+      startText.setAttribute('font-size', '12');
+      startText.setAttribute('fill', '#E74C3C');
+      startText.setAttribute('font-weight', 'bold');
+      startText.setAttribute('text-anchor', 'middle');
+      startText.setAttribute('dominant-baseline', 'middle');
+      startText.setAttribute('transform', 'rotate(-90, 12, ' + (padding + (rows - 1) * cellSize + cellSize / 2) + ')');
+      startText.textContent = 'Start';
+      itemsGroup.appendChild(startText);
+
+      // 蔬果位置 - 每個水果放在不同的隨機位置
+      // 7x7 迷宮，格子座標 0-6，避開入口 (0,6)
+      const availablePositions = [];
+      for (let r = 0; r < rows; r++) {
+        for (let c = 0; c < cols; c++) {
+          // 排除入口附近
+          if (!(c === 0 && r >= 5)) {
+            availablePositions.push({ col: c, row: r });
+          }
+        }
+      }
+
+      // 隨機打亂位置
+      for (let i = availablePositions.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [availablePositions[i], availablePositions[j]] = [availablePositions[j], availablePositions[i]];
+      }
+
+      // 為每個水果分配不同位置
+      const fruitPositions = [
+        { name: '玉米', ...availablePositions[0] },
+        { name: '番茄', ...availablePositions[1] },
+        { name: '芭樂', ...availablePositions[2] }
+      ];
+
+      fruitPositions.forEach(fruit => {
+        // 計算格子中心座標
+        const fx = padding + fruit.col * cellSize + cellSize / 2;
+        const fy = padding + fruit.row * cellSize + cellSize / 2;
+
+        const g = document.createElementNS(svgNS, 'g');
+        g.setAttribute('class', 'maze-target-fruit');
+        g.setAttribute('data-fruit', fruit.name);
+        g.setAttribute('transform', 'translate(' + fx + ', ' + fy + ')');
+
+        if (fruit.name === '玉米') {
+          const e1 = document.createElementNS(svgNS, 'ellipse');
+          e1.setAttribute('cx', '0'); e1.setAttribute('cy', '3');
+          e1.setAttribute('rx', '10'); e1.setAttribute('ry', '15');
+          e1.setAttribute('fill', '#F4D03F');
+          g.appendChild(e1);
+
+          const e2 = document.createElementNS(svgNS, 'ellipse');
+          e2.setAttribute('cx', '0'); e2.setAttribute('cy', '3');
+          e2.setAttribute('rx', '7'); e2.setAttribute('ry', '11');
+          e2.setAttribute('fill', '#F7DC6F');
+          g.appendChild(e2);
+
+          const leaf = document.createElementNS(svgNS, 'path');
+          leaf.setAttribute('d', 'M-6 -10 Q0 -18 6 -10 Q0 -8 -6 -10Z');
+          leaf.setAttribute('fill', '#2ECC71');
+          g.appendChild(leaf);
+        } else if (fruit.name === '番茄') {
+          const e1 = document.createElementNS(svgNS, 'ellipse');
+          e1.setAttribute('cx', '0'); e1.setAttribute('cy', '0');
+          e1.setAttribute('rx', '14'); e1.setAttribute('ry', '13');
+          e1.setAttribute('fill', '#E74C3C');
+          g.appendChild(e1);
+
+          const leaf = document.createElementNS(svgNS, 'path');
+          leaf.setAttribute('d', 'M-6 -11 Q0 -15 6 -11 Q0 -9 -6 -11Z');
+          leaf.setAttribute('fill', '#27AE60');
+          g.appendChild(leaf);
+        } else if (fruit.name === '芭樂') {
+          const e1 = document.createElementNS(svgNS, 'ellipse');
+          e1.setAttribute('cx', '0'); e1.setAttribute('cy', '0');
+          e1.setAttribute('rx', '13'); e1.setAttribute('ry', '15');
+          e1.setAttribute('fill', '#A8D948');
+          g.appendChild(e1);
+
+          const e2 = document.createElementNS(svgNS, 'ellipse');
+          e2.setAttribute('cx', '0'); e2.setAttribute('cy', '1');
+          e2.setAttribute('rx', '7'); e2.setAttribute('ry', '8');
+          e2.setAttribute('fill', '#FFB6C1');
+          g.appendChild(e2);
+        }
+
+        itemsGroup.appendChild(g);
+      });
+
+      // 房子 (右上角格子內，座標 6,0)
+      const houseX = padding + 6 * cellSize + cellSize / 2;
+      const houseY = padding + 0 * cellSize + cellSize / 2;
+      const houseG = document.createElementNS(svgNS, 'g');
+      houseG.setAttribute('transform', 'translate(' + houseX + ', ' + houseY + ')');
+
+      const roof = document.createElementNS(svgNS, 'path');
+      roof.setAttribute('d', 'M-15 0 L0 -15 L15 0 Z');
+      roof.setAttribute('fill', '#F39C12');
+      houseG.appendChild(roof);
+
+      const body = document.createElementNS(svgNS, 'rect');
+      body.setAttribute('x', '-12'); body.setAttribute('y', '0');
+      body.setAttribute('width', '24'); body.setAttribute('height', '18');
+      body.setAttribute('fill', '#F39C12');
+      houseG.appendChild(body);
+
+      const door = document.createElementNS(svgNS, 'rect');
+      door.setAttribute('x', '-4'); door.setAttribute('y', '6');
+      door.setAttribute('width', '8'); door.setAttribute('height', '12');
+      door.setAttribute('fill', '#5D4037');
+      houseG.appendChild(door);
+
+      itemsGroup.appendChild(houseG);
+    }
+
+    function initMaze() {
+      mazeCanvas = document.getElementById('maze-canvas');
+      mazeCtx = mazeCanvas.getContext('2d');
+
+      const mazeSvg = document.getElementById('maze-svg');
+
+      // 生成並渲染迷宮
+      const cols = 7;
+      const rows = 7;
+      const cellSize = 50;
+      const padding = 25;
+
+      const maze = generateMaze(cols, rows);
+      renderMaze(maze, cellSize, padding);
+
+      // 設定 canvas 尺寸
+      function resizeMazeCanvas() {
+        const rect = mazeSvg.getBoundingClientRect();
+        mazeCanvas.width = rect.width;
+        mazeCanvas.height = rect.height;
+      }
+
+      resizeMazeCanvas();
+      window.addEventListener('resize', resizeMazeCanvas);
+
+      // 滑鼠事件
+      mazeCanvas.addEventListener('mousedown', startDrawing);
+      mazeCanvas.addEventListener('mousemove', draw);
+      mazeCanvas.addEventListener('mouseup', stopDrawing);
+      mazeCanvas.addEventListener('mouseleave', stopDrawing);
+
+      // 觸控事件
+      mazeCanvas.addEventListener('touchstart', (e) => {
+        e.preventDefault();
+        startDrawing(e.touches[0]);
+      });
+      mazeCanvas.addEventListener('touchmove', (e) => {
+        e.preventDefault();
+        draw(e.touches[0]);
+      });
+      mazeCanvas.addEventListener('touchend', stopDrawing);
+
+      document.getElementById('maze-clear').addEventListener('click', clearMaze);
+      document.getElementById('maze-next').addEventListener('click', nextMaze);
+      document.getElementById('restart-maze').addEventListener('click', restartMaze);
+
+      updateMazeTarget();
+    }
+
+    function startDrawing(e) {
+      isDrawing = true;
+      mazeCtx.beginPath();
+      mazeCtx.strokeStyle = '#C84B31';
+      mazeCtx.lineWidth = 4;
+      mazeCtx.lineCap = 'round';
+      mazeCtx.lineJoin = 'round';
+      const rect = mazeCanvas.getBoundingClientRect();
+      mazeCtx.moveTo(e.clientX - rect.left, e.clientY - rect.top);
+    }
+
+    function draw(e) {
+      if (!isDrawing) return;
+      const rect = mazeCanvas.getBoundingClientRect();
+      mazeCtx.lineTo(e.clientX - rect.left, e.clientY - rect.top);
+      mazeCtx.stroke();
+    }
+
+    function stopDrawing() {
+      isDrawing = false;
+    }
+
+    function clearMaze() {
+      mazeCtx.clearRect(0, 0, mazeCanvas.width, mazeCanvas.height);
+    }
+
+    function nextMaze() {
+      currentMazeIndex++;
+      if (currentMazeIndex >= mazeTargets.length) {
+        document.getElementById('maze-complete').classList.add('visible');
+      } else {
+        clearMaze();
+        const maze = generateMaze(7, 7);
+        renderMaze(maze, 50, 25);
+        updateMazeTarget();
+      }
+    }
+
+    function restartMaze() {
+      currentMazeIndex = 0;
+      document.getElementById('maze-complete').classList.remove('visible');
+      clearMaze();
+      const maze = generateMaze(7, 7);
+      renderMaze(maze, 50, 25);
+      updateMazeTarget();
+    }
+
+    function updateMazeTarget() {
+      const target = mazeTargets[currentMazeIndex];
+      document.getElementById('maze-target').textContent = target;
+
+      // 更新左側蔬果高亮
+      document.querySelectorAll('.maze-fruit-item').forEach(item => {
+        item.classList.toggle('active', item.dataset.fruit === target);
+      });
+
+      // 更新迷宮內目標高亮
+      document.querySelectorAll('.maze-target-fruit').forEach(fruit => {
+        fruit.classList.toggle('highlight', fruit.dataset.fruit === target);
+      });
+    }
+
+    // ========================================
+    // 賓果遊戲
+    // ========================================
+    let bingoFruits = [];
+    let bingoQuestions = [
+      { question: 'k 開頭的水果（拼音）', filter: (v) => v.pinyin.toLowerCase().startsWith('k') },
+      { question: '紅色的水果', filter: (v) => ['草莓', '蘋果'].includes(v.chinese) },
+      { question: '「仔」結尾的水果', filter: (v) => v.chinese.endsWith('仔') },
+    ];
+    let currentBingoQuestion = 0;
+    let bingoFoundCount = 0;
+    let bingoTargetCount = 0;
+
+    function initBingo() {
+      document.getElementById('bingo-next').addEventListener('click', nextBingoQuestion);
+      document.getElementById('bingo-hint').addEventListener('click', showBingoHint);
+      document.getElementById('restart-bingo').addEventListener('click', restartBingo);
+      startBingo();
+    }
+
+    function startBingo() {
+      // 選擇 9 個水果，確保每題至少有正確答案
+      const fruits = vocabulary.filter(v => v.category === 'fruit');
+
+      // 先找出每題的必要水果
+      const requiredFruits = new Set();
+      bingoQuestions.forEach(q => {
+        const matches = fruits.filter(q.filter);
+        if (matches.length > 0) {
+          // 每題至少加入一個正確答案
+          requiredFruits.add(matches[Math.floor(Math.random() * matches.length)].id);
+        }
+      });
+
+      // 將必要水果放入結果
+      const requiredList = fruits.filter(f => requiredFruits.has(f.id));
+      const otherFruits = fruits.filter(f => !requiredFruits.has(f.id));
+
+      // 打亂其他水果，補足到 9 個
+      const shuffledOthers = [...otherFruits].sort(() => Math.random() - 0.5);
+      const needed = 9 - requiredList.length;
+      bingoFruits = [...requiredList, ...shuffledOthers.slice(0, needed)];
+
+      // 最後打亂順序
+      bingoFruits = bingoFruits.sort(() => Math.random() - 0.5);
+
+      renderBingoGrid();
+      updateBingoQuestion();
+    }
+
+    function renderBingoGrid() {
+      const grid = document.getElementById('bingo-grid');
+      grid.innerHTML = '';
+
+      bingoFruits.forEach((fruit, i) => {
+        const cell = document.createElement('div');
+        cell.className = 'bingo-cell';
+        cell.textContent = fruit.chinese;
+        cell.dataset.id = fruit.id;
+        cell.dataset.index = i;
+
+        cell.addEventListener('click', () => checkBingoCell(cell, fruit));
+        grid.appendChild(cell);
+      });
+    }
+
+    function updateBingoQuestion() {
+      const q = bingoQuestions[currentBingoQuestion];
+      document.getElementById('bingo-question').textContent = `找出：${q.question}`;
+
+      // 計算這題有幾個正確答案
+      bingoTargetCount = bingoFruits.filter(q.filter).length;
+      bingoFoundCount = 0;
+      updateBingoStatus();
+
+      // 重置格子狀態
+      document.querySelectorAll('.bingo-cell').forEach(cell => {
+        cell.classList.remove('correct', 'wrong', 'marked');
+      });
+    }
+
+    function checkBingoCell(cell, fruit) {
+      if (cell.classList.contains('correct') || cell.classList.contains('wrong')) return;
+
+      const q = bingoQuestions[currentBingoQuestion];
+      if (q.filter(fruit)) {
+        cell.classList.add('correct');
+        bingoFoundCount++;
+        updateBingoStatus();
+
+        if (bingoFoundCount === bingoTargetCount) {
+          // 這題完成
+          setTimeout(() => {
+            if (currentBingoQuestion < bingoQuestions.length - 1) {
+              currentBingoQuestion++;
+              updateBingoQuestion();
+            } else {
+              document.getElementById('bingo-complete').classList.add('visible');
+            }
+          }, 800);
+        }
+      } else {
+        cell.classList.add('wrong');
+        setTimeout(() => cell.classList.remove('wrong'), 500);
+      }
+    }
+
+    function updateBingoStatus() {
+      document.getElementById('bingo-status').textContent = `已找到：${bingoFoundCount} / ${bingoTargetCount}`;
+    }
+
+    function showBingoHint() {
+      const q = bingoQuestions[currentBingoQuestion];
+      const correctFruits = bingoFruits.filter(q.filter);
+      if (correctFruits.length > 0) {
+        // 找一個還沒標記的提示
+        for (const fruit of correctFruits) {
+          const cell = document.querySelector(`.bingo-cell[data-id="${fruit.id}"]`);
+          if (cell && !cell.classList.contains('correct')) {
+            cell.style.animation = 'pulse 0.5s ease-out 2';
+            setTimeout(() => cell.style.animation = '', 1000);
+            break;
+          }
+        }
+      }
+    }
+
+    function nextBingoQuestion() {
+      if (currentBingoQuestion < bingoQuestions.length - 1) {
+        currentBingoQuestion++;
+        updateBingoQuestion();
+      }
+    }
+
+    function restartBingo() {
+      currentBingoQuestion = 0;
+      document.getElementById('bingo-complete').classList.remove('visible');
+      startBingo();
+    }
+
+    // 初始化
+    init();
+  </script>
+</body>
+</html>

@@ -1,0 +1,219 @@
+{
+  "version": "1.0.0",
+  "totalItems": 26,
+  "categories": {
+    "fruit": "水果",
+    "vegetable": "蔬菜",
+    "item": "用品"
+  },
+  "vocabulary": [
+    {
+      "id": 1,
+      "chinese": "冰箱",
+      "pinyin": "ping-siunn",
+      "category": "item",
+      "image": "slides/slide-02.png",
+      "audioFile": "audio/ping-siunn.mp3"
+    },
+    {
+      "id": 2,
+      "chinese": "菜籃",
+      "pinyin": "tshái-nâ",
+      "category": "item",
+      "image": "slides/slide-02.png",
+      "audioFile": "audio/tshai-na.mp3"
+    },
+    {
+      "id": 3,
+      "chinese": "草莓",
+      "pinyin": "tsháu-m̂",
+      "category": "fruit",
+      "image": "slides/slide-03.png",
+      "audioFile": "audio/tshau-m.mp3"
+    },
+    {
+      "id": 4,
+      "chinese": "蘆黍",
+      "pinyin": "lôo-súe",
+      "category": "vegetable",
+      "image": "slides/slide-03.png",
+      "audioFile": "audio/loo-sue.mp3"
+    },
+    {
+      "id": 5,
+      "chinese": "苦瓜",
+      "pinyin": "khóo-kue",
+      "category": "vegetable",
+      "image": "slides/slide-04.png",
+      "audioFile": "audio/khoo-kue.mp3"
+    },
+    {
+      "id": 6,
+      "chinese": "金瓜",
+      "pinyin": "kim-kue",
+      "category": "vegetable",
+      "image": "slides/slide-04.png",
+      "audioFile": "audio/kim-kue.mp3"
+    },
+    {
+      "id": 7,
+      "chinese": "龍眼",
+      "pinyin": "gîng-ngái",
+      "category": "fruit",
+      "image": "slides/slide-05.png",
+      "audioFile": "audio/ging-ngai.mp3"
+    },
+    {
+      "id": 8,
+      "chinese": "柑",
+      "pinyin": "kam",
+      "category": "fruit",
+      "image": "slides/slide-05.png",
+      "audioFile": "audio/kam.mp3"
+    },
+    {
+      "id": 9,
+      "chinese": "紅菜頭",
+      "pinyin": "âng-tshài-thâu",
+      "category": "vegetable",
+      "image": "slides/slide-06.png",
+      "audioFile": "audio/ang-tshai-thau.mp3"
+    },
+    {
+      "id": 10,
+      "chinese": "檨仔",
+      "pinyin": "suāinn-á",
+      "category": "fruit",
+      "image": "slides/slide-06.png",
+      "audioFile": "audio/suainn-a.mp3"
+    },
+    {
+      "id": 11,
+      "chinese": "柚仔",
+      "pinyin": "iū-á",
+      "category": "fruit",
+      "image": "slides/slide-07.png",
+      "audioFile": "audio/iu-a.mp3"
+    },
+    {
+      "id": 12,
+      "chinese": "蘋果",
+      "pinyin": "phōng-kó",
+      "category": "fruit",
+      "image": "slides/slide-07.png",
+      "audioFile": "audio/phong-ko.mp3"
+    },
+    {
+      "id": 13,
+      "chinese": "茄仔",
+      "pinyin": "kiô-á",
+      "category": "vegetable",
+      "image": "slides/slide-08.png",
+      "audioFile": "audio/kio-a.mp3"
+    },
+    {
+      "id": 14,
+      "chinese": "菜頭",
+      "pinyin": "tshài-thâu",
+      "category": "vegetable",
+      "image": "slides/slide-08.png",
+      "audioFile": "audio/tshai-thau.mp3"
+    },
+    {
+      "id": 15,
+      "chinese": "高麗菜",
+      "pinyin": "ko-lê-tshài",
+      "category": "vegetable",
+      "image": "slides/slide-09.png",
+      "audioFile": "audio/ko-le-tshai.mp3"
+    },
+    {
+      "id": 16,
+      "chinese": "蕃薯",
+      "pinyin": "han-tsî",
+      "category": "vegetable",
+      "image": "slides/slide-09.png",
+      "audioFile": "audio/han-tsi.mp3"
+    },
+    {
+      "id": 17,
+      "chinese": "菌碻",
+      "pinyin": "kan-tan",
+      "category": "vegetable",
+      "image": "slides/slide-10.png",
+      "audioFile": "audio/kan-tan.mp3"
+    },
+    {
+      "id": 18,
+      "chinese": "林仔拔",
+      "pinyin": "nâi-á-pút",
+      "category": "fruit",
+      "image": "slides/slide-10.png",
+      "audioFile": "audio/nai-a-put.mp3"
+    },
+    {
+      "id": 19,
+      "chinese": "葡萄",
+      "pinyin": "phô-tô",
+      "category": "fruit",
+      "image": "slides/slide-11.png",
+      "audioFile": "audio/pho-to.mp3"
+    },
+    {
+      "id": 20,
+      "chinese": "香蕉",
+      "pinyin": "king-tsio",
+      "category": "fruit",
+      "image": "slides/slide-11.png",
+      "audioFile": "audio/king-tsio.mp3"
+    },
+    {
+      "id": 21,
+      "chinese": "王梨",
+      "pinyin": "ông-lâi",
+      "category": "fruit",
+      "image": "slides/slide-12.png",
+      "audioFile": "audio/ong-lai.mp3"
+    },
+    {
+      "id": 22,
+      "chinese": "芭樂",
+      "pinyin": "ná-pua̍t-á",
+      "category": "fruit",
+      "image": "slides/slide-12.png",
+      "audioFile": "audio/na-puat-a.mp3"
+    },
+    {
+      "id": 23,
+      "chinese": "刺瓜仔",
+      "pinyin": "tshì-kue-á",
+      "category": "vegetable",
+      "image": "slides/slide-13.png",
+      "audioFile": "audio/tshi-kue-a.mp3"
+    },
+    {
+      "id": 24,
+      "chinese": "番茄",
+      "pinyin": "thoo-má-too",
+      "category": "vegetable",
+      "image": "slides/slide-13.png",
+      "audioFile": "audio/thoo-ma-too.mp3"
+    },
+    {
+      "id": 25,
+      "chinese": "臭柿仔",
+      "pinyin": "tshàu-khī-á",
+      "category": "vegetable",
+      "image": "slides/slide-14.png",
+      "audioFile": "audio/tshau-khi-a.mp3"
+    },
+    {
+      "id": 26,
+      "chinese": "菜花",
+      "pinyin": "tshài-hue",
+      "category": "vegetable",
+      "image": "slides/slide-14.png",
+      "audioFile": "audio/tshai-hue.mp3"
+    }
+  ]
+}

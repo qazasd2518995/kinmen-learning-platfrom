@@ -1,0 +1,645 @@
+/* ========================================
+   互動活動樣式
+   ======================================== */
+
+/* ========================================
+   連連看遊戲
+   ======================================== */
+.matching-game {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.matching-game .game-area {
+  flex: 1;
+  position: relative;
+}
+
+/* SVG 連線層 */
+.connection-layer {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.connection-line {
+  stroke: var(--kinmen-ocean);
+  stroke-width: 3;
+  stroke-linecap: round;
+  fill: none;
+  transition: stroke 0.3s var(--ease-out);
+}
+
+.connection-line.drawing {
+  stroke: var(--kinmen-gold);
+  stroke-dasharray: 8 4;
+  animation: dash 0.5s linear infinite;
+}
+
+@keyframes dash {
+  to {
+    stroke-dashoffset: -12;
+  }
+}
+
+.connection-line.correct {
+  stroke: var(--kinmen-green);
+  stroke-width: 4;
+}
+
+.connection-line.incorrect {
+  stroke: var(--kinmen-red);
+  stroke-width: 3;
+  animation: shake 0.4s ease-out;
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  20% { transform: translateX(-4px); }
+  40% { transform: translateX(4px); }
+  60% { transform: translateX(-4px); }
+  80% { transform: translateX(4px); }
+}
+
+/* 連線點 */
+.match-point {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--kinmen-ocean);
+  border: 3px solid var(--kinmen-ocean);
+  cursor: pointer;
+  z-index: 2;
+  transition: all 0.2s var(--ease-out);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* 左側點：顯示在文字右邊（後方） */
+.match-point[data-side="left"] {
+  transform: translate(50%, -50%);
+}
+
+/* 右側點：顯示在文字左邊（前方） */
+.match-point[data-side="right"] {
+  transform: translate(-150%, -50%);
+}
+
+.match-point[data-side="left"]:hover {
+  transform: translate(50%, -50%) scale(1.2);
+  background: var(--kinmen-ocean-light);
+  box-shadow: var(--shadow-md);
+}
+
+.match-point[data-side="right"]:hover {
+  transform: translate(-150%, -50%) scale(1.2);
+  background: var(--kinmen-ocean-light);
+  box-shadow: var(--shadow-md);
+}
+
+.match-point[data-side="left"].active {
+  background: var(--kinmen-gold);
+  border-color: var(--kinmen-gold);
+  transform: translate(50%, -50%) scale(1.3);
+}
+
+.match-point[data-side="right"].active {
+  background: var(--kinmen-gold);
+  border-color: var(--kinmen-gold);
+  transform: translate(-150%, -50%) scale(1.3);
+}
+
+.match-point.connected {
+  background: var(--kinmen-green);
+  border-color: var(--kinmen-green);
+}
+
+.match-point.connected.correct {
+  background: var(--kinmen-green);
+}
+
+.match-point.connected.incorrect {
+  background: var(--kinmen-red);
+  border-color: var(--kinmen-red);
+}
+
+/* 連連看控制按鈕 */
+.matching-controls {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 12px;
+  z-index: 10;
+}
+
+.match-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 24px;
+  background: white;
+  border: 2px solid var(--deco-blue);
+  border-radius: var(--radius-md);
+  color: var(--text-primary);
+  font-weight: 600;
+  font-size: 0.9375rem;
+  box-shadow: var(--shadow-md);
+  transition: all 0.2s var(--ease-out);
+}
+
+.match-btn:hover {
+  background: var(--kinmen-ocean);
+  border-color: var(--kinmen-ocean);
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
+}
+
+.match-btn:active {
+  transform: translateY(0);
+}
+
+.match-btn.primary {
+  background: var(--kinmen-ocean);
+  border-color: var(--kinmen-ocean);
+  color: white;
+}
+
+.match-btn.primary:hover {
+  background: var(--kinmen-green);
+  border-color: var(--kinmen-green);
+}
+
+.match-btn svg {
+  width: 18px;
+  height: 18px;
+}
+
+/* ========================================
+   水果賓果遊戲
+   ======================================== */
+.bingo-game {
+  position: fixed;
+  inset: 0;
+  background: rgba(253, 246, 240, 0.98);
+  z-index: 150;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s var(--ease-out);
+}
+
+.bingo-game.visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.bingo-header {
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.bingo-header h2 {
+  font-family: var(--font-display);
+  font-size: 2rem;
+  color: var(--text-accent);
+  margin-bottom: 8px;
+}
+
+.bingo-header p {
+  color: var(--text-secondary);
+  font-size: 1rem;
+}
+
+/* 賓果卡片 */
+.bingo-card {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 8px;
+  max-width: 500px;
+  width: 100%;
+  margin-bottom: 24px;
+}
+
+.bingo-cell {
+  aspect-ratio: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: white;
+  border: 2px solid var(--deco-blue);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: all 0.2s var(--ease-out);
+  padding: 8px;
+  gap: 4px;
+}
+
+.bingo-cell:hover:not(.marked):not(.free) {
+  background: var(--bg-secondary);
+  transform: scale(1.05);
+  box-shadow: var(--shadow-md);
+}
+
+.bingo-cell .cell-image {
+  width: 50%;
+  height: 50%;
+  object-fit: contain;
+}
+
+.bingo-cell .cell-text {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  text-align: center;
+  line-height: 1.2;
+}
+
+.bingo-cell.marked {
+  background: var(--kinmen-gold-light);
+  border-color: var(--kinmen-gold);
+  position: relative;
+}
+
+.bingo-cell.marked::after {
+  content: '';
+  position: absolute;
+  inset: 8px;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%238B6914' stroke-width='3'%3E%3Cpolyline points='20 6 9 17 4 12'/%3E%3C/svg%3E") center/contain no-repeat;
+  opacity: 0.6;
+}
+
+.bingo-cell.free {
+  background: var(--kinmen-ocean-light);
+  border-color: var(--kinmen-ocean);
+  cursor: default;
+}
+
+.bingo-cell.free .cell-text {
+  font-weight: 700;
+  color: var(--kinmen-ocean);
+  font-size: 1rem;
+}
+
+.bingo-cell.bingo-line {
+  animation: bingoHighlight 0.5s ease-out forwards;
+}
+
+@keyframes bingoHighlight {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+    background: var(--kinmen-green-light);
+    border-color: var(--kinmen-green);
+  }
+  100% {
+    transform: scale(1);
+    background: var(--kinmen-green-light);
+    border-color: var(--kinmen-green);
+  }
+}
+
+/* 賓果控制區 */
+.bingo-controls {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+.current-word {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 16px 32px;
+  background: white;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+}
+
+.current-word .word-text {
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  color: var(--text-accent);
+}
+
+.current-word .play-btn {
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--kinmen-gold);
+  border-radius: 50%;
+  color: white;
+  transition: all 0.2s var(--ease-out);
+}
+
+.current-word .play-btn:hover {
+  background: var(--kinmen-gold-light);
+  transform: scale(1.1);
+}
+
+.current-word .play-btn svg {
+  width: 24px;
+  height: 24px;
+}
+
+.bingo-actions {
+  display: flex;
+  gap: 12px;
+}
+
+.bingo-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 24px;
+  background: var(--kinmen-ocean);
+  border-radius: var(--radius-md);
+  color: white;
+  font-weight: 600;
+  font-size: 0.9375rem;
+  transition: all 0.2s var(--ease-out);
+}
+
+.bingo-btn:hover {
+  background: var(--kinmen-ocean-light);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.bingo-btn.secondary {
+  background: white;
+  border: 2px solid var(--deco-blue);
+  color: var(--text-primary);
+}
+
+.bingo-btn.secondary:hover {
+  background: var(--bg-secondary);
+}
+
+.bingo-btn svg {
+  width: 18px;
+  height: 18px;
+}
+
+/* 賓果關閉按鈕 */
+.bingo-close {
+  position: absolute;
+  top: 24px;
+  right: 24px;
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: white;
+  border-radius: 50%;
+  box-shadow: var(--shadow-md);
+  color: var(--text-secondary);
+  transition: all 0.2s var(--ease-out);
+}
+
+.bingo-close:hover {
+  background: var(--kinmen-red-light);
+  color: white;
+  transform: rotate(90deg);
+}
+
+.bingo-close svg {
+  width: 24px;
+  height: 24px;
+}
+
+/* 賓果成功動畫 */
+.bingo-celebration {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 200;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s var(--ease-out);
+}
+
+.bingo-celebration.visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.celebration-content {
+  text-align: center;
+  animation: celebrationPop 0.5s var(--spring) forwards;
+}
+
+@keyframes celebrationPop {
+  0% {
+    transform: scale(0.5);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.celebration-content h2 {
+  font-family: var(--font-display);
+  font-size: 4rem;
+  color: var(--kinmen-gold);
+  text-shadow: 0 4px 20px rgba(212, 168, 75, 0.5);
+  margin-bottom: 16px;
+}
+
+.celebration-content p {
+  font-size: 1.5rem;
+  color: white;
+}
+
+/* 彩色紙屑效果 */
+.confetti {
+  position: fixed;
+  width: 10px;
+  height: 10px;
+  background: var(--kinmen-gold);
+  animation: confettiFall 3s ease-out forwards;
+}
+
+@keyframes confettiFall {
+  0% {
+    transform: translateY(-100vh) rotate(0deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(100vh) rotate(720deg);
+    opacity: 0;
+  }
+}
+
+/* ========================================
+   分類活動
+   ======================================== */
+.sorting-game {
+  position: absolute;
+  inset: 0;
+}
+
+.sorting-categories {
+  display: flex;
+  gap: 16px;
+  padding: 20px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.sort-category {
+  min-width: 120px;
+  min-height: 150px;
+  padding: 16px;
+  background: white;
+  border: 3px dashed var(--deco-blue);
+  border-radius: var(--radius-lg);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  transition: all 0.2s var(--ease-out);
+}
+
+.sort-category.drag-over {
+  background: var(--kinmen-ocean-light);
+  border-color: var(--kinmen-ocean);
+  border-style: solid;
+  transform: scale(1.05);
+}
+
+.sort-category .category-label {
+  font-weight: 600;
+  color: var(--text-primary);
+  padding: 8px 16px;
+  background: var(--bg-secondary);
+  border-radius: var(--radius-sm);
+}
+
+.sort-category .category-items {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+}
+
+.sort-item {
+  width: 60px;
+  height: 60px;
+  padding: 8px;
+  background: white;
+  border: 2px solid var(--deco-pink);
+  border-radius: var(--radius-md);
+  cursor: grab;
+  transition: all 0.2s var(--ease-out);
+}
+
+.sort-item:active {
+  cursor: grabbing;
+}
+
+.sort-item:hover {
+  transform: scale(1.1);
+  box-shadow: var(--shadow-md);
+}
+
+.sort-item.dragging {
+  opacity: 0.5;
+  transform: scale(1.1);
+}
+
+.sort-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+/* ========================================
+   響應式調整
+   ======================================== */
+@media (max-width: 768px) {
+  .matching-controls {
+    bottom: 12px;
+    gap: 8px;
+  }
+
+  .match-btn {
+    padding: 10px 16px;
+    font-size: 0.875rem;
+  }
+
+  .bingo-card {
+    gap: 6px;
+    max-width: 350px;
+  }
+
+  .bingo-cell .cell-text {
+    font-size: 0.625rem;
+  }
+
+  .current-word {
+    padding: 12px 24px;
+  }
+
+  .current-word .word-text {
+    font-size: 1.25rem;
+  }
+
+  .bingo-btn {
+    padding: 10px 16px;
+    font-size: 0.875rem;
+  }
+
+  .celebration-content h2 {
+    font-size: 2.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .matching-controls {
+    flex-direction: column;
+    width: calc(100% - 32px);
+  }
+
+  .match-btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .bingo-card {
+    gap: 4px;
+    max-width: 280px;
+  }
+
+  .bingo-actions {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .bingo-btn {
+    width: 100%;
+    justify-content: center;
+  }
+}

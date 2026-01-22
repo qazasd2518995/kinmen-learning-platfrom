@@ -1,0 +1,335 @@
+/* ========================================
+   金門主題裝飾元素
+   ======================================== */
+
+/* ========================================
+   風獅爺裝飾
+   ======================================== */
+.wind-lion-deco {
+  position: fixed;
+  pointer-events: none;
+  opacity: 0.15;
+  z-index: 0;
+}
+
+.wind-lion-deco.top-left {
+  top: 100px;
+  left: 20px;
+  width: 120px;
+  height: 120px;
+}
+
+.wind-lion-deco.bottom-right {
+  bottom: 100px;
+  right: 20px;
+  width: 100px;
+  height: 100px;
+  transform: scaleX(-1);
+}
+
+/* ========================================
+   高粱穗裝飾
+   ======================================== */
+.sorghum-deco {
+  position: absolute;
+  width: 60px;
+  height: auto;
+  opacity: 0.3;
+  pointer-events: none;
+}
+
+/* ========================================
+   波浪底部裝飾
+   ======================================== */
+.wave-decoration {
+  position: fixed;
+  bottom: var(--footer-height);
+  left: 0;
+  right: 0;
+  height: 80px;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 100' preserveAspectRatio='none'%3E%3Cpath fill='%23A8C5DA' fill-opacity='0.2' d='M0,60 C360,100 720,20 1080,60 C1260,80 1380,70 1440,60 L1440,100 L0,100 Z'/%3E%3Cpath fill='%23F2B5B5' fill-opacity='0.15' d='M0,70 C360,30 720,90 1080,50 C1260,30 1380,50 1440,70 L1440,100 L0,100 Z'/%3E%3C/svg%3E") center bottom/100% 100% no-repeat;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* 全螢幕模式隱藏波浪 */
+body.fullscreen-mode .wave-decoration {
+  opacity: 0;
+}
+
+/* ========================================
+   金門特色動畫效果
+   ======================================== */
+
+/* 完成獎勵 - 風獅爺跳躍 */
+.reward-animation {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 300;
+  pointer-events: none;
+  opacity: 0;
+}
+
+.reward-animation.visible {
+  animation: rewardShow 2s ease-out forwards;
+}
+
+@keyframes rewardShow {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.5);
+  }
+  20% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1.2);
+  }
+  40% {
+    transform: translate(-50%, -50%) scale(1) translateY(-20px);
+  }
+  60% {
+    transform: translate(-50%, -50%) scale(1) translateY(0);
+  }
+  80% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.8);
+  }
+}
+
+.reward-icon {
+  width: 150px;
+  height: 150px;
+}
+
+.reward-text {
+  position: absolute;
+  bottom: -40px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: var(--font-display);
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--kinmen-gold);
+  white-space: nowrap;
+  text-shadow: 0 2px 10px rgba(212, 168, 75, 0.5);
+}
+
+/* ========================================
+   金星噴發效果
+   ======================================== */
+.star-burst {
+  position: fixed;
+  pointer-events: none;
+  z-index: 250;
+}
+
+.star {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  background: var(--kinmen-gold);
+  clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+  animation: starBurst 1s ease-out forwards;
+}
+
+@keyframes starBurst {
+  0% {
+    opacity: 1;
+    transform: scale(0) rotate(0deg);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.5) rotate(180deg);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(0.5) rotate(360deg);
+  }
+}
+
+/* ========================================
+   進度提示動畫
+   ======================================== */
+.progress-toast {
+  position: fixed;
+  top: calc(var(--header-height) + 16px);
+  left: 50%;
+  transform: translateX(-50%) translateY(-100px);
+  padding: 12px 24px;
+  background: var(--kinmen-green);
+  color: white;
+  border-radius: var(--radius-md);
+  font-weight: 500;
+  box-shadow: var(--shadow-lg);
+  z-index: 300;
+  opacity: 0;
+  transition: all 0.3s var(--ease-out);
+}
+
+.progress-toast.visible {
+  transform: translateX(-50%) translateY(0);
+  opacity: 1;
+}
+
+.progress-toast.error {
+  background: var(--kinmen-red);
+}
+
+.progress-toast.info {
+  background: var(--kinmen-ocean);
+}
+
+/* ========================================
+   閩南建築元素（洋樓剪影）
+   ======================================== */
+.building-silhouette {
+  position: fixed;
+  bottom: calc(var(--footer-height) + 60px);
+  pointer-events: none;
+  opacity: 0.08;
+  z-index: 0;
+}
+
+.building-silhouette.left {
+  left: 20px;
+  width: 150px;
+}
+
+.building-silhouette.right {
+  right: 20px;
+  width: 130px;
+  transform: scaleX(-1);
+}
+
+/* ========================================
+   自訂滾動條
+   ======================================== */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-secondary);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--deco-blue);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--kinmen-ocean);
+}
+
+/* Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--deco-blue) var(--bg-secondary);
+}
+
+/* ========================================
+   文字選取顏色
+   ======================================== */
+::selection {
+  background: var(--kinmen-gold-light);
+  color: var(--text-primary);
+}
+
+::-moz-selection {
+  background: var(--kinmen-gold-light);
+  color: var(--text-primary);
+}
+
+/* ========================================
+   焦點環顏色
+   ======================================== */
+:focus-visible {
+  outline: 2px solid var(--kinmen-ocean);
+  outline-offset: 2px;
+}
+
+/* ========================================
+   列印樣式
+   ======================================== */
+@media print {
+  .nav-header,
+  .nav-footer,
+  .teacher-toolbar,
+  .sidebar,
+  .sidebar-overlay,
+  .bg-decoration,
+  .wave-decoration,
+  .wind-lion-deco,
+  .building-silhouette {
+    display: none !important;
+  }
+
+  .main-content {
+    padding: 0 !important;
+  }
+
+  .slide-container {
+    height: auto !important;
+  }
+
+  .slide-frame {
+    box-shadow: none !important;
+    border: 1px solid #ccc !important;
+  }
+
+  .slide-nav-area {
+    display: none !important;
+  }
+}
+
+/* ========================================
+   高對比模式支援
+   ======================================== */
+@media (prefers-contrast: high) {
+  :root {
+    --text-primary: #000;
+    --text-secondary: #333;
+    --bg-primary: #fff;
+    --bg-secondary: #f0f0f0;
+  }
+
+  .slide-frame {
+    border: 2px solid #000;
+  }
+
+  .audio-btn {
+    border-width: 3px;
+  }
+}
+
+/* ========================================
+   減少動態模式
+   ======================================== */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  .blob {
+    animation: none;
+  }
+}
+
+/* ========================================
+   深色模式（可選）
+   ======================================== */
+@media (prefers-color-scheme: dark) {
+  /* 預留深色模式樣式 */
+  /* 可根據需要啟用 */
+}

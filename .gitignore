@@ -1,0 +1,23 @@
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Claude
+.claude/
+
+# Large PDF files
+*.pdf
+
+# Node modules (if any)
+node_modules/
+
+# Environment files
+.env
+.env.local

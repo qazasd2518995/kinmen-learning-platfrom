@@ -1,0 +1,573 @@
+{
+  "title": "金門話教材：去巴剎買菜",
+  "version": "1.0.0",
+  "totalSlides": 55,
+  "sections": [
+    { "id": "intro", "name": "認識蔬果", "startSlide": 1, "endSlide": 18 },
+    { "id": "activity1", "name": "學習單", "startSlide": 19, "endSlide": 24 },
+    { "id": "dialogue", "name": "市場日常用語", "startSlide": 25, "endSlide": 36 },
+    { "id": "maze", "name": "迷宮遊戲", "startSlide": 37, "endSlide": 38 },
+    { "id": "activity2", "name": "模擬市場活動", "startSlide": 39, "endSlide": 42 },
+    { "id": "simulation", "name": "模擬市場", "startSlide": 43, "endSlide": 54 },
+    { "id": "review", "name": "回顧與反思", "startSlide": 55, "endSlide": 55 }
+  ],
+  "slides": [
+    {
+      "id": 1,
+      "image": "slides/slide-01.png",
+      "type": "cover",
+      "title": "認識蔬果",
+      "section": "intro"
+    },
+    {
+      "id": 2,
+      "image": "slides/slide-02.png",
+      "type": "vocabulary",
+      "section": "intro",
+      "vocabulary": [
+        {
+          "word": "冰箱",
+          "pinyin": "ping-siunn",
+          "audioFile": "audio/ping-siunn.mp3",
+          "position": { "x": "28%", "y": "8%" }
+        },
+        {
+          "word": "菜籃",
+          "pinyin": "tshái-nâ",
+          "audioFile": "audio/tshai-na.mp3",
+          "position": { "x": "78%", "y": "8%" }
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "image": "slides/slide-03.png",
+      "type": "vocabulary",
+      "section": "intro",
+      "vocabulary": [
+        {
+          "word": "草莓",
+          "pinyin": "tsháu-m̂",
+          "audioFile": "audio/tshau-m.mp3",
+          "position": { "x": "25%", "y": "8%" }
+        },
+        {
+          "word": "蘆黍",
+          "pinyin": "lôo-súe",
+          "audioFile": "audio/loo-sue.mp3",
+          "position": { "x": "75%", "y": "8%" }
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "image": "slides/slide-04.png",
+      "type": "vocabulary",
+      "section": "intro",
+      "vocabulary": [
+        {
+          "word": "苦瓜",
+          "pinyin": "khóo-kue",
+          "audioFile": "audio/khoo-kue.mp3",
+          "position": { "x": "25%", "y": "8%" }
+        },
+        {
+          "word": "金瓜",
+          "pinyin": "kim-kue",
+          "audioFile": "audio/kim-kue.mp3",
+          "position": { "x": "75%", "y": "8%" }
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "image": "slides/slide-05.png",
+      "type": "vocabulary",
+      "section": "intro",
+      "vocabulary": [
+        {
+          "word": "龍眼",
+          "pinyin": "gîng-ngái",
+          "audioFile": "audio/ging-ngai.mp3",
+          "position": { "x": "25%", "y": "8%" }
+        },
+        {
+          "word": "柑",
+          "pinyin": "kam",
+          "audioFile": "audio/kam.mp3",
+          "position": { "x": "75%", "y": "8%" }
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "image": "slides/slide-06.png",
+      "type": "vocabulary",
+      "section": "intro",
+      "vocabulary": [
+        {
+          "word": "紅菜頭",
+          "pinyin": "âng-tshài-thâu",
+          "audioFile": "audio/ang-tshai-thau.mp3",
+          "position": { "x": "25%", "y": "8%" }
+        },
+        {
+          "word": "檨仔",
+          "pinyin": "suāinn-á",
+          "audioFile": "audio/suainn-a.mp3",
+          "position": { "x": "75%", "y": "8%" }
+        }
+      ]
+    },
+    {
+      "id": 7,
+      "image": "slides/slide-07.png",
+      "type": "vocabulary",
+      "section": "intro",
+      "vocabulary": [
+        {
+          "word": "柚仔",
+          "pinyin": "iū-á",
+          "audioFile": "audio/iu-a.mp3",
+          "position": { "x": "25%", "y": "8%" }
+        },
+        {
+          "word": "蘋果",
+          "pinyin": "phōng-kó",
+          "audioFile": "audio/phong-ko.mp3",
+          "position": { "x": "75%", "y": "8%" }
+        }
+      ]
+    },
+    {
+      "id": 8,
+      "image": "slides/slide-08.png",
+      "type": "vocabulary",
+      "section": "intro",
+      "vocabulary": [
+        {
+          "word": "茄仔",
+          "pinyin": "kiô-á",
+          "audioFile": "audio/kio-a.mp3",
+          "position": { "x": "25%", "y": "8%" }
+        },
+        {
+          "word": "菜頭",
+          "pinyin": "tshài-thâu",
+          "audioFile": "audio/tshai-thau.mp3",
+          "position": { "x": "75%", "y": "8%" }
+        }
+      ]
+    },
+    {
+      "id": 9,
+      "image": "slides/slide-09.png",
+      "type": "vocabulary",
+      "section": "intro",
+      "vocabulary": [
+        {
+          "word": "高麗菜",
+          "pinyin": "ko-lê-tshài",
+          "audioFile": "audio/ko-le-tshai.mp3",
+          "position": { "x": "25%", "y": "8%" }
+        },
+        {
+          "word": "蕃薯",
+          "pinyin": "han-tsî",
+          "audioFile": "audio/han-tsi.mp3",
+          "position": { "x": "75%", "y": "8%" }
+        }
+      ]
+    },
+    {
+      "id": 10,
+      "image": "slides/slide-10.png",
+      "type": "vocabulary",
+      "section": "intro",
+      "vocabulary": [
+        {
+          "word": "菌碻",
+          "pinyin": "kan-tan",
+          "audioFile": "audio/kan-tan.mp3",
+          "position": { "x": "28%", "y": "8%" }
+        },
+        {
+          "word": "林仔拔",
+          "pinyin": "nâi-á-pút",
+          "audioFile": "audio/nai-a-put.mp3",
+          "position": { "x": "78%", "y": "8%" }
+        }
+      ]
+    },
+    {
+      "id": 11,
+      "image": "slides/slide-11.png",
+      "type": "vocabulary",
+      "section": "intro",
+      "vocabulary": [
+        {
+          "word": "葡萄",
+          "pinyin": "phô-tô",
+          "audioFile": "audio/pho-to.mp3",
+          "position": { "x": "25%", "y": "8%" }
+        },
+        {
+          "word": "香蕉",
+          "pinyin": "king-tsio",
+          "audioFile": "audio/king-tsio.mp3",
+          "position": { "x": "75%", "y": "8%" }
+        }
+      ]
+    },
+    {
+      "id": 12,
+      "image": "slides/slide-12.png",
+      "type": "vocabulary",
+      "section": "intro",
+      "vocabulary": [
+        {
+          "word": "王梨",
+          "pinyin": "ông-lâi",
+          "audioFile": "audio/ong-lai.mp3",
+          "position": { "x": "25%", "y": "8%" }
+        },
+        {
+          "word": "芭樂",
+          "pinyin": "ná-pua̍t-á",
+          "audioFile": "audio/na-puat-a.mp3",
+          "position": { "x": "75%", "y": "8%" }
+        }
+      ]
+    },
+    {
+      "id": 13,
+      "image": "slides/slide-13.png",
+      "type": "vocabulary",
+      "section": "intro",
+      "vocabulary": [
+        {
+          "word": "刺瓜仔",
+          "pinyin": "tshì-kue-á",
+          "audioFile": "audio/tshi-kue-a.mp3",
+          "position": { "x": "25%", "y": "8%" }
+        },
+        {
+          "word": "番茄",
+          "pinyin": "thoo-má-too",
+          "audioFile": "audio/thoo-ma-too.mp3",
+          "position": { "x": "75%", "y": "8%" }
+        }
+      ]
+    },
+    {
+      "id": 14,
+      "image": "slides/slide-14.png",
+      "type": "vocabulary",
+      "section": "intro",
+      "vocabulary": [
+        {
+          "word": "臭柿仔",
+          "pinyin": "tshàu-khī-á",
+          "audioFile": "audio/tshau-khi-a.mp3",
+          "position": { "x": "25%", "y": "8%" }
+        },
+        {
+          "word": "菜花",
+          "pinyin": "tshài-hue",
+          "audioFile": "audio/tshai-hue.mp3",
+          "position": { "x": "75%", "y": "8%" }
+        }
+      ]
+    },
+    {
+      "id": 15,
+      "image": "slides/slide-15.png",
+      "type": "instruction",
+      "section": "activity1",
+      "title": "學習單 - 活動一 連連看"
+    },
+    {
+      "id": 16,
+      "image": "slides/slide-16.png",
+      "type": "vocabulary",
+      "section": "intro",
+      "vocabulary": []
+    },
+    {
+      "id": 17,
+      "image": "slides/slide-17.png",
+      "type": "vocabulary",
+      "section": "intro",
+      "vocabulary": []
+    },
+    {
+      "id": 18,
+      "image": "slides/slide-18.png",
+      "type": "vocabulary",
+      "section": "intro",
+      "vocabulary": []
+    },
+    {
+      "id": 19,
+      "image": "slides/slide-19.png",
+      "type": "matching",
+      "section": "activity1",
+      "title": "連連看",
+      "matchingData": {
+        "pairs": [
+          { "left": "苦瓜", "right": "khóo-kue" },
+          { "left": "金瓜", "right": "kim-kue" },
+          { "left": "小刺瓜", "right": "sió-tshì-kue" }
+        ],
+        "leftPoints": [
+          { "value": "苦瓜", "x": "26%", "y": "40%" },
+          { "value": "金瓜", "x": "26%", "y": "56%" },
+          { "value": "小刺瓜", "x": "28%", "y": "72%" }
+        ],
+        "rightPoints": [
+          { "value": "khóo-kue", "x": "60%", "y": "40%" },
+          { "value": "sió-tshì-kue", "x": "60%", "y": "56%" },
+          { "value": "kim-kue", "x": "60%", "y": "72%" }
+        ]
+      }
+    },
+    {
+      "id": 20,
+      "image": "slides/slide-20.png",
+      "type": "sorting",
+      "section": "activity1",
+      "title": "學習單 - 活動二 分色水"
+    },
+    {
+      "id": 21,
+      "image": "slides/slide-21.png",
+      "type": "instruction",
+      "section": "activity1"
+    },
+    {
+      "id": 22,
+      "image": "slides/slide-22.png",
+      "type": "instruction",
+      "section": "activity1"
+    },
+    {
+      "id": 23,
+      "image": "slides/slide-23.png",
+      "type": "instruction",
+      "section": "activity1"
+    },
+    {
+      "id": 24,
+      "image": "slides/slide-24.png",
+      "type": "instruction",
+      "section": "activity1"
+    },
+    {
+      "id": 25,
+      "image": "slides/slide-25.png",
+      "type": "dialogue",
+      "section": "dialogue",
+      "title": "市場日常用語"
+    },
+    {
+      "id": 26,
+      "image": "slides/slide-26.png",
+      "type": "dialogue",
+      "section": "dialogue"
+    },
+    {
+      "id": 27,
+      "image": "slides/slide-27.png",
+      "type": "dialogue",
+      "section": "dialogue"
+    },
+    {
+      "id": 28,
+      "image": "slides/slide-28.png",
+      "type": "dialogue",
+      "section": "dialogue"
+    },
+    {
+      "id": 29,
+      "image": "slides/slide-29.png",
+      "type": "dialogue",
+      "section": "dialogue"
+    },
+    {
+      "id": 30,
+      "image": "slides/slide-30.png",
+      "type": "dialogue",
+      "section": "dialogue",
+      "title": "人客常講"
+    },
+    {
+      "id": 31,
+      "image": "slides/slide-31.png",
+      "type": "dialogue",
+      "section": "dialogue"
+    },
+    {
+      "id": 32,
+      "image": "slides/slide-32.png",
+      "type": "dialogue",
+      "section": "dialogue"
+    },
+    {
+      "id": 33,
+      "image": "slides/slide-33.png",
+      "type": "dialogue",
+      "section": "dialogue"
+    },
+    {
+      "id": 34,
+      "image": "slides/slide-34.png",
+      "type": "dialogue",
+      "section": "dialogue"
+    },
+    {
+      "id": 35,
+      "image": "slides/slide-35.png",
+      "type": "dialogue",
+      "section": "dialogue",
+      "title": "市場日常用語 - 買果子",
+      "dialogues": [
+        {
+          "role": "人客",
+          "text": "這个水梨有甜無？",
+          "audioFile": "audio/dialogue-35-1.mp3",
+          "position": { "x": "92%", "y": "25%" }
+        },
+        {
+          "role": "頭家",
+          "text": "足甜的啦！你試看覓就知。",
+          "audioFile": "audio/dialogue-35-2.mp3",
+          "position": { "x": "92%", "y": "45%" }
+        }
+      ]
+    },
+    {
+      "id": 36,
+      "image": "slides/slide-36.png",
+      "type": "dialogue",
+      "section": "dialogue"
+    },
+    {
+      "id": 37,
+      "image": "slides/slide-37.png",
+      "type": "maze",
+      "section": "maze",
+      "title": "迷宮遊戲"
+    },
+    {
+      "id": 38,
+      "image": "slides/slide-38.png",
+      "type": "maze",
+      "section": "maze"
+    },
+    {
+      "id": 39,
+      "image": "slides/slide-39.png",
+      "type": "instruction",
+      "section": "activity2"
+    },
+    {
+      "id": 40,
+      "image": "slides/slide-40.png",
+      "type": "bingo",
+      "section": "activity2",
+      "title": "學習單 - 活動二 水果賓果"
+    },
+    {
+      "id": 41,
+      "image": "slides/slide-41.png",
+      "type": "content",
+      "section": "activity2"
+    },
+    {
+      "id": 42,
+      "image": "slides/slide-42.png",
+      "type": "content",
+      "section": "activity2"
+    },
+    {
+      "id": 43,
+      "image": "slides/slide-43.png",
+      "type": "simulation",
+      "section": "simulation",
+      "title": "模擬市場"
+    },
+    {
+      "id": 44,
+      "image": "slides/slide-44.png",
+      "type": "simulation",
+      "section": "simulation"
+    },
+    {
+      "id": 45,
+      "image": "slides/slide-45.png",
+      "type": "simulation",
+      "section": "simulation"
+    },
+    {
+      "id": 46,
+      "image": "slides/slide-46.png",
+      "type": "simulation",
+      "section": "simulation"
+    },
+    {
+      "id": 47,
+      "image": "slides/slide-47.png",
+      "type": "simulation",
+      "section": "simulation"
+    },
+    {
+      "id": 48,
+      "image": "slides/slide-48.png",
+      "type": "simulation",
+      "section": "simulation"
+    },
+    {
+      "id": 49,
+      "image": "slides/slide-49.png",
+      "type": "simulation",
+      "section": "simulation"
+    },
+    {
+      "id": 50,
+      "image": "slides/slide-50.png",
+      "type": "simulation",
+      "section": "simulation"
+    },
+    {
+      "id": 51,
+      "image": "slides/slide-51.png",
+      "type": "simulation",
+      "section": "simulation"
+    },
+    {
+      "id": 52,
+      "image": "slides/slide-52.png",
+      "type": "simulation",
+      "section": "simulation"
+    },
+    {
+      "id": 53,
+      "image": "slides/slide-53.png",
+      "type": "simulation",
+      "section": "simulation"
+    },
+    {
+      "id": 54,
+      "image": "slides/slide-54.png",
+      "type": "simulation",
+      "section": "simulation"
+    },
+    {
+      "id": 55,
+      "image": "slides/slide-55.png",
+      "type": "content",
+      "section": "review",
+      "title": "回顧與反思"
+    }
+  ]
+}
