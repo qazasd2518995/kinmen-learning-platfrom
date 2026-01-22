@@ -2,6 +2,27 @@
    互動活動樣式
    ======================================== */
 
+/* 觸控目標標準 */
+:root {
+  --touch-target-min: 44px;
+  --touch-target-comfortable: 48px;
+  --touch-spacing-min: 8px;
+}
+
+/* 全域觸控優化 */
+.matching-game, .bingo-game, .sorting-game {
+  touch-action: manipulation;
+}
+
+/* 分類遊戲觸控優化 - 防止拖曳時滾動 */
+.sorting-game {
+  touch-action: none;
+}
+
+.sorting-item, .sort-item {
+  touch-action: none;
+}
+
 /* ========================================
    連連看遊戲
    ======================================== */
@@ -64,11 +85,11 @@
   80% { transform: translateX(4px); }
 }
 
-/* 連線點 */
+/* 連線點 - 增加觸控目標尺寸 */
 .match-point {
   position: absolute;
-  width: 20px;
-  height: 20px;
+  width: 24px;
+  height: 24px;
   border-radius: 50%;
   background: var(--kinmen-ocean);
   border: 3px solid var(--kinmen-ocean);
@@ -78,6 +99,10 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  /* 增加觸控熱區但不改變視覺大小 */
+  box-sizing: content-box;
+  padding: 10px;
+  margin: -10px;
 }
 
 /* 左側點：顯示在文字右邊（後方） */
@@ -152,6 +177,7 @@
   font-size: 0.9375rem;
   box-shadow: var(--shadow-md);
   transition: all 0.2s var(--ease-out);
+  min-height: var(--touch-target-min);
 }
 
 .match-btn:hover {
@@ -245,6 +271,8 @@
   transition: all 0.2s var(--ease-out);
   padding: 8px;
   gap: 4px;
+  min-width: 50px;
+  min-height: 50px;
 }
 
 .bingo-cell:hover:not(.marked):not(.free) {
@@ -374,6 +402,7 @@
   font-weight: 600;
   font-size: 0.9375rem;
   transition: all 0.2s var(--ease-out);
+  min-height: var(--touch-target-min);
 }
 
 .bingo-btn:hover {
@@ -546,6 +575,8 @@
 }
 
 .sort-item {
+  min-width: 48px;
+  min-height: 48px;
   width: 60px;
   height: 60px;
   padding: 8px;
@@ -588,11 +619,17 @@
   .match-btn {
     padding: 10px 16px;
     font-size: 0.875rem;
+    min-height: var(--touch-target-min);
   }
 
   .bingo-card {
     gap: 6px;
     max-width: 350px;
+  }
+
+  .bingo-cell {
+    min-width: 50px;
+    min-height: 50px;
   }
 
   .bingo-cell .cell-text {
@@ -610,10 +647,17 @@
   .bingo-btn {
     padding: 10px 16px;
     font-size: 0.875rem;
+    min-height: var(--touch-target-min);
   }
 
   .celebration-content h2 {
     font-size: 2.5rem;
+  }
+
+  /* 分類項目觸控優化 */
+  .sort-item {
+    min-width: 48px;
+    min-height: 48px;
   }
 }
 
@@ -626,11 +670,17 @@
   .match-btn {
     width: 100%;
     justify-content: center;
+    min-height: var(--touch-target-comfortable);
   }
 
   .bingo-card {
     gap: 4px;
     max-width: 280px;
+  }
+
+  .bingo-cell {
+    min-width: 48px;
+    min-height: 48px;
   }
 
   .bingo-actions {
@@ -641,5 +691,78 @@
   .bingo-btn {
     width: 100%;
     justify-content: center;
+    min-height: var(--touch-target-comfortable);
+  }
+
+  /* 分類遊戲 */
+  .sort-category {
+    min-width: 100px;
+    min-height: 120px;
+  }
+}
+
+/* 超小螢幕 (320px) */
+@media (max-width: 320px) {
+  .bingo-card {
+    gap: 3px;
+    max-width: 260px;
+  }
+
+  .bingo-cell {
+    min-width: 44px;
+    min-height: 44px;
+    padding: 4px;
+  }
+
+  .bingo-cell .cell-text {
+    font-size: 0.5rem;
+  }
+
+  .matching-controls {
+    bottom: 8px;
+    width: calc(100% - 16px);
+  }
+
+  .match-btn {
+    padding: 8px 12px;
+    font-size: 0.8125rem;
+  }
+}
+
+/* 橫向模式 */
+@media (max-height: 500px) and (orientation: landscape) {
+  .bingo-game {
+    padding: 12px;
+  }
+
+  .bingo-header {
+    margin-bottom: 12px;
+  }
+
+  .bingo-header h2 {
+    font-size: 1.5rem;
+  }
+
+  .bingo-card {
+    max-width: 300px;
+    gap: 4px;
+    margin-bottom: 12px;
+  }
+
+  .bingo-controls {
+    gap: 8px;
+  }
+
+  .current-word {
+    padding: 8px 16px;
+  }
+
+  .current-word .word-text {
+    font-size: 1rem;
+  }
+
+  .current-word .play-btn {
+    width: 36px;
+    height: 36px;
   }
 }

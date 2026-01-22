@@ -127,6 +127,23 @@
       height: auto;
     }
 
+    /* 全域觸控優化 */
+    button, [role="button"], .interactive, a, .unit-card, .feature-item, .nav-btn {
+      touch-action: manipulation;
+    }
+
+    /* 輸入框防 iOS 縮放 */
+    input, textarea, select {
+      font-size: max(16px, 1rem);
+    }
+
+    /* 觸控目標標準 */
+    :root {
+      --touch-target-min: 44px;
+      --touch-target-comfortable: 48px;
+      --touch-spacing-min: 8px;
+    }
+
     /* ========================================
        背景裝飾
        ======================================== */
@@ -246,6 +263,8 @@
       font-size: 0.9375rem;
       transition: all var(--duration-normal) var(--ease-out);
       overflow: hidden;
+      min-height: var(--touch-target-min);
+      min-width: var(--touch-target-min);
     }
 
     /* Ripple 效果 */
@@ -888,7 +907,9 @@
       }
 
       .nav-btn {
-        padding: 10px;
+        padding: 12px;
+        min-height: var(--touch-target-min);
+        min-width: var(--touch-target-min);
       }
 
       .main-content {
@@ -927,6 +948,10 @@
       .feature-item {
         padding: 16px;
       }
+
+      .hero-cta {
+        min-height: var(--touch-target-comfortable);
+      }
     }
 
     @media (max-width: 480px) {
@@ -937,6 +962,316 @@
       .hero-cta {
         width: 100%;
         justify-content: center;
+        min-height: var(--touch-target-comfortable);
+      }
+
+      .unit-card {
+        padding: 20px;
+      }
+
+      .unit-icon {
+        width: 56px;
+        height: 56px;
+      }
+
+      .unit-icon svg {
+        width: 28px;
+        height: 28px;
+      }
+
+      .unit-title {
+        font-size: 1.25rem;
+      }
+
+      .unit-desc {
+        font-size: 0.875rem;
+      }
+
+      .unit-arrow {
+        width: var(--touch-target-min);
+        height: var(--touch-target-min);
+      }
+    }
+
+    /* 超小螢幕 (320px) */
+    @media (max-width: 320px) {
+      .nav-header {
+        padding: 8px 12px;
+      }
+
+      .logo-icon {
+        width: 36px;
+        height: 36px;
+      }
+
+      .logo-text {
+        font-size: 0.9375rem;
+      }
+
+      .logo {
+        gap: 10px;
+      }
+
+      .nav-btn {
+        padding: 10px;
+      }
+
+      .main-content {
+        padding: 20px 8px 56px;
+      }
+
+      .hero {
+        padding: 24px 0 36px;
+      }
+
+      .hero-badge {
+        padding: 6px 12px;
+        font-size: 0.75rem;
+        margin-bottom: 16px;
+      }
+
+      .hero-title {
+        font-size: 1.75rem;
+        margin-bottom: 12px;
+      }
+
+      .hero-subtitle {
+        font-size: 0.875rem;
+        margin-bottom: 24px;
+      }
+
+      .hero-cta {
+        padding: 14px 28px;
+        font-size: 1rem;
+      }
+
+      .section-header {
+        gap: 12px;
+        margin-bottom: 20px;
+      }
+
+      .section-icon {
+        width: 40px;
+        height: 40px;
+      }
+
+      .section-icon svg {
+        width: 22px;
+        height: 22px;
+      }
+
+      .section-title {
+        font-size: 1.375rem;
+      }
+
+      .units-grid {
+        gap: 16px;
+      }
+
+      .unit-card {
+        padding: 16px;
+      }
+
+      .unit-header {
+        margin-bottom: 16px;
+      }
+
+      .unit-icon {
+        width: 48px;
+        height: 48px;
+      }
+
+      .unit-icon svg {
+        width: 24px;
+        height: 24px;
+      }
+
+      .unit-number {
+        font-size: 0.75rem;
+        padding: 4px 10px;
+      }
+
+      .unit-title {
+        font-size: 1.125rem;
+        margin-bottom: 6px;
+      }
+
+      .unit-desc {
+        font-size: 0.8125rem;
+        margin-bottom: 16px;
+      }
+
+      .unit-stats {
+        padding-top: 14px;
+        gap: 10px;
+      }
+
+      .stat-item {
+        font-size: 0.75rem;
+      }
+
+      .unit-arrow {
+        right: 16px;
+        bottom: 16px;
+        width: 36px;
+        height: 36px;
+      }
+
+      .unit-arrow svg {
+        width: 18px;
+        height: 18px;
+      }
+
+      .features-section {
+        padding: 24px 16px;
+        margin-top: 48px;
+      }
+
+      .features-header {
+        margin-bottom: 32px;
+      }
+
+      .features-title {
+        font-size: 1.375rem;
+      }
+
+      .features-subtitle {
+        font-size: 0.875rem;
+      }
+
+      .features-grid {
+        gap: 12px;
+      }
+
+      .feature-item {
+        padding: 14px;
+      }
+
+      .feature-icon {
+        width: 48px;
+        height: 48px;
+        margin-bottom: 14px;
+      }
+
+      .feature-icon svg {
+        width: 24px;
+        height: 24px;
+      }
+
+      .feature-title {
+        font-size: 0.9375rem;
+      }
+
+      .feature-desc {
+        font-size: 0.8125rem;
+      }
+
+      .footer {
+        margin-top: 48px;
+        padding: 20px 16px;
+      }
+
+      .footer-text {
+        font-size: 0.75rem;
+      }
+    }
+
+    /* 橫向模式 */
+    @media (max-height: 500px) and (orientation: landscape) {
+      .nav-header {
+        padding: 8px 16px;
+      }
+
+      .logo-icon {
+        width: 32px;
+        height: 32px;
+      }
+
+      .main-content {
+        padding: 20px 24px 48px;
+      }
+
+      .hero {
+        padding: 20px 0 32px;
+      }
+
+      .hero-badge {
+        margin-bottom: 12px;
+      }
+
+      .hero-title {
+        font-size: 1.75rem;
+        margin-bottom: 8px;
+      }
+
+      .hero-subtitle {
+        font-size: 0.9375rem;
+        margin-bottom: 24px;
+      }
+
+      .hero-cta {
+        padding: 14px 28px;
+        font-size: 1rem;
+      }
+
+      .section-header {
+        margin-bottom: 20px;
+      }
+
+      .units-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 16px;
+      }
+
+      .unit-card {
+        padding: 16px;
+      }
+
+      .unit-header {
+        margin-bottom: 12px;
+      }
+
+      .unit-icon {
+        width: 40px;
+        height: 40px;
+      }
+
+      .unit-title {
+        font-size: 1.125rem;
+      }
+
+      .unit-desc {
+        font-size: 0.8125rem;
+        margin-bottom: 16px;
+      }
+
+      .features-section {
+        margin-top: 32px;
+        padding: 24px;
+      }
+
+      .features-header {
+        margin-bottom: 24px;
+      }
+
+      .features-grid {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 16px;
+      }
+
+      .feature-item {
+        padding: 14px;
+      }
+
+      .feature-icon {
+        width: 40px;
+        height: 40px;
+        margin-bottom: 12px;
+      }
+
+      .footer {
+        margin-top: 24px;
+        padding: 16px;
       }
     }
 

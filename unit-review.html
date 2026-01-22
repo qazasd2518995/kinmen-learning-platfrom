@@ -64,6 +64,23 @@
     button { font-family: inherit; border: none; background: none; cursor: pointer; }
     a { text-decoration: none; color: inherit; }
 
+    /* 全域觸控優化 */
+    button, [role="button"], .interactive, a, .question-tab, .vocab-item, .meaning-item {
+      touch-action: manipulation;
+    }
+
+    /* 輸入框防 iOS 縮放 */
+    input, textarea, select {
+      font-size: max(16px, 1rem);
+    }
+
+    /* 觸控目標標準 */
+    :root {
+      --touch-target-min: 44px;
+      --touch-target-comfortable: 48px;
+      --touch-spacing-min: 8px;
+    }
+
     /* 背景 */
     .bg-pattern {
       position: fixed; inset: 0; pointer-events: none; z-index: 0; opacity: 0.08;
@@ -135,6 +152,7 @@
       cursor: pointer;
       position: relative;
       overflow: hidden;
+      min-height: var(--touch-target-min);
     }
 
     .question-tab::before {
@@ -596,6 +614,7 @@
       display: flex;
       align-items: center;
       gap: 8px;
+      min-height: var(--touch-target-min);
     }
 
     .nav-btn.prev {
@@ -752,6 +771,7 @@
 
       .vocab-item {
         padding: 16px 12px;
+        min-height: var(--touch-target-comfortable);
       }
 
       .vocab-chinese {
@@ -760,6 +780,385 @@
 
       .tab-desc {
         display: none;
+      }
+
+      .question-tab {
+        min-height: var(--touch-target-comfortable);
+      }
+
+      .nav-btn {
+        min-height: var(--touch-target-min);
+        padding: 10px 20px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .vocab-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+      }
+
+      .vocab-item {
+        padding: 14px 10px;
+      }
+
+      .vocab-chinese {
+        font-size: 1rem;
+      }
+
+      .question-tab {
+        padding: 14px 16px;
+        gap: 12px;
+      }
+
+      .tab-icon {
+        width: 40px;
+        height: 40px;
+      }
+
+      .tab-icon svg {
+        width: 20px;
+        height: 20px;
+      }
+
+      .tab-number {
+        font-size: 0.6875rem;
+      }
+
+      .tab-title {
+        font-size: 0.9375rem;
+      }
+
+      .content-area {
+        padding: 20px 16px;
+      }
+
+      .content-title {
+        font-size: 1.25rem;
+      }
+
+      .content-subtitle {
+        font-size: 0.875rem;
+      }
+
+      .think-box {
+        padding: 16px;
+      }
+
+      .think-label {
+        font-size: 0.9375rem;
+      }
+
+      .think-textarea {
+        min-height: 120px;
+        font-size: max(16px, 1rem);
+      }
+
+      .meaning-item {
+        padding: 16px;
+      }
+
+      .info-box {
+        padding: 16px;
+      }
+
+      .nav-buttons {
+        gap: 12px;
+      }
+
+      .nav-btn {
+        padding: 10px 16px;
+        font-size: 0.875rem;
+      }
+    }
+
+    /* 超小螢幕 (320px) */
+    @media (max-width: 320px) {
+      main {
+        padding: 16px 8px;
+      }
+
+      .question-selector {
+        gap: 8px;
+        margin-bottom: 16px;
+      }
+
+      .question-tab {
+        padding: 12px;
+        gap: 10px;
+      }
+
+      .tab-icon {
+        width: 36px;
+        height: 36px;
+      }
+
+      .tab-icon svg {
+        width: 18px;
+        height: 18px;
+      }
+
+      .tab-number {
+        font-size: 0.625rem;
+      }
+
+      .tab-title {
+        font-size: 0.8125rem;
+      }
+
+      .content-area {
+        padding: 16px 12px;
+      }
+
+      .content-header {
+        margin-bottom: 20px;
+      }
+
+      .content-title {
+        font-size: 1.125rem;
+      }
+
+      .content-subtitle {
+        font-size: 0.8125rem;
+      }
+
+      .vocab-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 8px;
+        margin-bottom: 20px;
+      }
+
+      .vocab-item {
+        padding: 12px 8px;
+      }
+
+      .vocab-chinese {
+        font-size: 0.9375rem;
+      }
+
+      .vocab-pinyin {
+        font-size: 0.75rem;
+      }
+
+      .think-box {
+        padding: 14px;
+      }
+
+      .think-label {
+        font-size: 0.875rem;
+        margin-bottom: 12px;
+      }
+
+      .think-label svg {
+        width: 18px;
+        height: 18px;
+      }
+
+      .think-textarea {
+        min-height: 100px;
+        padding: 12px;
+      }
+
+      .info-box {
+        padding: 14px;
+        margin-bottom: 16px;
+      }
+
+      .info-title {
+        font-size: 1rem;
+        margin-bottom: 12px;
+      }
+
+      .info-content p {
+        padding: 6px 10px;
+        font-size: 0.875rem;
+      }
+
+      .meaning-list {
+        gap: 10px;
+        margin-bottom: 16px;
+      }
+
+      .meaning-item {
+        padding: 14px;
+      }
+
+      .meaning-icon {
+        width: 36px;
+        height: 36px;
+        font-size: 1.125rem;
+        margin-bottom: 10px;
+      }
+
+      .meaning-title {
+        font-size: 0.9375rem;
+      }
+
+      .meaning-desc {
+        font-size: 0.8125rem;
+      }
+
+      .nav-buttons {
+        margin-top: 20px;
+        padding-top: 16px;
+        flex-direction: column;
+        gap: 10px;
+      }
+
+      .nav-btn {
+        width: 100%;
+        justify-content: center;
+      }
+
+      .complete-section {
+        padding: 40px 20px;
+      }
+
+      .complete-icon {
+        width: 80px;
+        height: 80px;
+      }
+
+      .complete-icon svg {
+        width: 40px;
+        height: 40px;
+      }
+
+      .complete-title {
+        font-size: 1.5rem;
+      }
+
+      .complete-message {
+        font-size: 1rem;
+        margin-bottom: 24px;
+      }
+
+      .complete-btn {
+        padding: 14px 32px;
+        font-size: 1rem;
+      }
+    }
+
+    /* 橫向模式 */
+    @media (max-height: 500px) and (orientation: landscape) {
+      main {
+        padding: 12px 16px;
+      }
+
+      .question-selector {
+        flex-direction: row;
+        gap: 10px;
+        margin-bottom: 12px;
+      }
+
+      .question-tab {
+        padding: 10px 14px;
+        gap: 10px;
+      }
+
+      .tab-icon {
+        width: 32px;
+        height: 32px;
+      }
+
+      .tab-number {
+        font-size: 0.625rem;
+      }
+
+      .tab-title {
+        font-size: 0.8125rem;
+      }
+
+      .content-area {
+        padding: 16px 20px;
+        max-height: calc(100vh - 120px);
+        overflow-y: auto;
+      }
+
+      .content-header {
+        margin-bottom: 16px;
+      }
+
+      .content-title {
+        font-size: 1.125rem;
+        margin-bottom: 4px;
+      }
+
+      .content-subtitle {
+        font-size: 0.8125rem;
+      }
+
+      .vocab-grid {
+        grid-template-columns: repeat(5, 1fr);
+        gap: 8px;
+        margin-bottom: 16px;
+      }
+
+      .vocab-item {
+        padding: 10px 8px;
+      }
+
+      .vocab-chinese {
+        font-size: 0.9375rem;
+      }
+
+      .think-box {
+        padding: 14px;
+      }
+
+      .think-label {
+        font-size: 0.875rem;
+        margin-bottom: 10px;
+      }
+
+      .think-textarea {
+        min-height: 80px;
+      }
+
+      .info-box {
+        padding: 14px;
+        margin-bottom: 12px;
+      }
+
+      .meaning-list {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+        margin-bottom: 12px;
+      }
+
+      .nav-buttons {
+        margin-top: 16px;
+        padding-top: 12px;
+      }
+
+      .complete-section {
+        padding: 24px;
+      }
+
+      .complete-icon {
+        width: 60px;
+        height: 60px;
+        margin-bottom: 12px;
+      }
+
+      .complete-icon svg {
+        width: 30px;
+        height: 30px;
+      }
+
+      .complete-title {
+        font-size: 1.25rem;
+        margin-bottom: 8px;
+      }
+
+      .complete-message {
+        font-size: 0.9375rem;
+        margin-bottom: 16px;
+      }
+
+      .complete-btn {
+        padding: 12px 32px;
+        font-size: 1rem;
       }
     }
   </style>

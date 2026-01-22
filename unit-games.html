@@ -80,6 +80,23 @@
     button { font-family: inherit; border: none; background: none; cursor: pointer; }
     a { text-decoration: none; color: inherit; }
 
+    /* 全域觸控優化 */
+    button, [role="button"], .interactive, a, .game-card, .sorting-item, .bingo-cell, .matching-item {
+      touch-action: manipulation;
+    }
+
+    /* 輸入框防 iOS 縮放 */
+    input, textarea, select {
+      font-size: max(16px, 1rem);
+    }
+
+    /* 觸控目標標準 */
+    :root {
+      --touch-target-min: 44px;
+      --touch-target-comfortable: 48px;
+      --touch-spacing-min: 8px;
+    }
+
     /* 背景 */
     .bg-pattern {
       position: fixed; inset: 0; pointer-events: none; z-index: 0; opacity: 0.08;
@@ -1301,7 +1318,7 @@
 
     /* Mobile (<768px) */
     @media (max-width: 767px) {
-      /* 遊戲選單 - 水平滾動 */
+      /* 遊戲選單 - 水平滾動，增大觸控目標 */
       .game-selector {
         display: flex;
         overflow-x: auto;
@@ -1323,14 +1340,15 @@
 
       .game-card {
         flex: 0 0 auto;
-        min-width: 120px;
-        padding: 12px;
+        min-width: 140px;
+        padding: 16px;
         scroll-snap-align: start;
+        min-height: var(--touch-target-comfortable);
       }
 
       .game-card-icon {
-        width: 40px;
-        height: 40px;
+        width: 44px;
+        height: 44px;
         margin-bottom: 8px;
       }
 
@@ -1463,16 +1481,17 @@
         padding: 16px;
       }
 
-      /* 連連看超小螢幕 */
+      /* 連連看超小螢幕 - 確保觸控目標 */
       .matching-container {
         gap: 12px;
         padding: 8px;
       }
 
       .matching-item {
-        padding: 8px 12px;
+        padding: 10px 14px;
         font-size: 0.9rem;
-        min-width: 80px;
+        min-width: 90px;
+        min-height: var(--touch-target-min);
       }
 
       .maze-svg {
@@ -1483,6 +1502,159 @@
       .maze-fruit-item svg {
         width: 30px;
         height: 40px;
+      }
+    }
+
+    /* 超小螢幕 (320px) */
+    @media (max-width: 320px) {
+      main {
+        padding: 8px;
+      }
+
+      .game-selector {
+        gap: 8px;
+      }
+
+      .game-card {
+        min-width: 110px;
+        padding: 12px;
+      }
+
+      .game-card-icon {
+        width: 36px;
+        height: 36px;
+      }
+
+      .game-card-title {
+        font-size: 0.8rem;
+      }
+
+      .game-card-desc {
+        font-size: 0.7rem;
+      }
+
+      .game-area {
+        padding: 12px;
+      }
+
+      .game-title {
+        font-size: 1.125rem;
+      }
+
+      .game-instruction {
+        font-size: 0.8125rem;
+      }
+
+      .matching-item {
+        padding: 8px 10px;
+        font-size: 0.8rem;
+        min-width: 80px;
+        min-height: 40px;
+      }
+
+      .bingo-grid {
+        max-width: 260px;
+        gap: 4px;
+      }
+
+      .bingo-cell {
+        font-size: 1rem;
+        min-width: 44px;
+        min-height: 44px;
+      }
+
+      .sorting-item {
+        padding: 8px 12px;
+        font-size: 0.8rem;
+        min-height: var(--touch-target-min);
+      }
+
+      .sorting-category {
+        min-height: 80px;
+        padding: 8px;
+      }
+
+      .maze-wrapper {
+        width: 260px;
+        height: 260px;
+      }
+    }
+
+    /* 橫向模式 */
+    @media (max-height: 500px) and (orientation: landscape) {
+      main {
+        padding: 8px 16px;
+      }
+
+      .game-selector {
+        margin-bottom: 8px;
+      }
+
+      .game-card {
+        padding: 8px 12px;
+      }
+
+      .game-card-icon {
+        width: 32px;
+        height: 32px;
+        margin-bottom: 4px;
+      }
+
+      .game-area {
+        padding: 12px 16px;
+      }
+
+      .game-header {
+        margin-bottom: 12px;
+      }
+
+      .game-title {
+        font-size: 1.125rem;
+        margin-bottom: 4px;
+      }
+
+      .game-instruction {
+        font-size: 0.8125rem;
+      }
+
+      .matching-container {
+        min-height: 200px;
+        padding: 8px;
+      }
+
+      .matching-item {
+        padding: 8px 14px;
+        font-size: 0.875rem;
+      }
+
+      .bingo-grid {
+        max-width: 250px;
+        gap: 6px;
+      }
+
+      .bingo-question {
+        padding: 8px 16px;
+        font-size: 1rem;
+        margin-bottom: 8px;
+      }
+
+      .maze-wrapper {
+        width: 250px;
+        height: 250px;
+      }
+
+      .maze-question {
+        font-size: 0.9rem;
+        padding: 6px 12px;
+      }
+
+      .sorting-items {
+        padding: 8px;
+        min-height: 60px;
+      }
+
+      .sorting-categories {
+        gap: 8px;
       }
     }
   </style>

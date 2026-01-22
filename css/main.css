@@ -56,6 +56,11 @@
   --header-height: 64px;
   --footer-height: 72px;
   --sidebar-width: 320px;
+
+  /* 觸控目標標準 */
+  --touch-target-min: 44px;
+  --touch-target-comfortable: 48px;
+  --touch-spacing-min: 8px;
 }
 
 html {
@@ -160,6 +165,16 @@ button:focus-visible {
   outline-offset: 2px;
 }
 
+/* 全域觸控優化 */
+button, [role="button"], .interactive, a {
+  touch-action: manipulation;
+}
+
+/* 輸入框防 iOS 縮放 */
+input, textarea, select {
+  font-size: max(16px, 1rem);
+}
+
 .hidden {
   display: none !important;
 }
@@ -232,6 +247,8 @@ button:focus-visible {
   color: var(--text-secondary);
   font-weight: 500;
   font-size: 0.9375rem;
+  min-height: var(--touch-target-min);
+  min-width: var(--touch-target-min);
 }
 
 .nav-btn:hover {
@@ -400,8 +417,8 @@ button:focus-visible {
 }
 
 .close-btn {
-  width: 36px;
-  height: 36px;
+  width: var(--touch-target-min);
+  height: var(--touch-target-min);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -519,6 +536,7 @@ button:focus-visible {
   font-weight: 500;
   font-size: 1rem;
   box-shadow: var(--shadow-sm);
+  min-height: var(--touch-target-min);
 }
 
 .footer-btn:hover {
@@ -644,7 +662,9 @@ body.teacher-mode .main-content {
   }
 
   .nav-btn {
-    padding: 10px;
+    padding: 12px;
+    min-height: var(--touch-target-min);
+    min-width: var(--touch-target-min);
   }
 
   .nav-footer {
@@ -654,6 +674,7 @@ body.teacher-mode .main-content {
   .footer-btn {
     padding: 10px 16px;
     font-size: 0.875rem;
+    min-height: var(--touch-target-min);
   }
 
   .footer-btn span {
@@ -674,6 +695,7 @@ body.teacher-mode .main-content {
 
   .toolbar-btn {
     padding: 8px;
+    min-height: var(--touch-target-min);
   }
 }
 
@@ -693,5 +715,73 @@ body.teacher-mode .main-content {
 
   #current-page {
     font-size: 1.25rem;
+  }
+}
+
+/* 超小螢幕 (320px) */
+@media (max-width: 320px) {
+  :root {
+    --header-height: 48px;
+    --footer-height: 56px;
+  }
+
+  .nav-header {
+    padding: 0 8px;
+  }
+
+  .logo-icon {
+    width: 28px;
+    height: 28px;
+  }
+
+  .logo-text {
+    font-size: 0.75rem;
+  }
+
+  .nav-btn {
+    padding: 8px;
+  }
+
+  .nav-footer {
+    padding: 0 8px;
+  }
+
+  .footer-btn {
+    padding: 8px 12px;
+    font-size: 0.8125rem;
+  }
+
+  .progress-bar {
+    width: 60px;
+  }
+}
+
+/* 橫向模式處理 */
+@media (max-height: 500px) and (orientation: landscape) {
+  :root {
+    --header-height: 40px;
+    --footer-height: 48px;
+  }
+
+  .nav-header {
+    padding: 8px 16px;
+  }
+
+  .page-title {
+    font-size: 1rem;
+  }
+
+  .nav-footer {
+    padding: 4px 16px;
+  }
+
+  .footer-btn {
+    padding: 8px 12px;
+    min-height: 36px;
+  }
+
+  .progress-bar {
+    width: 80px;
+    height: 4px;
   }
 }

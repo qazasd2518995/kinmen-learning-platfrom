@@ -75,6 +75,23 @@
     button { font-family: inherit; border: none; background: none; cursor: pointer; }
     a { text-decoration: none; color: inherit; }
 
+    /* 全域觸控優化 */
+    button, [role="button"], .interactive, a, .stall-item, .response-option, .shopping-item {
+      touch-action: manipulation;
+    }
+
+    /* 輸入框防 iOS 縮放 */
+    input, textarea, select {
+      font-size: max(16px, 1rem);
+    }
+
+    /* 觸控目標標準 */
+    :root {
+      --touch-target-min: 44px;
+      --touch-target-comfortable: 48px;
+      --touch-spacing-min: 8px;
+    }
+
     /* 背景 */
     .bg-pattern {
       position: fixed; inset: 0; pointer-events: none; z-index: 0; opacity: 0.08;
@@ -916,6 +933,7 @@
       border: 2px solid rgba(91, 143, 168, 0.2);
       position: relative;
       overflow: hidden;
+      min-height: var(--touch-target-comfortable);
     }
 
     .response-option::before {
@@ -1040,6 +1058,7 @@
       margin-bottom: 8px;
       border-left: 3px solid var(--kinmen-gold);
       transition: all var(--duration-fast);
+      min-height: var(--touch-target-min);
     }
 
     .checkout-item:hover {
@@ -1698,9 +1717,10 @@
 
       .stall-item {
         flex: 0 0 auto;
-        width: 100px;
+        width: 110px;
         padding: 12px;
         scroll-snap-align: start;
+        min-height: var(--touch-target-min);
       }
 
       .stall-item .stall-emoji {
@@ -1815,6 +1835,363 @@
       .complete-stats {
         flex-direction: column;
         gap: 16px;
+      }
+    }
+
+    /* 超小螢幕 (320px) */
+    @media (max-width: 320px) {
+      main {
+        padding: 16px 8px;
+      }
+
+      .intro-section {
+        padding: 16px 12px;
+      }
+
+      .intro-title {
+        font-size: 1.5rem;
+      }
+
+      .intro-subtitle {
+        font-size: 0.875rem;
+      }
+
+      .market-scene {
+        gap: 6px;
+      }
+
+      .scene-item {
+        padding: 8px 10px;
+        min-width: 55px;
+      }
+
+      .scene-icon {
+        width: 36px;
+        height: 36px;
+      }
+
+      .scene-icon svg {
+        width: 18px;
+        height: 18px;
+      }
+
+      .scene-label {
+        font-size: 0.6875rem;
+      }
+
+      .steps-header {
+        font-size: 1rem;
+      }
+
+      .intro-step {
+        padding: 12px;
+        gap: 12px;
+      }
+
+      .step-number {
+        width: 32px;
+        height: 32px;
+        font-size: 0.875rem;
+      }
+
+      .step-text {
+        font-size: 0.85rem;
+      }
+
+      .step-desc {
+        font-size: 0.75rem;
+      }
+
+      .tip-badge {
+        padding: 6px 10px;
+        font-size: 0.75rem;
+      }
+
+      .start-btn {
+        padding: 12px 32px;
+        font-size: 1rem;
+      }
+
+      /* 購物區 */
+      .shopping-header, .market-area, .dialogue-area, .checkout-area {
+        padding: 12px;
+      }
+
+      .shopping-title, .market-title {
+        font-size: 1rem;
+      }
+
+      .shopping-item {
+        padding: 8px 12px;
+        font-size: 0.875rem;
+      }
+
+      .shopping-item-qty {
+        padding: 2px 8px;
+        font-size: 0.75rem;
+      }
+
+      .stall-item {
+        width: 90px;
+        padding: 10px;
+      }
+
+      .stall-image {
+        width: 50px;
+        height: 50px;
+      }
+
+      .stall-name {
+        font-size: 0.75rem;
+      }
+
+      .stall-price {
+        font-size: 0.6875rem;
+        padding: 2px 8px;
+      }
+
+      .dialogue-avatar {
+        width: 36px;
+        height: 36px;
+        font-size: 0.875rem;
+      }
+
+      .dialogue-info h3 {
+        font-size: 0.9375rem;
+      }
+
+      .dialogue-messages {
+        max-height: 150px;
+        padding: 10px;
+      }
+
+      .message-avatar {
+        width: 28px;
+        height: 28px;
+        font-size: 0.6875rem;
+      }
+
+      .message-bubble {
+        padding: 8px 10px;
+      }
+
+      .message-text {
+        font-size: 0.85rem;
+      }
+
+      .message-pinyin {
+        font-size: 0.7rem;
+      }
+
+      .response-option {
+        padding: 12px 14px;
+      }
+
+      .response-chinese {
+        font-size: 0.9rem;
+      }
+
+      .response-pinyin {
+        font-size: 0.75rem;
+      }
+
+      .checkout-item {
+        padding: 10px 12px;
+        font-size: 0.875rem;
+      }
+
+      .checkout-total {
+        padding: 14px 16px;
+        font-size: 1.125rem;
+      }
+
+      .checkout-total span:last-child {
+        font-size: 1.25rem;
+      }
+
+      .pay-btn {
+        padding: 14px;
+        font-size: 1rem;
+      }
+
+      /* 完成畫面 */
+      .complete-card {
+        padding: 32px 16px;
+      }
+
+      .complete-icon {
+        width: 64px;
+        height: 64px;
+      }
+
+      .complete-icon svg {
+        width: 32px;
+        height: 32px;
+      }
+
+      .complete-title {
+        font-size: 1.5rem;
+      }
+
+      .complete-message {
+        font-size: 0.9375rem;
+      }
+
+      .stat-item {
+        padding: 12px 16px;
+      }
+
+      .stat-value {
+        font-size: 1.75rem;
+      }
+
+      .stat-label {
+        font-size: 0.75rem;
+      }
+
+      .restart-btn {
+        padding: 12px 32px;
+        font-size: 1rem;
+      }
+    }
+
+    /* 橫向模式 */
+    @media (max-height: 500px) and (orientation: landscape) {
+      main {
+        padding: 12px 16px;
+      }
+
+      .intro-section {
+        padding: 16px;
+      }
+
+      .intro-title {
+        font-size: 1.5rem;
+        margin-bottom: 8px;
+      }
+
+      .intro-subtitle {
+        font-size: 0.875rem;
+        margin-bottom: 16px;
+      }
+
+      .market-scene {
+        margin-bottom: 16px;
+        gap: 12px;
+      }
+
+      .scene-item {
+        padding: 8px 12px;
+      }
+
+      .scene-icon {
+        width: 32px;
+        height: 32px;
+      }
+
+      .steps-header {
+        font-size: 1rem;
+        margin-bottom: 12px;
+      }
+
+      .intro-steps {
+        gap: 8px;
+        max-width: 100%;
+      }
+
+      .intro-step {
+        padding: 10px 14px;
+      }
+
+      .step-number {
+        width: 28px;
+        height: 28px;
+        font-size: 0.8rem;
+      }
+
+      .intro-tips {
+        margin: 12px 0;
+        gap: 8px;
+      }
+
+      .start-btn {
+        margin-top: 12px;
+        padding: 10px 32px;
+        font-size: 1rem;
+      }
+
+      /* 購物區 */
+      .shopping-header {
+        padding: 12px;
+        margin-bottom: 12px;
+      }
+
+      .shopping-title {
+        font-size: 1rem;
+        margin-bottom: 8px;
+      }
+
+      .market-area {
+        padding: 12px;
+        margin-bottom: 12px;
+      }
+
+      .market-title {
+        font-size: 0.9375rem;
+        margin-bottom: 8px;
+      }
+
+      .dialogue-area {
+        padding: 12px;
+        margin-bottom: 12px;
+      }
+
+      .dialogue-header {
+        margin-bottom: 8px;
+        padding-bottom: 8px;
+      }
+
+      .dialogue-messages {
+        max-height: 120px;
+        margin-bottom: 8px;
+      }
+
+      .checkout-area {
+        padding: 12px;
+      }
+
+      .complete-card {
+        padding: 24px;
+      }
+
+      .complete-icon {
+        width: 48px;
+        height: 48px;
+        margin-bottom: 12px;
+      }
+
+      .complete-title {
+        font-size: 1.25rem;
+        margin-bottom: 8px;
+      }
+
+      .complete-message {
+        font-size: 0.875rem;
+        margin-bottom: 16px;
+      }
+
+      .complete-stats {
+        flex-direction: row;
+        gap: 16px;
+        margin-bottom: 16px;
+      }
+
+      .stat-item {
+        padding: 8px 16px;
+      }
+
+      .stat-value {
+        font-size: 1.5rem;
       }
     }
   </style>

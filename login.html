@@ -90,6 +90,23 @@
       overflow: hidden;
     }
 
+    /* 全域觸控優化 */
+    button, [role="button"], .interactive, a, .auth-tab, .submit-btn, .guest-btn {
+      touch-action: manipulation;
+    }
+
+    /* 輸入框防 iOS 縮放 */
+    input, textarea, select {
+      font-size: max(16px, 1rem);
+    }
+
+    /* 觸控目標標準 */
+    :root {
+      --touch-target-min: 44px;
+      --touch-target-comfortable: 48px;
+      --touch-spacing-min: 8px;
+    }
+
     /* 背景 */
     .bg-pattern {
       position: fixed;
@@ -197,6 +214,7 @@
     .auth-tab {
       flex: 1;
       padding: 14px 16px;
+      min-height: var(--touch-target-min);
       font-weight: 600;
       font-size: 0.9375rem;
       color: var(--text-secondary);
@@ -316,6 +334,7 @@
       position: relative;
       width: 100%;
       padding: 16px 24px;
+      min-height: var(--touch-target-comfortable);
       font-family: inherit;
       font-size: 1rem;
       font-weight: 600;
@@ -485,6 +504,7 @@
       justify-content: center;
       gap: 8px;
       margin-top: 24px;
+      min-height: var(--touch-target-min);
       font-size: 0.9375rem;
       color: var(--text-secondary);
       text-decoration: none;
@@ -522,6 +542,7 @@
       position: relative;
       width: 100%;
       padding: 14px 24px;
+      min-height: var(--touch-target-comfortable);
       font-family: inherit;
       font-size: 0.9375rem;
       font-weight: 600;
@@ -638,6 +659,185 @@
 
       .auth-logo h1 {
         font-size: 1.25rem;
+      }
+    }
+
+    /* 480px 斷點 */
+    @media (max-width: 480px) {
+      body {
+        padding: 12px;
+      }
+
+      .auth-card {
+        padding: 24px 20px;
+        border-radius: var(--radius-lg);
+      }
+
+      .auth-logo img {
+        width: 56px;
+        height: 56px;
+      }
+
+      .auth-logo h1 {
+        font-size: 1.125rem;
+      }
+
+      .auth-tabs {
+        margin-bottom: 24px;
+      }
+
+      .auth-tab {
+        padding: 12px 14px;
+        font-size: 0.875rem;
+      }
+
+      .form-group {
+        margin-bottom: 16px;
+      }
+
+      .form-input {
+        padding: 12px 14px;
+      }
+
+      .submit-btn {
+        padding: 14px 20px;
+      }
+
+      .guest-divider {
+        margin: 20px 0;
+      }
+
+      .guest-btn {
+        padding: 12px 20px;
+        font-size: 0.875rem;
+      }
+
+      .back-link {
+        margin-top: 20px;
+      }
+    }
+
+    /* 320px 超小螢幕 */
+    @media (max-width: 320px) {
+      body {
+        padding: 8px;
+      }
+
+      .auth-card {
+        padding: 20px 16px;
+      }
+
+      .auth-logo {
+        margin-bottom: 24px;
+      }
+
+      .auth-logo img {
+        width: 48px;
+        height: 48px;
+        margin-bottom: 12px;
+      }
+
+      .auth-logo h1 {
+        font-size: 1rem;
+      }
+
+      .auth-tabs {
+        gap: 4px;
+        padding: 4px;
+        margin-bottom: 20px;
+      }
+
+      .auth-tab {
+        padding: 10px 12px;
+        font-size: 0.8125rem;
+      }
+
+      .form-label {
+        font-size: 0.8125rem;
+      }
+
+      .form-input {
+        padding: 10px 12px;
+        font-size: 0.9375rem;
+      }
+
+      .submit-btn {
+        padding: 12px 16px;
+        font-size: 0.9375rem;
+      }
+
+      .guest-btn {
+        padding: 10px 16px;
+        font-size: 0.8125rem;
+      }
+
+      .back-link {
+        font-size: 0.875rem;
+      }
+    }
+
+    /* 橫向模式 */
+    @media (max-height: 500px) and (orientation: landscape) {
+      body {
+        padding: 8px 16px;
+        align-items: flex-start;
+      }
+
+      .roof-deco {
+        height: 4px;
+      }
+
+      .auth-card {
+        padding: 20px 24px;
+      }
+
+      .auth-logo {
+        flex-direction: row;
+        gap: 12px;
+        margin-bottom: 16px;
+      }
+
+      .auth-logo img {
+        width: 40px;
+        height: 40px;
+        margin-bottom: 0;
+        animation: none;
+      }
+
+      .auth-logo h1 {
+        font-size: 1.125rem;
+      }
+
+      .auth-tabs {
+        margin-bottom: 16px;
+      }
+
+      .auth-tab {
+        padding: 10px 14px;
+      }
+
+      .form-group {
+        margin-bottom: 12px;
+      }
+
+      .form-input {
+        padding: 10px 14px;
+      }
+
+      .submit-btn {
+        padding: 12px 20px;
+      }
+
+      .guest-divider {
+        margin: 16px 0;
+      }
+
+      .guest-btn {
+        padding: 10px 20px;
+      }
+
+      .back-link {
+        margin-top: 16px;
       }
     }
   </style>

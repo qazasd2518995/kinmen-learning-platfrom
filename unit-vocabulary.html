@@ -85,6 +85,23 @@
     a { text-decoration: none; color: inherit; }
     img { max-width: 100%; height: auto; }
 
+    /* 全域觸控優化 */
+    button, [role="button"], .interactive, a, .mode-btn, .flashcard, .quiz-option, .match-card {
+      touch-action: manipulation;
+    }
+
+    /* 輸入框防 iOS 縮放 */
+    input, textarea, select {
+      font-size: max(16px, 1rem);
+    }
+
+    /* 觸控目標標準 */
+    :root {
+      --touch-target-min: 44px;
+      --touch-target-comfortable: 48px;
+      --touch-spacing-min: 8px;
+    }
+
     /* 背景 */
     .bg-pattern {
       position: fixed; inset: 0; pointer-events: none; z-index: 0; opacity: 0.08;
@@ -159,6 +176,7 @@
       background: var(--bg-card);
       border: 2px solid transparent;
       box-shadow: var(--shadow-sm);
+      min-height: var(--touch-target-comfortable);
     }
     .mode-btn::before {
       content: '';
@@ -318,6 +336,8 @@
       box-shadow: var(--shadow-md);
       position: relative;
       overflow: hidden;
+      min-height: var(--touch-target-comfortable);
+      min-width: var(--touch-target-comfortable);
     }
     .audio-btn-large::before {
       content: '';
@@ -353,6 +373,8 @@
     }
     .nav-btn-round {
       width: 56px; height: 56px;
+      min-width: var(--touch-target-comfortable);
+      min-height: var(--touch-target-comfortable);
       display: flex; align-items: center; justify-content: center;
       background: var(--bg-card);
       border-radius: 50%;
@@ -1356,18 +1378,364 @@
       .nav-header { padding: 12px 16px; }
       .page-title { font-size: 1rem; }
       .mode-selector { flex-direction: column; }
-      .mode-btn { flex-direction: row; padding: 12px 16px; }
+      .mode-btn {
+        flex-direction: row;
+        padding: 12px 16px;
+        min-height: var(--touch-target-comfortable);
+      }
       .quiz-options { grid-template-columns: repeat(2, 1fr); gap: 12px; }
       .matching-grid { grid-template-columns: repeat(3, 1fr); gap: 12px; }
       .flashcard-wrapper { max-width: 100%; }
       .card-chinese { font-size: 2rem; }
       .card-pinyin { font-size: 1.25rem; }
+
+      .play-sound-btn {
+        min-height: var(--touch-target-comfortable);
+        padding: 16px 32px;
+      }
+
+      .next-question-btn, .result-btn {
+        min-height: var(--touch-target-comfortable);
+      }
     }
     @media (max-width: 480px) {
       .matching-grid { grid-template-columns: repeat(2, 1fr); }
       .match-card .card-text { font-size: 1.25rem; }
       .flashcard-nav { gap: 16px; }
-      .nav-btn-round { width: 48px; height: 48px; }
+      .nav-btn-round {
+        width: var(--touch-target-comfortable);
+        height: var(--touch-target-comfortable);
+        min-width: var(--touch-target-min);
+        min-height: var(--touch-target-min);
+      }
+
+      .quiz-option {
+        min-height: 100px;
+      }
+
+      .match-card {
+        min-height: 80px;
+      }
+    }
+
+    /* 超小螢幕 (320px) */
+    @media (max-width: 320px) {
+      .main-content {
+        padding: 16px 8px 64px;
+      }
+
+      .mode-selector {
+        gap: 8px;
+        margin-bottom: 16px;
+      }
+
+      .mode-btn {
+        padding: 10px 12px;
+      }
+
+      .mode-btn .mode-icon {
+        width: 36px;
+        height: 36px;
+      }
+
+      .mode-btn svg {
+        width: 20px;
+        height: 20px;
+      }
+
+      .mode-btn span {
+        font-size: 0.8125rem;
+      }
+
+      /* 閃卡 */
+      .flashcard-face {
+        padding: 20px;
+      }
+
+      .card-chinese {
+        font-size: 1.75rem;
+      }
+
+      .card-pinyin {
+        font-size: 1rem;
+      }
+
+      .card-hint {
+        font-size: 0.8125rem;
+      }
+
+      .audio-btn-large {
+        padding: 10px 20px;
+        font-size: 0.875rem;
+      }
+
+      .flashcard-nav {
+        gap: 12px;
+        margin-bottom: 16px;
+      }
+
+      .nav-btn-round {
+        width: var(--touch-target-min);
+        height: var(--touch-target-min);
+      }
+
+      .nav-btn-round svg {
+        width: 22px;
+        height: 22px;
+      }
+
+      .card-counter {
+        font-size: 1rem;
+      }
+
+      .progress-dots {
+        gap: 6px;
+      }
+
+      .progress-dot {
+        width: 10px;
+        height: 10px;
+      }
+
+      /* 聽力測驗 */
+      .quiz-question {
+        font-size: 1.125rem;
+        margin-bottom: 12px;
+      }
+
+      .play-sound-btn {
+        padding: 14px 28px;
+        font-size: 0.9375rem;
+      }
+
+      .play-sound-btn svg {
+        width: 24px;
+        height: 24px;
+      }
+
+      .quiz-options {
+        gap: 8px;
+        margin-top: 20px;
+      }
+
+      .quiz-option {
+        padding: 12px;
+        min-height: 80px;
+      }
+
+      .quiz-option .option-text {
+        font-size: 0.8125rem;
+      }
+
+      .quiz-feedback {
+        padding: 12px;
+        font-size: 0.875rem;
+      }
+
+      .next-question-btn {
+        padding: 12px 24px;
+        font-size: 0.9375rem;
+      }
+
+      /* 測驗結果 */
+      .quiz-result {
+        padding: 32px 20px;
+      }
+
+      .result-icon {
+        width: 60px;
+        height: 60px;
+      }
+
+      .result-icon svg {
+        width: 30px;
+        height: 30px;
+      }
+
+      .result-title {
+        font-size: 1.5rem;
+      }
+
+      .result-score {
+        font-size: 1rem;
+      }
+
+      .result-actions {
+        flex-direction: column;
+        gap: 8px;
+      }
+
+      .result-btn {
+        width: 100%;
+        padding: 12px 20px;
+      }
+
+      /* 配對遊戲 */
+      .matching-header {
+        flex-direction: column;
+        gap: 12px;
+        align-items: flex-start;
+        margin-bottom: 16px;
+      }
+
+      .matching-title {
+        font-size: 1rem;
+      }
+
+      .matching-stats {
+        gap: 8px;
+      }
+
+      .stat-badge {
+        padding: 6px 12px;
+        font-size: 0.75rem;
+      }
+
+      .matching-grid {
+        gap: 8px;
+      }
+
+      .match-card {
+        padding: 10px;
+        min-height: 70px;
+      }
+
+      .match-card .card-text {
+        font-size: 1rem;
+      }
+
+      .match-card .card-pinyin {
+        font-size: 0.75rem;
+      }
+
+      .matching-complete {
+        padding: 32px 16px;
+      }
+    }
+
+    /* 橫向模式 */
+    @media (max-height: 500px) and (orientation: landscape) {
+      .main-content {
+        padding: 12px 16px 48px;
+      }
+
+      .mode-selector {
+        flex-direction: row;
+        margin-bottom: 12px;
+      }
+
+      .mode-btn {
+        padding: 10px 16px;
+        flex-direction: row;
+      }
+
+      .mode-btn .mode-icon {
+        width: 32px;
+        height: 32px;
+      }
+
+      /* 閃卡 */
+      .flashcard-container {
+        gap: 8px;
+      }
+
+      .flashcard-wrapper {
+        max-width: 50vh;
+        margin-bottom: 8px;
+      }
+
+      .flashcard-face {
+        padding: 16px;
+      }
+
+      .card-image {
+        height: 50%;
+        margin-bottom: 8px;
+      }
+
+      .card-pinyin {
+        font-size: 1.25rem;
+        margin-bottom: 4px;
+      }
+
+      .card-chinese {
+        font-size: 1.75rem;
+        margin-bottom: 8px;
+      }
+
+      .audio-btn-large {
+        padding: 8px 16px;
+        font-size: 0.875rem;
+      }
+
+      .flashcard-nav {
+        gap: 16px;
+        margin-bottom: 8px;
+      }
+
+      .nav-btn-round {
+        width: 40px;
+        height: 40px;
+      }
+
+      .card-counter {
+        font-size: 1rem;
+      }
+
+      .progress-dots {
+        gap: 4px;
+      }
+
+      .progress-dot {
+        width: 8px;
+        height: 8px;
+      }
+
+      /* 聽力測驗 */
+      .quiz-header {
+        margin-bottom: 16px;
+      }
+
+      .quiz-question {
+        font-size: 1.125rem;
+        margin-bottom: 12px;
+      }
+
+      .play-sound-btn {
+        padding: 12px 24px;
+        font-size: 1rem;
+      }
+
+      .quiz-options {
+        margin-top: 16px;
+        gap: 10px;
+      }
+
+      .quiz-option {
+        padding: 12px;
+      }
+
+      /* 配對遊戲 */
+      .matching-header {
+        margin-bottom: 12px;
+      }
+
+      .matching-title {
+        font-size: 1.125rem;
+      }
+
+      .matching-grid {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 10px;
+      }
+
+      .match-card {
+        padding: 10px;
+      }
+
+      .match-card .card-text {
+        font-size: 1.125rem;
+      }
     }
   </style>
 </head>
@@ -1554,7 +1922,7 @@
   </main>
 
   <!-- 音頻播放器 -->
-  <audio id="audio-player" preload="auto"></audio>
+  <audio id="audio-player" playsinline preload="auto"></audio>
 
   <script type="module">
     import { getLocalProgress, saveVocabularyProgress, initProgress } from './js/api.js';
