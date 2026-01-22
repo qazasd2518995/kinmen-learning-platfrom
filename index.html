@@ -948,8 +948,27 @@
     }
 
     .stat-icon {
-      font-size: 2.5rem;
-      margin-bottom: 8px;
+      width: 48px;
+      height: 48px;
+      margin: 0 auto 8px;
+      color: var(--kinmen-gold);
+    }
+
+    .stat-icon svg {
+      width: 100%;
+      height: 100%;
+    }
+
+    .streak-stat .stat-icon {
+      color: #FF6B35;
+    }
+
+    .games-stat .stat-icon {
+      color: var(--kinmen-ocean);
+    }
+
+    .score-stat .stat-icon {
+      color: var(--kinmen-gold);
     }
 
     .stat-value {
@@ -1015,22 +1034,25 @@
     }
 
     .achievement-badge .badge-icon {
-      font-size: 1.25rem;
-      filter: grayscale(1);
+      width: 24px;
+      height: 24px;
+      flex-shrink: 0;
+      color: var(--text-secondary);
       opacity: 0.5;
     }
 
+    .achievement-badge .badge-icon svg {
+      width: 100%;
+      height: 100%;
+    }
+
     .achievement-badge.unlocked .badge-icon {
-      filter: none;
+      color: var(--kinmen-gold);
       opacity: 1;
     }
 
     .achievement-badge.locked {
       opacity: 0.6;
-    }
-
-    .achievement-badge.locked .badge-icon {
-      filter: grayscale(1);
     }
 
     /* ========================================
@@ -1918,21 +1940,37 @@
 
         <!-- 連續天數 -->
         <div class="stat-card streak-stat">
-          <div class="stat-icon">🔥</div>
+          <div class="stat-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"/>
+            </svg>
+          </div>
           <div class="stat-value" id="streak-value">0</div>
           <div class="stat-label">連續學習天數</div>
         </div>
 
         <!-- 遊戲次數 -->
         <div class="stat-card games-stat">
-          <div class="stat-icon">🎮</div>
+          <div class="stat-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="6" y1="12" x2="10" y2="12"/>
+              <line x1="8" y1="10" x2="8" y2="14"/>
+              <line x1="15" y1="13" x2="15.01" y2="13"/>
+              <line x1="18" y1="11" x2="18.01" y2="11"/>
+              <rect x="2" y="6" width="20" height="12" rx="2"/>
+            </svg>
+          </div>
           <div class="stat-value" id="games-value">0</div>
           <div class="stat-label">遊戲完成次數</div>
         </div>
 
         <!-- 最高分 -->
         <div class="stat-card score-stat">
-          <div class="stat-icon">⭐</div>
+          <div class="stat-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+            </svg>
+          </div>
           <div class="stat-value" id="best-score">0</div>
           <div class="stat-label">決鬥最高分</div>
         </div>
@@ -1957,7 +1995,7 @@
 
   <!-- Scripts -->
   <script type="module">
-    import { getCurrentUser, initProgress, getStatistics, getAchievements, getAllAchievementDefinitions } from './js/api.js';
+    import { getCurrentUser, initProgress, getStatistics, getAchievements, getAllAchievementDefinitions, ACHIEVEMENT_ICONS } from './js/api.js';
 
     // 頁面載入動畫
     window.addEventListener('load', () => {
@@ -2058,8 +2096,9 @@
         const isUnlocked = achievements.unlocked?.includes(achievement.id);
         const badge = document.createElement('div');
         badge.className = `achievement-badge ${isUnlocked ? 'unlocked' : 'locked'}`;
+        const iconSvg = ACHIEVEMENT_ICONS[achievement.icon] || '';
         badge.innerHTML = `
-          <span class="badge-icon">${achievement.icon}</span>
+          <span class="badge-icon">${iconSvg}</span>
           <span class="badge-name">${achievement.name}</span>
         `;
         badge.title = achievement.description;

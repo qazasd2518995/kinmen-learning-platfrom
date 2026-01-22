@@ -1068,8 +1068,32 @@
     }
 
     .duel-start-icon {
-      font-size: 4rem;
+      width: 80px;
+      height: 80px;
+      color: var(--kinmen-gold);
       animation: duelPulse 1.5s ease-in-out infinite;
+    }
+
+    .duel-start-icon svg {
+      width: 100%;
+      height: 100%;
+    }
+
+    .duel-feedback svg {
+      width: 64px;
+      height: 64px;
+    }
+
+    .duel-feedback.correct {
+      color: var(--kinmen-green);
+    }
+
+    .duel-feedback.wrong {
+      color: var(--kinmen-red);
+    }
+
+    .duel-feedback.timeout {
+      color: var(--text-secondary);
     }
 
     @keyframes duelPulse {
@@ -2206,7 +2230,11 @@
 
         <!-- 開始按鈕 -->
         <div class="duel-start-screen" id="duel-start-screen">
-          <div class="duel-start-icon">⚡</div>
+          <div class="duel-start-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+            </svg>
+          </div>
           <h3>準備好了嗎？</h3>
           <p>10 題計時搶答挑戰</p>
           <p>每題 3 秒，答對得分！</p>
@@ -3199,8 +3227,9 @@
 
       if (isCorrect) {
         btn.classList.add('correct');
-        document.getElementById('duel-feedback').textContent = '✓';
-        document.getElementById('duel-feedback').classList.add('visible');
+        const feedback = document.getElementById('duel-feedback');
+        feedback.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>';
+        feedback.className = 'duel-feedback visible correct';
 
         // 計分：剩餘時間越多分數越高
         const timeBonus = Math.floor(duelTimeLeft * 10);
@@ -3208,8 +3237,9 @@
         duelCorrectCount++;
       } else {
         btn.classList.add('wrong');
-        document.getElementById('duel-feedback').textContent = '✗';
-        document.getElementById('duel-feedback').classList.add('visible');
+        const feedback = document.getElementById('duel-feedback');
+        feedback.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>';
+        feedback.className = 'duel-feedback visible wrong';
 
         // 顯示正確答案
         document.querySelectorAll('.duel-option').forEach(b => {
@@ -3233,8 +3263,9 @@
         if (btn.dataset.correct === 'true') btn.classList.add('reveal');
       });
 
-      document.getElementById('duel-feedback').textContent = '⏱';
-      document.getElementById('duel-feedback').classList.add('visible');
+      const feedback = document.getElementById('duel-feedback');
+      feedback.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>';
+      feedback.className = 'duel-feedback visible timeout';
 
       setTimeout(() => {
         currentDuelQuestion++;
