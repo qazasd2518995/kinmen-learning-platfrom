@@ -331,6 +331,16 @@
       display: block;
     }
 
+    .form-hint {
+      margin-top: 6px;
+      font-size: 0.75rem;
+      color: var(--text-secondary);
+    }
+
+    .required {
+      color: var(--kinmen-red);
+    }
+
     /* 提交按鈕 */
     .submit-btn {
       position: relative;
@@ -891,7 +901,14 @@
       <!-- 註冊表單 -->
       <form id="register-form" class="auth-form">
         <div class="form-group">
-          <label class="form-label" for="register-username">使用者名稱</label>
+          <label class="form-label" for="register-invitecode">班級邀請碼 <span class="required">*</span></label>
+          <input type="text" id="register-invitecode" class="form-input" placeholder="輸入老師提供的邀請碼" required maxlength="10" style="text-transform: uppercase; letter-spacing: 2px;">
+          <div class="form-error" id="register-invitecode-error"></div>
+          <div class="form-hint">請向您的老師索取班級邀請碼</div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="register-username">使用者名稱 <span class="required">*</span></label>
           <input type="text" id="register-username" class="form-input" placeholder="設定使用者名稱" required minlength="3">
           <div class="form-error" id="register-username-error"></div>
         </div>
@@ -902,13 +919,13 @@
         </div>
 
         <div class="form-group">
-          <label class="form-label" for="register-password">密碼</label>
+          <label class="form-label" for="register-password">密碼 <span class="required">*</span></label>
           <input type="password" id="register-password" class="form-input" placeholder="設定密碼（至少6位）" required minlength="6">
           <div class="form-error" id="register-password-error"></div>
         </div>
 
         <div class="form-group">
-          <label class="form-label" for="register-confirm">確認密碼</label>
+          <label class="form-label" for="register-confirm">確認密碼 <span class="required">*</span></label>
           <input type="password" id="register-confirm" class="form-input" placeholder="再次輸入密碼" required>
           <div class="form-error" id="register-confirm-error"></div>
         </div>
@@ -1072,6 +1089,7 @@
       clearFieldErrors();
       hideMessage();
 
+      const inviteCode = document.getElementById('register-invitecode').value.trim().toUpperCase();
       const username = document.getElementById('register-username').value.trim();
       const displayName = document.getElementById('register-displayname').value.trim();
       const password = document.getElementById('register-password').value;
@@ -1079,6 +1097,11 @@
 
       // 驗證
       let hasError = false;
+
+      if (!inviteCode || inviteCode.length < 4) {
+        showFieldError('register-invitecode', '請輸入有效的邀請碼');
+        hasError = true;
+      }
 
       if (username.length < 3) {
         showFieldError('register-username', '使用者名稱至少需要3個字元');
@@ -1105,7 +1128,7 @@
         const response = await fetch(`${API_BASE}/api/auth/register`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ username, password, displayName: displayName || username })
+          body: JSON.stringify({ username, password, displayName: displayName || username, inviteCode })
         });
 
         const data = await response.json();
@@ -1113,6 +1136,8 @@
         if (!response.ok) {
           if (data.error && data.error.includes('已被使用')) {
             showFieldError('register-username', data.error);
+          } else if (data.error && (data.error.includes('邀請碼') || data.error.includes('invite'))) {
+            showFieldError('register-invitecode', data.error);
           } else {
             showMessage(data.error || '註冊失敗', 'error');
           }

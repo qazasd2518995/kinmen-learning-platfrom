@@ -141,6 +141,16 @@ export const TeacherAPI = {
     }
   },
 
+  /**
+   * 建立新班級
+   */
+  async createClass(className) {
+    return this.request('/api/teacher/classes', {
+      method: 'POST',
+      body: JSON.stringify({ className })
+    });
+  },
+
   // ========================================
   // 模擬數據（後端尚未實作時使用）
   // ========================================
@@ -152,6 +162,7 @@ export const TeacherAPI = {
         {
           classId: 'class_2026_a',
           className: '一年甲班',
+          inviteCode: 'KM2026AA',
           studentCount: 25,
           activeCount: 22,
           avgProgress: 68,
@@ -176,6 +187,7 @@ export const TeacherAPI = {
         {
           classId: 'class_2026_b',
           className: '一年乙班',
+          inviteCode: 'KM2026BB',
           studentCount: 23,
           activeCount: 20,
           avgProgress: 55,

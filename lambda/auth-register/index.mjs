@@ -1,10 +1,10 @@
 /**
  * Lambda Function: auth-register
- * 用戶註冊 API
+ * 用戶註冊 API - 需要邀請碼才能註冊
  */
 
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
-import { DynamoDBDocumentClient, PutCommand, GetCommand } from '@aws-sdk/lib-dynamodb';
+import { DynamoDBDocumentClient, PutCommand, GetCommand, UpdateCommand } from '@aws-sdk/lib-dynamodb';
 import crypto from 'crypto';
 
 const client = new DynamoDBClient({ region: 'ap-southeast-2' });
@@ -24,6 +24,52 @@ const corsHeaders = {
   'Access-Control-Allow-Methods': 'POST, OPTIONS'
 };
 
+// 驗證邀請碼並取得班級資訊
+async function validateInviteCode(inviteCode) {
+  if (!inviteCode || inviteCode.trim().length === 0) {
+    return { valid: false, error: '請輸入班級邀請碼' };
+  }
+
+  const normalizedCode = inviteCode.trim().toUpperCase();
+
+  try {
+    const result = await docClient.send(new GetCommand({
+      TableName: TABLE_NAME,
+      Key: { kinmen: `INVITE#${normalizedCode}` }
+    }));
+
+    if (!result.Item) {
+      return { valid: false, error: '邀請碼不存在或已失效' };
+    }
+
+    return {
+      valid: true,
+      classId: result.Item.classId,
+      className: result.Item.className,
+      teacherUsername: result.Item.teacherUsername
+    };
+  } catch (error) {
+    console.error('Validate invite code error:', error);
+    return { valid: false, error: '驗證邀請碼失敗' };
+  }
+}
+
+// 將學生加入班級
+async function addStudentToClass(classId, username) {
+  const now = new Date().toISOString();
+
+  await docClient.send(new UpdateCommand({
+    TableName: TABLE_NAME,
+    Key: { kinmen: `CLASS#${classId}` },
+    UpdateExpression: 'SET studentUsernames = list_append(if_not_exists(studentUsernames, :empty), :newStudent), updatedAt = :now',
+    ExpressionAttributeValues: {
+      ':empty': [],
+      ':newStudent': [username],
+      ':now': now
+    }
+  }));
+}
+
 export const handler = async (event) => {
   // 處理 CORS preflight
   if (event.httpMethod === 'OPTIONS') {
@@ -36,7 +82,7 @@ export const handler = async (event) => {
 
   try {
     const body = JSON.parse(event.body || '{}');
-    const { username, password, displayName } = body;
+    const { username, password, displayName, inviteCode } = body;
 
     // 驗證輸入
     if (!username || username.length < 3) {
@@ -55,6 +101,16 @@ export const handler = async (event) => {
       };
     }
 
+    // 驗證邀請碼（必填）
+    const inviteValidation = await validateInviteCode(inviteCode);
+    if (!inviteValidation.valid) {
+      return {
+        statusCode: 400,
+        headers: corsHeaders,
+        body: JSON.stringify({ error: inviteValidation.error })
+      };
+    }
+
     // 檢查使用者是否已存在
     const existingUser = await docClient.send(new GetCommand({
       TableName: TABLE_NAME,
@@ -69,13 +125,16 @@ export const handler = async (event) => {
       };
     }
 
-    // 建立新使用者
+    // 建立新使用者（包含班級資訊）
     const now = new Date().toISOString();
     const userItem = {
       kinmen: `USER#${username}`,
       username,
       passwordHash: hashPassword(password),
       displayName: displayName || username,
+      classId: inviteValidation.classId,
+      className: inviteValidation.className,
+      role: 'student',
       createdAt: now,
       updatedAt: now
     };
@@ -98,6 +157,16 @@ export const handler = async (event) => {
         viewedScenarios: []
       },
       practice: {},
+      statistics: {
+        totalStudyTime: 0,
+        dailyStreak: 0,
+        lastStudyDate: null,
+        gamesPlayed: {}
+      },
+      achievements: {
+        unlocked: [],
+        total: 9
+      },
       createdAt: now,
       updatedAt: now
     };
@@ -107,6 +176,9 @@ export const handler = async (event) => {
       Item: progressItem
     }));
 
+    // 將學生加入班級
+    await addStudentToClass(inviteValidation.classId, username);
+
     return {
       statusCode: 201,
       headers: corsHeaders,
@@ -114,7 +186,9 @@ export const handler = async (event) => {
         success: true,
         user: {
           username,
-          displayName: displayName || username
+          displayName: displayName || username,
+          classId: inviteValidation.classId,
+          className: inviteValidation.className
         }
       })
     };

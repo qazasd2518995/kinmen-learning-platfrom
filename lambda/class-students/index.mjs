@@ -161,6 +161,7 @@ async function getTeacherClasses(teacherUsername) {
     return {
       classId: cls.classId,
       className: cls.className,
+      inviteCode: cls.inviteCode,
       studentCount,
       activeCount,
       avgProgress,
@@ -190,6 +191,7 @@ async function getClassStudents(classId) {
   if (studentUsernames.length === 0) {
     return {
       className: cls.className,
+      inviteCode: cls.inviteCode,
       students: []
     };
   }
@@ -262,6 +264,7 @@ async function getClassStudents(classId) {
 
   return {
     className: cls.className,
+    inviteCode: cls.inviteCode,
     students
   };
 }

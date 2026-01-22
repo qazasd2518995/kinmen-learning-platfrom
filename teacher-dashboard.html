@@ -222,6 +222,15 @@
             <p class="view-subtitle">選擇班級查看學生學習狀況</p>
           </div>
 
+          <!-- 建立班級按鈕 -->
+          <button class="create-class-btn" id="create-class-btn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="12" y1="5" x2="12" y2="19"/>
+              <line x1="5" y1="12" x2="19" y2="12"/>
+            </svg>
+            建立新班級
+          </button>
+
           <div class="classes-list" id="classes-list">
             <!-- 動態生成 -->
           </div>
@@ -429,6 +438,66 @@
 
   <!-- Toast 通知 -->
   <div class="toast-container" id="toast-container"></div>
+
+  <!-- 建立班級 Modal -->
+  <div class="modal-overlay" id="create-class-modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>建立新班級</h3>
+        <button class="modal-close" id="modal-close">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="18" y1="6" x2="6" y2="18"/>
+            <line x1="6" y1="6" x2="18" y2="18"/>
+          </svg>
+        </button>
+      </div>
+      <form id="create-class-form">
+        <div class="form-group">
+          <label class="form-label" for="class-name-input">班級名稱</label>
+          <input type="text" id="class-name-input" class="form-input" placeholder="例如：一年甲班" required maxlength="50">
+          <p class="form-hint">系統將自動產生邀請碼，學生需使用邀請碼才能註冊</p>
+        </div>
+        <div class="modal-actions">
+          <button type="button" class="btn-secondary" id="modal-cancel">取消</button>
+          <button type="submit" class="btn-primary" id="modal-submit">
+            <span class="btn-text">建立班級</span>
+            <div class="spinner"></div>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- 邀請碼顯示 Modal -->
+  <div class="modal-overlay" id="invite-code-modal">
+    <div class="modal-content invite-code-content">
+      <div class="modal-header">
+        <h3>班級建立成功</h3>
+        <button class="modal-close" id="invite-modal-close">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="18" y1="6" x2="6" y2="18"/>
+            <line x1="6" y1="6" x2="18" y2="18"/>
+          </svg>
+        </button>
+      </div>
+      <div class="invite-code-display">
+        <p class="invite-code-label">班級邀請碼</p>
+        <div class="invite-code-box">
+          <span class="invite-code-value" id="new-invite-code">KM2026A</span>
+          <button type="button" class="copy-btn" id="copy-new-invite-code" title="複製邀請碼">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+              <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+            </svg>
+          </button>
+        </div>
+        <p class="invite-code-hint">請將此邀請碼提供給學生，學生註冊時需要輸入此邀請碼</p>
+      </div>
+      <div class="modal-actions">
+        <button type="button" class="btn-primary" id="invite-modal-done">完成</button>
+      </div>
+    </div>
+  </div>
 
   <script type="module">
     import { TeacherAPI } from './js/teacher-api.js';
@@ -642,6 +711,18 @@
           <div class="class-list-info">
             <h3>${cls.className}</h3>
             <p>${cls.studentCount || 0} 學生 · 平均進度 ${cls.avgProgress || 0}%</p>
+            ${cls.inviteCode ? `
+            <div class="class-invite-code">
+              <span class="class-invite-code-label">邀請碼：</span>
+              <span class="class-invite-code-value">${cls.inviteCode}</span>
+              <button class="copy-btn-small" data-code="${cls.inviteCode}" title="複製邀請碼">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+                  <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+                </svg>
+              </button>
+            </div>
+            ` : ''}
           </div>
           <div class="class-list-arrow">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -653,8 +734,19 @@
 
       // 綁定點擊事件
       classesList.querySelectorAll('.class-list-item').forEach(item => {
-        item.addEventListener('click', () => {
+        item.addEventListener('click', (e) => {
+          // 排除複製按鈕的點擊
+          if (e.target.closest('.copy-btn-small')) return;
           loadClassStudents(item.dataset.classId);
+        });
+      });
+
+      // 綁定複製按鈕
+      classesList.querySelectorAll('.copy-btn-small').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          const code = btn.dataset.code;
+          copyInviteCode(code, btn);
         });
       });
     }
@@ -994,6 +1086,75 @@
     }
 
     // ========================================
+    // Modal 功能
+    // ========================================
+    const createClassModal = document.getElementById('create-class-modal');
+    const inviteCodeModal = document.getElementById('invite-code-modal');
+    const createClassForm = document.getElementById('create-class-form');
+    const classNameInput = document.getElementById('class-name-input');
+
+    function openCreateClassModal() {
+      createClassModal.classList.add('active');
+      classNameInput.value = '';
+      classNameInput.focus();
+    }
+
+    function closeCreateClassModal() {
+      createClassModal.classList.remove('active');
+    }
+
+    function openInviteCodeModal(inviteCode) {
+      document.getElementById('new-invite-code').textContent = inviteCode;
+      inviteCodeModal.classList.add('active');
+    }
+
+    function closeInviteCodeModal() {
+      inviteCodeModal.classList.remove('active');
+    }
+
+    async function handleCreateClass(e) {
+      e.preventDefault();
+      const className = classNameInput.value.trim();
+      if (!className) return;
+
+      const submitBtn = document.getElementById('modal-submit');
+      submitBtn.classList.add('loading');
+      submitBtn.disabled = true;
+
+      try {
+        const result = await TeacherAPI.createClass(className);
+        if (result.success) {
+          closeCreateClassModal();
+          showToast('班級建立成功', 'success');
+
+          // 顯示邀請碼
+          openInviteCodeModal(result.class.inviteCode);
+
+          // 重新載入班級列表
+          await loadAllData();
+        }
+      } catch (error) {
+        console.error('建立班級失敗:', error);
+        showToast(error.message || '建立班級失敗', 'error');
+      } finally {
+        submitBtn.classList.remove('loading');
+        submitBtn.disabled = false;
+      }
+    }
+
+    function copyInviteCode(code, button) {
+      navigator.clipboard.writeText(code).then(() => {
+        button.classList.add('copied');
+        showToast('邀請碼已複製', 'success');
+        setTimeout(() => {
+          button.classList.remove('copied');
+        }, 2000);
+      }).catch(() => {
+        showToast('複製失敗，請手動複製', 'error');
+      });
+    }
+
+    // ========================================
     // 事件綁定
     // ========================================
     function bindEvents() {
@@ -1024,6 +1185,28 @@
       // 匯出按鈕
       document.getElementById('export-csv-btn').addEventListener('click', exportToCSV);
       document.getElementById('export-excel-btn').addEventListener('click', exportToExcel);
+
+      // 建立班級 Modal
+      document.getElementById('create-class-btn').addEventListener('click', openCreateClassModal);
+      document.getElementById('modal-close').addEventListener('click', closeCreateClassModal);
+      document.getElementById('modal-cancel').addEventListener('click', closeCreateClassModal);
+      createClassForm.addEventListener('submit', handleCreateClass);
+
+      // 邀請碼 Modal
+      document.getElementById('invite-modal-close').addEventListener('click', closeInviteCodeModal);
+      document.getElementById('invite-modal-done').addEventListener('click', closeInviteCodeModal);
+      document.getElementById('copy-new-invite-code').addEventListener('click', function() {
+        const code = document.getElementById('new-invite-code').textContent;
+        copyInviteCode(code, this);
+      });
+
+      // 點擊 Modal 外部關閉
+      createClassModal.addEventListener('click', (e) => {
+        if (e.target === createClassModal) closeCreateClassModal();
+      });
+      inviteCodeModal.addEventListener('click', (e) => {
+        if (e.target === inviteCodeModal) closeInviteCodeModal();
+      });
 
       // 學生搜尋
       document.getElementById('student-search').addEventListener('input', (e) => {
