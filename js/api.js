@@ -36,6 +36,7 @@ export function saveLocalProgress(progress) {
 
 /**
  * 同步進度到伺服器（如果已登入）
+ * 包含班級 ID 關聯，讓教師後台能追蹤學生
  */
 export async function syncProgressToServer(progressData) {
   const user = getCurrentUser();
@@ -45,11 +46,17 @@ export async function syncProgressToServer(progressData) {
   }
 
   try {
+    // 取得本地進度中的統計和成就數據一併同步
+    const localProgress = getLocalProgress();
+
     const response = await fetch(`${API_BASE}/api/progress`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         username: user.username,
+        classId: user.classId || null, // 班級關聯（如果有）
+        statistics: localProgress.statistics || null,
+        achievements: localProgress.achievements || null,
         ...progressData
       })
     });

@@ -1079,6 +1079,23 @@
       text-decoration: underline;
     }
 
+    .footer-teacher-link {
+      margin-top: 12px;
+      font-size: 0.8125rem;
+    }
+
+    .footer-teacher-link a {
+      color: var(--text-secondary);
+      opacity: 0.8;
+      transition: opacity var(--duration-fast) var(--ease-out), color var(--duration-fast) var(--ease-out);
+    }
+
+    .footer-teacher-link a:hover {
+      color: var(--kinmen-ocean);
+      opacity: 1;
+      text-decoration: underline;
+    }
+
     /* ========================================
        響應式調整
        ======================================== */
@@ -1989,6 +2006,9 @@
     <footer class="footer">
       <p class="footer-text">
         金聲玉語 - 保存並傳承金門方言文化
+      </p>
+      <p class="footer-teacher-link">
+        <a href="teacher-login.html">教師入口</a>
       </p>
     </footer>
   </main>

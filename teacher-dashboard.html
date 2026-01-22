@@ -1,0 +1,1173 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>教師後台 - 金聲玉語</title>
+  <link rel="icon" type="image/png" href="favicon.png">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <meta name="description" content="金聲玉語教師後台 - 學習追蹤系統">
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;600;700&family=Noto+Serif+TC:wght@500;600;700;900&display=swap" rel="stylesheet">
+
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+
+  <!-- SheetJS for Excel export -->
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+
+  <link rel="stylesheet" href="css/teacher-dashboard.css">
+</head>
+<body>
+  <!-- 頁面載入動畫 -->
+  <div class="page-loader" id="page-loader">
+    <div class="loader-spinner"></div>
+    <p>載入中...</p>
+  </div>
+
+  <!-- 側邊欄 -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <div class="sidebar-logo">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+          <circle cx="9" cy="7" r="4"/>
+          <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+          <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+        </svg>
+      </div>
+      <div class="sidebar-title">
+        <h1>教師後台</h1>
+        <p>金聲玉語</p>
+      </div>
+    </div>
+
+    <nav class="sidebar-nav">
+      <button class="nav-item active" data-view="overview">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="3" width="7" height="7"/>
+          <rect x="14" y="3" width="7" height="7"/>
+          <rect x="14" y="14" width="7" height="7"/>
+          <rect x="3" y="14" width="7" height="7"/>
+        </svg>
+        <span>總覽</span>
+      </button>
+      <button class="nav-item" data-view="classes">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+          <circle cx="9" cy="7" r="4"/>
+          <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+          <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+        </svg>
+        <span>班級管理</span>
+      </button>
+      <button class="nav-item" data-view="analytics">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="18" y1="20" x2="18" y2="10"/>
+          <line x1="12" y1="20" x2="12" y2="4"/>
+          <line x1="6" y1="20" x2="6" y2="14"/>
+        </svg>
+        <span>數據分析</span>
+      </button>
+    </nav>
+
+    <div class="sidebar-footer">
+      <div class="user-info">
+        <div class="user-avatar" id="teacher-avatar">T</div>
+        <div class="user-details">
+          <span class="user-name" id="teacher-name">教師</span>
+          <span class="user-role">教師</span>
+        </div>
+      </div>
+      <button class="logout-btn" id="logout-btn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+          <polyline points="16 17 21 12 16 7"/>
+          <line x1="21" y1="12" x2="9" y2="12"/>
+        </svg>
+        登出
+      </button>
+    </div>
+  </aside>
+
+  <!-- 主內容區 -->
+  <main class="main-content">
+    <!-- 頂部導航 -->
+    <header class="top-header">
+      <button class="menu-toggle" id="menu-toggle">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="3" y1="12" x2="21" y2="12"/>
+          <line x1="3" y1="6" x2="21" y2="6"/>
+          <line x1="3" y1="18" x2="21" y2="18"/>
+        </svg>
+      </button>
+      <div class="breadcrumb" id="breadcrumb">
+        <span>總覽</span>
+      </div>
+      <div class="header-actions">
+        <button class="refresh-btn" id="refresh-btn" title="重新整理">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="23 4 23 10 17 10"/>
+            <polyline points="1 20 1 14 7 14"/>
+            <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/>
+          </svg>
+        </button>
+      </div>
+    </header>
+
+    <!-- 視圖容器 -->
+    <div class="view-container">
+      <!-- 總覽視圖 -->
+      <section class="view active" id="view-overview">
+        <div class="view-header">
+          <h2>歡迎回來，<span id="welcome-name">老師</span>！</h2>
+          <p class="view-subtitle">以下是您班級的學習概況</p>
+        </div>
+
+        <!-- 統計卡片 -->
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-icon students">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                <circle cx="9" cy="7" r="4"/>
+                <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+                <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+              </svg>
+            </div>
+            <div class="stat-info">
+              <span class="stat-value" id="stat-total-students">0</span>
+              <span class="stat-label">總學生數</span>
+            </div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-icon active">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+                <polyline points="22 4 12 14.01 9 11.01"/>
+              </svg>
+            </div>
+            <div class="stat-info">
+              <span class="stat-value" id="stat-active-students">0</span>
+              <span class="stat-label">本週活躍</span>
+            </div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-icon progress">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="12" y1="20" x2="12" y2="10"/>
+                <line x1="18" y1="20" x2="18" y2="4"/>
+                <line x1="6" y1="20" x2="6" y2="16"/>
+              </svg>
+            </div>
+            <div class="stat-info">
+              <span class="stat-value" id="stat-avg-progress">0%</span>
+              <span class="stat-label">平均進度</span>
+            </div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-icon time">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"/>
+                <polyline points="12 6 12 12 16 14"/>
+              </svg>
+            </div>
+            <div class="stat-info">
+              <span class="stat-value" id="stat-avg-time">0</span>
+              <span class="stat-label">平均學習時間</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 班級一覽 -->
+        <div class="section-card">
+          <div class="section-header">
+            <h3>班級一覽</h3>
+          </div>
+          <div class="classes-grid" id="overview-classes">
+            <!-- 動態生成 -->
+          </div>
+        </div>
+
+        <!-- 需要關注的學生 -->
+        <div class="section-card attention">
+          <div class="section-header">
+            <h3>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+                <line x1="12" y1="9" x2="12" y2="13"/>
+                <line x1="12" y1="17" x2="12.01" y2="17"/>
+              </svg>
+              需要關注的學生
+            </h3>
+          </div>
+          <div class="attention-list" id="attention-list">
+            <!-- 動態生成 -->
+          </div>
+        </div>
+      </section>
+
+      <!-- 班級管理視圖 -->
+      <section class="view" id="view-classes">
+        <!-- 班級列表 -->
+        <div class="class-list-view" id="class-list-view">
+          <div class="view-header">
+            <h2>班級管理</h2>
+            <p class="view-subtitle">選擇班級查看學生學習狀況</p>
+          </div>
+
+          <div class="classes-list" id="classes-list">
+            <!-- 動態生成 -->
+          </div>
+        </div>
+
+        <!-- 班級詳情（學生列表） -->
+        <div class="class-detail-view hidden" id="class-detail-view">
+          <div class="view-header with-back">
+            <button class="back-btn" id="back-to-classes">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="19" y1="12" x2="5" y2="12"/>
+                <polyline points="12 19 5 12 12 5"/>
+              </svg>
+              返回班級列表
+            </button>
+            <div class="view-title-row">
+              <h2 id="class-detail-title">班級名稱</h2>
+              <div class="view-actions">
+                <button class="action-btn" id="export-csv-btn">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                    <polyline points="7 10 12 15 17 10"/>
+                    <line x1="12" y1="15" x2="12" y2="3"/>
+                  </svg>
+                  匯出 CSV
+                </button>
+                <button class="action-btn primary" id="export-excel-btn">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                    <polyline points="14 2 14 8 20 8"/>
+                    <line x1="16" y1="13" x2="8" y2="13"/>
+                    <line x1="16" y1="17" x2="8" y2="17"/>
+                    <polyline points="10 9 9 9 8 9"/>
+                  </svg>
+                  匯出 Excel
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- 搜尋欄 -->
+          <div class="search-bar">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="11" cy="11" r="8"/>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+            </svg>
+            <input type="text" id="student-search" placeholder="搜尋學生...">
+          </div>
+
+          <!-- 學生列表表格 -->
+          <div class="table-container">
+            <table class="data-table" id="students-table">
+              <thead>
+                <tr>
+                  <th class="sortable" data-sort="name">姓名</th>
+                  <th class="sortable" data-sort="vocab">詞彙進度</th>
+                  <th class="sortable" data-sort="dialogue">對話</th>
+                  <th class="sortable" data-sort="games">遊戲</th>
+                  <th class="sortable" data-sort="time">學習時間</th>
+                  <th class="sortable" data-sort="lastActive">最後活動</th>
+                  <th>操作</th>
+                </tr>
+              </thead>
+              <tbody id="students-tbody">
+                <!-- 動態生成 -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- 學生詳情 -->
+        <div class="student-detail-view hidden" id="student-detail-view">
+          <div class="view-header with-back">
+            <button class="back-btn" id="back-to-class">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="19" y1="12" x2="5" y2="12"/>
+                <polyline points="12 19 5 12 12 5"/>
+              </svg>
+              返回班級
+            </button>
+            <h2>學生：<span id="student-detail-name">學生姓名</span></h2>
+          </div>
+
+          <!-- 學生統計卡片 -->
+          <div class="student-stats-grid">
+            <div class="student-stat-card">
+              <div class="stat-ring">
+                <svg viewBox="0 0 100 100">
+                  <circle class="ring-bg" cx="50" cy="50" r="40"/>
+                  <circle class="ring-fill vocab" id="student-vocab-ring" cx="50" cy="50" r="40"/>
+                </svg>
+                <div class="ring-value" id="student-vocab-percent">0%</div>
+              </div>
+              <div class="stat-label">詞彙進度</div>
+              <div class="stat-detail" id="student-vocab-detail">0/27</div>
+            </div>
+
+            <div class="student-stat-card">
+              <div class="stat-ring">
+                <svg viewBox="0 0 100 100">
+                  <circle class="ring-bg" cx="50" cy="50" r="40"/>
+                  <circle class="ring-fill dialogue" id="student-dialogue-ring" cx="50" cy="50" r="40"/>
+                </svg>
+                <div class="ring-value" id="student-dialogue-percent">0%</div>
+              </div>
+              <div class="stat-label">對話進度</div>
+              <div class="stat-detail" id="student-dialogue-detail">0/7</div>
+            </div>
+
+            <div class="student-stat-card simple">
+              <div class="stat-icon time">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="12" r="10"/>
+                  <polyline points="12 6 12 12 16 14"/>
+                </svg>
+              </div>
+              <div class="stat-value" id="student-study-time">0</div>
+              <div class="stat-label">總學習時間</div>
+            </div>
+          </div>
+
+          <!-- 詞彙學習詳情 -->
+          <div class="section-card">
+            <div class="section-header">
+              <h3>詞彙學習詳情</h3>
+            </div>
+            <div class="vocab-categories" id="vocab-categories">
+              <!-- 動態生成 -->
+            </div>
+          </div>
+
+          <!-- 遊戲成績 -->
+          <div class="section-card">
+            <div class="section-header">
+              <h3>遊戲成績</h3>
+            </div>
+            <div class="games-grid" id="games-grid">
+              <!-- 動態生成 -->
+            </div>
+          </div>
+
+          <!-- 成就徽章 -->
+          <div class="section-card">
+            <div class="section-header">
+              <h3>成就徽章 (<span id="achievements-count">0</span>/9)</h3>
+            </div>
+            <div class="achievements-grid" id="student-achievements">
+              <!-- 動態生成 -->
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 數據分析視圖 -->
+      <section class="view" id="view-analytics">
+        <div class="view-header">
+          <h2>數據分析</h2>
+          <div class="view-filters">
+            <select id="analytics-class-filter">
+              <option value="all">所有班級</option>
+              <!-- 動態生成 -->
+            </select>
+          </div>
+        </div>
+
+        <div class="charts-grid">
+          <!-- 進度分佈圖 -->
+          <div class="chart-card">
+            <h3>學生進度分佈</h3>
+            <div class="chart-container">
+              <canvas id="progress-chart"></canvas>
+            </div>
+          </div>
+
+          <!-- 詞彙掌握統計 -->
+          <div class="chart-card">
+            <h3>詞彙掌握情況</h3>
+            <div class="chart-container">
+              <canvas id="vocab-chart"></canvas>
+            </div>
+          </div>
+
+          <!-- 遊戲偏好 -->
+          <div class="chart-card">
+            <h3>遊戲偏好統計</h3>
+            <div class="chart-container">
+              <canvas id="games-chart"></canvas>
+            </div>
+          </div>
+
+          <!-- 學習時間趨勢 -->
+          <div class="chart-card wide">
+            <h3>本週學習時間趨勢</h3>
+            <div class="chart-container">
+              <canvas id="time-chart"></canvas>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <!-- 側邊欄遮罩（手機版） -->
+  <div class="sidebar-overlay" id="sidebar-overlay"></div>
+
+  <!-- Toast 通知 -->
+  <div class="toast-container" id="toast-container"></div>
+
+  <script type="module">
+    import { TeacherAPI } from './js/teacher-api.js';
+
+    // ========================================
+    // 全域變數
+    // ========================================
+    let currentTeacher = null;
+    let currentClassId = null;
+    let currentStudentUsername = null;
+    let classesData = [];
+    let studentsData = [];
+    let charts = {};
+
+    // ========================================
+    // DOM 元素
+    // ========================================
+    const sidebar = document.getElementById('sidebar');
+    const sidebarOverlay = document.getElementById('sidebar-overlay');
+    const menuToggle = document.getElementById('menu-toggle');
+    const navItems = document.querySelectorAll('.nav-item');
+    const views = document.querySelectorAll('.view');
+    const breadcrumb = document.getElementById('breadcrumb');
+    const pageLoader = document.getElementById('page-loader');
+
+    // ========================================
+    // 初始化
+    // ========================================
+    async function init() {
+      // 檢查登入狀態
+      currentTeacher = TeacherAPI.getCurrentTeacher();
+      if (!currentTeacher) {
+        window.location.href = 'teacher-login.html';
+        return;
+      }
+
+      // 更新 UI
+      updateTeacherInfo();
+
+      // 載入數據
+      await loadAllData();
+
+      // 綁定事件
+      bindEvents();
+
+      // 隱藏載入動畫
+      hideLoader();
+    }
+
+    // ========================================
+    // 數據載入
+    // ========================================
+    async function loadAllData() {
+      try {
+        // 載入班級列表
+        const classesResult = await TeacherAPI.getClasses();
+        if (classesResult.success) {
+          classesData = classesResult.classes;
+          renderOverview();
+          renderClassesList();
+          updateAnalyticsFilter();
+        }
+      } catch (error) {
+        console.error('載入數據失敗:', error);
+        showToast('載入數據失敗，請重新整理', 'error');
+      }
+    }
+
+    async function loadClassStudents(classId) {
+      try {
+        showLoader();
+        const result = await TeacherAPI.getClassStudents(classId);
+        if (result.success) {
+          studentsData = result.students;
+          currentClassId = classId;
+          document.getElementById('class-detail-title').textContent = result.className;
+          renderStudentsTable();
+          showClassDetail();
+        }
+      } catch (error) {
+        console.error('載入學生數據失敗:', error);
+        showToast('載入學生數據失敗', 'error');
+      } finally {
+        hideLoader();
+      }
+    }
+
+    async function loadStudentDetail(username) {
+      try {
+        showLoader();
+        const result = await TeacherAPI.getStudentDetail(username);
+        if (result.success) {
+          currentStudentUsername = username;
+          renderStudentDetail(result);
+          showStudentDetail();
+        }
+      } catch (error) {
+        console.error('載入學生詳情失敗:', error);
+        showToast('載入學生詳情失敗', 'error');
+      } finally {
+        hideLoader();
+      }
+    }
+
+    // ========================================
+    // 渲染函數
+    // ========================================
+    function updateTeacherInfo() {
+      document.getElementById('teacher-name').textContent = currentTeacher.displayName || currentTeacher.username;
+      document.getElementById('teacher-avatar').textContent = (currentTeacher.displayName || currentTeacher.username)[0];
+      document.getElementById('welcome-name').textContent = currentTeacher.displayName || '老師';
+    }
+
+    function renderOverview() {
+      // 計算統計數據
+      let totalStudents = 0;
+      let activeStudents = 0;
+      let totalProgress = 0;
+      let totalTime = 0;
+      const attentionStudents = [];
+
+      classesData.forEach(cls => {
+        totalStudents += cls.studentCount || 0;
+        activeStudents += cls.activeCount || 0;
+        totalProgress += (cls.avgProgress || 0) * (cls.studentCount || 0);
+        totalTime += (cls.avgStudyTime || 0) * (cls.studentCount || 0);
+
+        // 收集需要關注的學生
+        if (cls.attentionStudents) {
+          attentionStudents.push(...cls.attentionStudents);
+        }
+      });
+
+      const avgProgress = totalStudents > 0 ? Math.round(totalProgress / totalStudents) : 0;
+      const avgTime = totalStudents > 0 ? Math.round(totalTime / totalStudents) : 0;
+
+      document.getElementById('stat-total-students').textContent = totalStudents;
+      document.getElementById('stat-active-students').textContent = activeStudents;
+      document.getElementById('stat-avg-progress').textContent = avgProgress + '%';
+      document.getElementById('stat-avg-time').textContent = formatTime(avgTime);
+
+      // 渲染班級卡片
+      const classesGrid = document.getElementById('overview-classes');
+      classesGrid.innerHTML = classesData.map(cls => `
+        <div class="class-card" data-class-id="${cls.classId}">
+          <h4>${cls.className}</h4>
+          <div class="class-stats">
+            <span>${cls.studentCount || 0} 學生</span>
+            <span>平均進度: ${cls.avgProgress || 0}%</span>
+          </div>
+          <div class="progress-bar">
+            <div class="progress-fill" style="width: ${cls.avgProgress || 0}%"></div>
+          </div>
+        </div>
+      `).join('');
+
+      // 綁定班級卡片點擊
+      classesGrid.querySelectorAll('.class-card').forEach(card => {
+        card.addEventListener('click', () => {
+          const classId = card.dataset.classId;
+          switchView('classes');
+          loadClassStudents(classId);
+        });
+      });
+
+      // 渲染需要關注的學生
+      const attentionList = document.getElementById('attention-list');
+      if (attentionStudents.length === 0) {
+        attentionList.innerHTML = '<p class="empty-message">目前沒有需要特別關注的學生</p>';
+      } else {
+        attentionList.innerHTML = attentionStudents.slice(0, 5).map(student => `
+          <div class="attention-item">
+            <div class="attention-icon ${student.type}">
+              ${student.type === 'inactive' ?
+                '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>' :
+                '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="20" x2="12" y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="16"/></svg>'
+              }
+            </div>
+            <div class="attention-info">
+              <span class="attention-name">${student.displayName}</span>
+              <span class="attention-reason">${student.reason}</span>
+            </div>
+            <button class="attention-action" data-username="${student.username}" data-class-id="${student.classId}">
+              查看詳情
+            </button>
+          </div>
+        `).join('');
+
+        // 綁定查看詳情
+        attentionList.querySelectorAll('.attention-action').forEach(btn => {
+          btn.addEventListener('click', async () => {
+            await loadClassStudents(btn.dataset.classId);
+            await loadStudentDetail(btn.dataset.username);
+          });
+        });
+      }
+    }
+
+    function renderClassesList() {
+      const classesList = document.getElementById('classes-list');
+      classesList.innerHTML = classesData.map(cls => `
+        <div class="class-list-item" data-class-id="${cls.classId}">
+          <div class="class-list-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+              <circle cx="9" cy="7" r="4"/>
+              <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+              <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+            </svg>
+          </div>
+          <div class="class-list-info">
+            <h3>${cls.className}</h3>
+            <p>${cls.studentCount || 0} 學生 · 平均進度 ${cls.avgProgress || 0}%</p>
+          </div>
+          <div class="class-list-arrow">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="9 18 15 12 9 6"/>
+            </svg>
+          </div>
+        </div>
+      `).join('');
+
+      // 綁定點擊事件
+      classesList.querySelectorAll('.class-list-item').forEach(item => {
+        item.addEventListener('click', () => {
+          loadClassStudents(item.dataset.classId);
+        });
+      });
+    }
+
+    function renderStudentsTable() {
+      const tbody = document.getElementById('students-tbody');
+      tbody.innerHTML = studentsData.map(student => `
+        <tr data-username="${student.username}">
+          <td>
+            <div class="student-name-cell">
+              <span class="student-avatar">${(student.displayName || student.username)[0]}</span>
+              <span>${student.displayName || student.username}</span>
+            </div>
+          </td>
+          <td>
+            <div class="progress-cell">
+              <div class="mini-progress">
+                <div class="mini-progress-fill" style="width: ${student.vocabularyProgress?.percent || 0}%"></div>
+              </div>
+              <span>${student.vocabularyProgress?.viewed || 0}/${student.vocabularyProgress?.total || 27}</span>
+            </div>
+          </td>
+          <td>${student.dialogueProgress?.completed || 0}/${student.dialogueProgress?.total || 7}</td>
+          <td>${student.gamesPlayed || 0}次</td>
+          <td>${formatTime(student.totalStudyTime || 0)}</td>
+          <td>${formatDate(student.lastActive)}</td>
+          <td>
+            <button class="table-action-btn view-detail" data-username="${student.username}">
+              詳情
+            </button>
+          </td>
+        </tr>
+      `).join('');
+
+      // 綁定詳情按鈕
+      tbody.querySelectorAll('.view-detail').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          loadStudentDetail(btn.dataset.username);
+        });
+      });
+
+      // 綁定行點擊
+      tbody.querySelectorAll('tr').forEach(row => {
+        row.addEventListener('click', () => {
+          loadStudentDetail(row.dataset.username);
+        });
+      });
+    }
+
+    function renderStudentDetail(data) {
+      const { student, vocabulary, dialogue, games, statistics, achievements } = data;
+
+      document.getElementById('student-detail-name').textContent = student.displayName || student.username;
+
+      // 詞彙進度
+      const vocabPercent = Math.round((vocabulary.mastered / vocabulary.total) * 100);
+      updateRing('student-vocab-ring', vocabPercent);
+      document.getElementById('student-vocab-percent').textContent = vocabPercent + '%';
+      document.getElementById('student-vocab-detail').textContent = `${vocabulary.mastered}/${vocabulary.total}`;
+
+      // 對話進度
+      const dialoguePercent = Math.round((dialogue.completed / dialogue.total) * 100);
+      updateRing('student-dialogue-ring', dialoguePercent);
+      document.getElementById('student-dialogue-percent').textContent = dialoguePercent + '%';
+      document.getElementById('student-dialogue-detail').textContent = `${dialogue.completed}/${dialogue.total}`;
+
+      // 學習時間
+      document.getElementById('student-study-time').textContent = formatTime(statistics.totalStudyTime || 0);
+
+      // 詞彙分類
+      const vocabCategories = document.getElementById('vocab-categories');
+      vocabCategories.innerHTML = Object.entries(vocabulary.byCategory || {}).map(([category, data]) => `
+        <div class="vocab-category">
+          <div class="category-header">
+            <span class="category-name">${getCategoryName(category)}</span>
+            <span class="category-count">${data.mastered}/${data.total} 已掌握</span>
+          </div>
+          <div class="progress-bar">
+            <div class="progress-fill" style="width: ${(data.viewed / data.total) * 100}%"></div>
+          </div>
+        </div>
+      `).join('');
+
+      // 遊戲成績
+      const gamesGrid = document.getElementById('games-grid');
+      const gameNames = {
+        matching: '連連看',
+        sorting: '分類遊戲',
+        maze: '迷宮',
+        bingo: '賓果',
+        duel: '閃電決鬥'
+      };
+
+      gamesGrid.innerHTML = Object.entries(games || {}).map(([gameId, data]) => `
+        <div class="game-stat-card">
+          <div class="game-name">${gameNames[gameId] || gameId}</div>
+          <div class="game-score">${data.bestScore || '-'}</div>
+          <div class="game-plays">${data.played || 0} 次</div>
+        </div>
+      `).join('');
+
+      // 成就
+      document.getElementById('achievements-count').textContent = achievements.unlocked?.length || 0;
+      const achievementsGrid = document.getElementById('student-achievements');
+
+      const allAchievements = [
+        { id: 'first_word', name: '初學者', icon: 'seedling' },
+        { id: 'vocab_10', name: '詞彙達人', icon: 'book' },
+        { id: 'vocab_all', name: '詞彙大師', icon: 'trophy' },
+        { id: 'game_first', name: '遊戲新手', icon: 'gamepad' },
+        { id: 'game_all', name: '遊戲專家', icon: 'target' },
+        { id: 'perfect_match', name: '完美配對', icon: 'star' },
+        { id: 'speed_demon', name: '閃電反應', icon: 'zap' },
+        { id: 'streak_3', name: '堅持學習', icon: 'fire' },
+        { id: 'streak_7', name: '學習週冠', icon: 'crown' }
+      ];
+
+      achievementsGrid.innerHTML = allAchievements.map(ach => `
+        <div class="achievement-badge ${achievements.unlocked?.includes(ach.id) ? 'unlocked' : 'locked'}">
+          <span class="badge-icon">${getAchievementIcon(ach.icon)}</span>
+          <span class="badge-name">${ach.name}</span>
+        </div>
+      `).join('');
+    }
+
+    function updateAnalyticsFilter() {
+      const filter = document.getElementById('analytics-class-filter');
+      filter.innerHTML = '<option value="all">所有班級</option>' +
+        classesData.map(cls => `<option value="${cls.classId}">${cls.className}</option>`).join('');
+    }
+
+    async function renderAnalytics(classId = 'all') {
+      try {
+        const result = await TeacherAPI.getClassAnalytics(classId === 'all' ? null : classId);
+        if (!result.success) return;
+
+        const { progressDistribution, vocabMastery, gamePreferences, timeData } = result;
+
+        // 進度分佈圖
+        if (charts.progress) charts.progress.destroy();
+        charts.progress = new Chart(document.getElementById('progress-chart'), {
+          type: 'bar',
+          data: {
+            labels: ['0-20%', '21-40%', '41-60%', '61-80%', '81-100%'],
+            datasets: [{
+              label: '學生數',
+              data: progressDistribution || [0, 0, 0, 0, 0],
+              backgroundColor: ['#C84B31', '#E07A5F', '#D4A84B', '#7D9D6D', '#2C5F6E']
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: { legend: { display: false } }
+          }
+        });
+
+        // 詞彙掌握圖
+        if (charts.vocab) charts.vocab.destroy();
+        charts.vocab = new Chart(document.getElementById('vocab-chart'), {
+          type: 'doughnut',
+          data: {
+            labels: ['水果', '蔬菜', '用品'],
+            datasets: [{
+              data: vocabMastery || [0, 0, 0],
+              backgroundColor: ['#D4A84B', '#7D9D6D', '#5B8FA8']
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false
+          }
+        });
+
+        // 遊戲偏好圖
+        if (charts.games) charts.games.destroy();
+        charts.games = new Chart(document.getElementById('games-chart'), {
+          type: 'polarArea',
+          data: {
+            labels: ['連連看', '分類', '迷宮', '賓果', '決鬥'],
+            datasets: [{
+              data: gamePreferences || [0, 0, 0, 0, 0],
+              backgroundColor: [
+                'rgba(212, 168, 75, 0.7)',
+                'rgba(125, 157, 109, 0.7)',
+                'rgba(91, 143, 168, 0.7)',
+                'rgba(139, 123, 181, 0.7)',
+                'rgba(224, 122, 95, 0.7)'
+              ]
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false
+          }
+        });
+
+        // 時間趨勢圖
+        if (charts.time) charts.time.destroy();
+        charts.time = new Chart(document.getElementById('time-chart'), {
+          type: 'line',
+          data: {
+            labels: ['週一', '週二', '週三', '週四', '週五', '週六', '週日'],
+            datasets: [{
+              label: '平均學習時間（分鐘）',
+              data: timeData || [0, 0, 0, 0, 0, 0, 0],
+              borderColor: '#2C5F6E',
+              backgroundColor: 'rgba(44, 95, 110, 0.1)',
+              fill: true,
+              tension: 0.4
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false
+          }
+        });
+      } catch (error) {
+        console.error('載入分析數據失敗:', error);
+      }
+    }
+
+    // ========================================
+    // 視圖切換
+    // ========================================
+    function switchView(viewName) {
+      navItems.forEach(item => {
+        item.classList.toggle('active', item.dataset.view === viewName);
+      });
+
+      views.forEach(view => {
+        view.classList.toggle('active', view.id === `view-${viewName}`);
+      });
+
+      // 更新麵包屑
+      const viewTitles = {
+        overview: '總覽',
+        classes: '班級管理',
+        analytics: '數據分析'
+      };
+      breadcrumb.innerHTML = `<span>${viewTitles[viewName]}</span>`;
+
+      // 特殊處理
+      if (viewName === 'classes') {
+        showClassList();
+      } else if (viewName === 'analytics') {
+        renderAnalytics();
+      }
+
+      // 手機版關閉側邊欄
+      closeSidebar();
+    }
+
+    function showClassList() {
+      document.getElementById('class-list-view').classList.remove('hidden');
+      document.getElementById('class-detail-view').classList.add('hidden');
+      document.getElementById('student-detail-view').classList.add('hidden');
+    }
+
+    function showClassDetail() {
+      document.getElementById('class-list-view').classList.add('hidden');
+      document.getElementById('class-detail-view').classList.remove('hidden');
+      document.getElementById('student-detail-view').classList.add('hidden');
+    }
+
+    function showStudentDetail() {
+      document.getElementById('class-list-view').classList.add('hidden');
+      document.getElementById('class-detail-view').classList.add('hidden');
+      document.getElementById('student-detail-view').classList.remove('hidden');
+    }
+
+    // ========================================
+    // 匯出功能
+    // ========================================
+    function exportToCSV() {
+      if (studentsData.length === 0) {
+        showToast('沒有數據可匯出', 'error');
+        return;
+      }
+
+      const headers = ['學生姓名', '詞彙進度', '詞彙掌握', '對話完成', '遊戲次數', '總學習時間', '連續天數', '成就數'];
+      const rows = studentsData.map(s => [
+        s.displayName || s.username,
+        `${s.vocabularyProgress?.percent || 0}%`,
+        `${s.vocabularyProgress?.mastered || 0}/${s.vocabularyProgress?.total || 27}`,
+        `${s.dialogueProgress?.completed || 0}/${s.dialogueProgress?.total || 7}`,
+        s.gamesPlayed || 0,
+        formatTime(s.totalStudyTime || 0),
+        s.dailyStreak || 0,
+        s.achievementsUnlocked || 0
+      ]);
+
+      const csv = [headers.join(','), ...rows.map(r => r.join(','))].join('\n');
+      const blob = new Blob(['\ufeff' + csv], { type: 'text/csv;charset=utf-8' });
+      downloadBlob(blob, `班級學生數據_${new Date().toISOString().split('T')[0]}.csv`);
+      showToast('CSV 匯出成功', 'success');
+    }
+
+    function exportToExcel() {
+      if (studentsData.length === 0) {
+        showToast('沒有數據可匯出', 'error');
+        return;
+      }
+
+      const wb = XLSX.utils.book_new();
+
+      // 學生總覽工作表
+      const overviewData = studentsData.map(s => ({
+        '學生姓名': s.displayName || s.username,
+        '詞彙進度(%)': s.vocabularyProgress?.percent || 0,
+        '詞彙掌握數': s.vocabularyProgress?.mastered || 0,
+        '對話完成數': s.dialogueProgress?.completed || 0,
+        '遊戲次數': s.gamesPlayed || 0,
+        '總學習時間(秒)': s.totalStudyTime || 0,
+        '連續學習天數': s.dailyStreak || 0,
+        '成就數': s.achievementsUnlocked || 0
+      }));
+
+      const ws1 = XLSX.utils.json_to_sheet(overviewData);
+      XLSX.utils.book_append_sheet(wb, ws1, '學生總覽');
+
+      // 匯出
+      XLSX.writeFile(wb, `班級學生數據_${new Date().toISOString().split('T')[0]}.xlsx`);
+      showToast('Excel 匯出成功', 'success');
+    }
+
+    function downloadBlob(blob, filename) {
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    }
+
+    // ========================================
+    // 事件綁定
+    // ========================================
+    function bindEvents() {
+      // 導航項目
+      navItems.forEach(item => {
+        item.addEventListener('click', () => {
+          switchView(item.dataset.view);
+        });
+      });
+
+      // 手機版選單
+      menuToggle.addEventListener('click', toggleSidebar);
+      sidebarOverlay.addEventListener('click', closeSidebar);
+
+      // 登出
+      document.getElementById('logout-btn').addEventListener('click', () => {
+        TeacherAPI.logout();
+        window.location.href = 'teacher-login.html';
+      });
+
+      // 重新整理
+      document.getElementById('refresh-btn').addEventListener('click', loadAllData);
+
+      // 返回按鈕
+      document.getElementById('back-to-classes').addEventListener('click', showClassList);
+      document.getElementById('back-to-class').addEventListener('click', showClassDetail);
+
+      // 匯出按鈕
+      document.getElementById('export-csv-btn').addEventListener('click', exportToCSV);
+      document.getElementById('export-excel-btn').addEventListener('click', exportToExcel);
+
+      // 學生搜尋
+      document.getElementById('student-search').addEventListener('input', (e) => {
+        const query = e.target.value.toLowerCase();
+        const rows = document.querySelectorAll('#students-tbody tr');
+        rows.forEach(row => {
+          const name = row.querySelector('.student-name-cell span:last-child').textContent.toLowerCase();
+          row.style.display = name.includes(query) ? '' : 'none';
+        });
+      });
+
+      // 分析篩選
+      document.getElementById('analytics-class-filter').addEventListener('change', (e) => {
+        renderAnalytics(e.target.value);
+      });
+
+      // 表格排序
+      document.querySelectorAll('.sortable').forEach(th => {
+        th.addEventListener('click', () => sortTable(th.dataset.sort));
+      });
+    }
+
+    function toggleSidebar() {
+      sidebar.classList.toggle('open');
+      sidebarOverlay.classList.toggle('visible');
+    }
+
+    function closeSidebar() {
+      sidebar.classList.remove('open');
+      sidebarOverlay.classList.remove('visible');
+    }
+
+    // ========================================
+    // 輔助函數
+    // ========================================
+    function formatTime(seconds) {
+      if (!seconds || seconds === 0) return '0分鐘';
+      const hours = Math.floor(seconds / 3600);
+      const minutes = Math.floor((seconds % 3600) / 60);
+      if (hours > 0) {
+        return `${hours}小時${minutes > 0 ? minutes + '分' : ''}`;
+      }
+      return `${minutes}分鐘`;
+    }
+
+    function formatDate(dateStr) {
+      if (!dateStr) return '-';
+      const date = new Date(dateStr);
+      const now = new Date();
+      const diff = now - date;
+      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+
+      if (days === 0) return '今天';
+      if (days === 1) return '昨天';
+      if (days < 7) return `${days} 天前`;
+      return date.toLocaleDateString('zh-TW');
+    }
+
+    function getCategoryName(category) {
+      const names = {
+        fruit: '水果',
+        vegetable: '蔬菜',
+        item: '用品'
+      };
+      return names[category] || category;
+    }
+
+    function updateRing(ringId, percent) {
+      const circumference = 251.2;
+      const offset = circumference - (percent / 100) * circumference;
+      document.getElementById(ringId).style.strokeDashoffset = offset;
+    }
+
+    function getAchievementIcon(iconName) {
+      const icons = {
+        seedling: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22v-7"/><path d="M9 15c-3 0-5.5-2.5-5.5-5.5 0-2 1-3.5 2.5-4.5C7 4 8.5 3 10.5 3c1 0 2 .5 2.5 1"/><path d="M15 15c3 0 5.5-2.5 5.5-5.5 0-2-1-3.5-2.5-4.5C17 4 15.5 3 13.5 3c-1 0-2 .5-2.5 1"/></svg>',
+        book: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>',
+        trophy: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg>',
+        gamepad: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="6" y1="12" x2="10" y2="12"/><line x1="8" y1="10" x2="8" y2="14"/><line x1="15" y1="13" x2="15.01" y2="13"/><line x1="18" y1="11" x2="18.01" y2="11"/><rect x="2" y="6" width="20" height="12" rx="2"/></svg>',
+        target: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>',
+        star: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>',
+        zap: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>',
+        fire: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"/></svg>',
+        crown: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 4l3 12h14l3-12-6 7-4-7-4 7-6-7z"/><path d="M3 20h18"/></svg>'
+      };
+      return icons[iconName] || '';
+    }
+
+    function sortTable(sortKey) {
+      // 簡單的排序實現
+      const getSortValue = (student, key) => {
+        switch (key) {
+          case 'name': return student.displayName || student.username;
+          case 'vocab': return student.vocabularyProgress?.percent || 0;
+          case 'dialogue': return student.dialogueProgress?.completed || 0;
+          case 'games': return student.gamesPlayed || 0;
+          case 'time': return student.totalStudyTime || 0;
+          case 'lastActive': return student.lastActive ? new Date(student.lastActive).getTime() : 0;
+          default: return 0;
+        }
+      };
+
+      studentsData.sort((a, b) => {
+        const aVal = getSortValue(a, sortKey);
+        const bVal = getSortValue(b, sortKey);
+        if (typeof aVal === 'string') return aVal.localeCompare(bVal);
+        return bVal - aVal;
+      });
+
+      renderStudentsTable();
+    }
+
+    function showLoader() {
+      pageLoader.classList.remove('hidden');
+    }
+
+    function hideLoader() {
+      pageLoader.classList.add('hidden');
+    }
+
+    function showToast(message, type = 'info') {
+      const container = document.getElementById('toast-container');
+      const toast = document.createElement('div');
+      toast.className = `toast ${type}`;
+      toast.innerHTML = `
+        <span>${message}</span>
+        <button class="toast-close">&times;</button>
+      `;
+
+      container.appendChild(toast);
+
+      toast.querySelector('.toast-close').addEventListener('click', () => {
+        toast.classList.add('hiding');
+        setTimeout(() => toast.remove(), 300);
+      });
+
+      setTimeout(() => {
+        toast.classList.add('hiding');
+        setTimeout(() => toast.remove(), 300);
+      }, 3000);
+    }
+
+    // 啟動
+    init();
+  </script>
+</body>
+</html>
