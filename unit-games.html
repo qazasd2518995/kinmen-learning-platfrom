@@ -1266,9 +1266,28 @@
 
     /* Mobile (<768px) */
     @media (max-width: 767px) {
+      /* 連連看手機版 - 保持左右排列但縮小 */
       .matching-container {
-        flex-direction: column;
-        align-items: center;
+        flex-direction: row;
+        justify-content: center;
+        gap: 20px;
+        padding: 10px;
+        min-height: auto;
+      }
+
+      .matching-column {
+        gap: 10px;
+      }
+
+      .matching-item {
+        padding: 10px 16px;
+        font-size: 1rem;
+        min-width: 100px;
+      }
+
+      .matching-score {
+        font-size: 1rem;
+        margin-top: 16px;
       }
 
       .game-selector {
@@ -1337,7 +1356,19 @@
       }
 
       .game-area {
-        padding: 20px;
+        padding: 16px;
+      }
+
+      /* 連連看超小螢幕 */
+      .matching-container {
+        gap: 12px;
+        padding: 8px;
+      }
+
+      .matching-item {
+        padding: 8px 12px;
+        font-size: 0.9rem;
+        min-width: 80px;
       }
 
       .maze-svg {
@@ -1691,9 +1722,12 @@
     }
 
     function startMatching() {
-      // 隨機選擇 5 個詞彙
+      // 根據螢幕寬度決定題目數量：手機 4 題，桌面 5 題
+      const isMobile = window.innerWidth < 768;
+      const pairCount = isMobile ? 4 : 5;
+
       const shuffled = [...vocabulary].sort(() => Math.random() - 0.5);
-      matchingPairs = shuffled.slice(0, 5);
+      matchingPairs = shuffled.slice(0, pairCount);
       matchedCount = 0;
       selectedLeft = null;
 
