@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "totalItems": 26,
+  "totalItems": 27,
   "categories": {
     "fruit": "水果",
     "vegetable": "蔬菜",
@@ -214,6 +214,14 @@
       "category": "vegetable",
       "image": "slides/slide-14.png",
       "audioFile": "audio/tshai-hue.mp3"
+    },
+    {
+      "id": 27,
+      "chinese": "小刺瓜",
+      "pinyin": "sió-tshì-kue",
+      "category": "vegetable",
+      "image": "slides/slide-13.png",
+      "audioFile": "audio/sio-tshi-kue.mp3"
     }
   ]
 }

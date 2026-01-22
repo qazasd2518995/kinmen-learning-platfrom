@@ -4,6 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>金聲玉語 - 去巴剎買菜</title>
+  <link rel="icon" type="image/png" href="favicon.png">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
   <meta name="description" content="學習金門話，從市場買菜開始。互動式詞彙學習、聽力測驗、對話練習。">
 
   <!-- Fonts -->
@@ -867,6 +869,171 @@
     }
 
     /* ========================================
+       學習統計區塊
+       ======================================== */
+    .stats-section {
+      margin-top: 80px;
+      padding: 0 24px;
+    }
+
+    .section-title {
+      font-family: var(--font-display);
+      font-size: 1.75rem;
+      font-weight: 700;
+      color: var(--text-accent);
+      text-align: center;
+      margin-bottom: 32px;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+      max-width: 900px;
+      margin: 0 auto 40px;
+    }
+
+    .stat-card {
+      background: var(--bg-card);
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      text-align: center;
+      box-shadow: var(--shadow-sm);
+      transition: all var(--duration-normal) var(--ease-out);
+    }
+
+    .stat-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-md);
+    }
+
+    .stat-ring {
+      position: relative;
+      width: 80px;
+      height: 80px;
+      margin: 0 auto 12px;
+    }
+
+    .stat-ring svg {
+      transform: rotate(-90deg);
+      width: 100%;
+      height: 100%;
+    }
+
+    .stat-ring-bg {
+      fill: none;
+      stroke: var(--bg-secondary);
+      stroke-width: 8;
+    }
+
+    .stat-ring-fill {
+      fill: none;
+      stroke: var(--kinmen-gold);
+      stroke-width: 8;
+      stroke-linecap: round;
+      stroke-dasharray: 251.2;
+      stroke-dashoffset: 251.2;
+      transition: stroke-dashoffset 1s var(--ease-out);
+    }
+
+    .stat-ring-value {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.125rem;
+      font-weight: 700;
+      color: var(--text-accent);
+    }
+
+    .stat-icon {
+      font-size: 2.5rem;
+      margin-bottom: 8px;
+    }
+
+    .stat-value {
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--text-accent);
+      margin-bottom: 4px;
+    }
+
+    .stat-label {
+      font-size: 0.875rem;
+      color: var(--text-secondary);
+    }
+
+    .stat-info {
+      text-align: center;
+    }
+
+    .stat-detail {
+      font-size: 0.8125rem;
+      color: var(--text-secondary);
+      margin-top: 4px;
+    }
+
+    /* 成就牆 */
+    .achievements-section {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .achievements-title {
+      font-family: var(--font-display);
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 16px;
+      text-align: center;
+    }
+
+    .achievements-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      justify-content: center;
+    }
+
+    .achievement-badge {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 16px;
+      background: var(--bg-secondary);
+      border-radius: var(--radius-md);
+      font-size: 0.875rem;
+      color: var(--text-secondary);
+      transition: all var(--duration-fast) var(--ease-out);
+    }
+
+    .achievement-badge.unlocked {
+      background: linear-gradient(135deg, var(--kinmen-gold-light) 0%, #FFF8E7 100%);
+      color: var(--text-accent);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .achievement-badge .badge-icon {
+      font-size: 1.25rem;
+      filter: grayscale(1);
+      opacity: 0.5;
+    }
+
+    .achievement-badge.unlocked .badge-icon {
+      filter: none;
+      opacity: 1;
+    }
+
+    .achievement-badge.locked {
+      opacity: 0.6;
+    }
+
+    .achievement-badge.locked .badge-icon {
+      filter: grayscale(1);
+    }
+
+    /* ========================================
        頁尾
        ======================================== */
     .footer {
@@ -952,6 +1119,32 @@
       .hero-cta {
         min-height: var(--touch-target-comfortable);
       }
+
+      .stats-section {
+        margin-top: 48px;
+      }
+
+      .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 16px;
+      }
+
+      .stat-card {
+        padding: 20px 16px;
+      }
+
+      .stat-ring {
+        width: 70px;
+        height: 70px;
+      }
+
+      .stat-icon {
+        font-size: 2rem;
+      }
+
+      .stat-value {
+        font-size: 1.5rem;
+      }
     }
 
     @media (max-width: 480px) {
@@ -990,6 +1183,24 @@
       .unit-arrow {
         width: var(--touch-target-min);
         height: var(--touch-target-min);
+      }
+
+      .stats-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+      }
+
+      .stat-card {
+        padding: 16px 12px;
+      }
+
+      .section-title {
+        font-size: 1.5rem;
+      }
+
+      .achievement-badge {
+        padding: 8px 12px;
+        font-size: 0.8125rem;
       }
     }
 
@@ -1686,6 +1897,56 @@
       </div>
     </section>
 
+    <!-- 學習統計 -->
+    <section class="stats-section" id="stats-section">
+      <h2 class="section-title">學習統計</h2>
+      <div class="stats-grid">
+        <!-- 詞彙進度 -->
+        <div class="stat-card vocab-stat">
+          <div class="stat-ring">
+            <svg viewBox="0 0 100 100">
+              <circle class="stat-ring-bg" cx="50" cy="50" r="40"/>
+              <circle class="stat-ring-fill" id="vocab-ring" cx="50" cy="50" r="40"/>
+            </svg>
+            <div class="stat-ring-value" id="vocab-percent">0%</div>
+          </div>
+          <div class="stat-info">
+            <div class="stat-label">詞彙掌握</div>
+            <div class="stat-detail" id="vocab-detail">0 / 27</div>
+          </div>
+        </div>
+
+        <!-- 連續天數 -->
+        <div class="stat-card streak-stat">
+          <div class="stat-icon">🔥</div>
+          <div class="stat-value" id="streak-value">0</div>
+          <div class="stat-label">連續學習天數</div>
+        </div>
+
+        <!-- 遊戲次數 -->
+        <div class="stat-card games-stat">
+          <div class="stat-icon">🎮</div>
+          <div class="stat-value" id="games-value">0</div>
+          <div class="stat-label">遊戲完成次數</div>
+        </div>
+
+        <!-- 最高分 -->
+        <div class="stat-card score-stat">
+          <div class="stat-icon">⭐</div>
+          <div class="stat-value" id="best-score">0</div>
+          <div class="stat-label">決鬥最高分</div>
+        </div>
+      </div>
+
+      <!-- 成就牆 -->
+      <div class="achievements-section">
+        <h3 class="achievements-title">成就</h3>
+        <div class="achievements-grid" id="achievements-grid">
+          <!-- 成就將由 JS 動態生成 -->
+        </div>
+      </div>
+    </section>
+
     <!-- 頁尾 -->
     <footer class="footer">
       <p class="footer-text">
@@ -1696,7 +1957,7 @@
 
   <!-- Scripts -->
   <script type="module">
-    import { getCurrentUser, initProgress } from './js/api.js';
+    import { getCurrentUser, initProgress, getStatistics, getAchievements, getAllAchievementDefinitions } from './js/api.js';
 
     // 頁面載入動畫
     window.addEventListener('load', () => {
@@ -1762,8 +2023,53 @@
       }
     }
 
+    // 載入統計數據
+    function loadStatistics() {
+      const stats = getStatistics();
+      const achievements = getAchievements();
+      const allAchievements = getAllAchievementDefinitions();
+
+      // 詞彙進度環形圖
+      const vocabCount = stats.vocabularyMastered?.length || 0;
+      const vocabTotal = 27;
+      const vocabPercent = Math.round((vocabCount / vocabTotal) * 100);
+      const circumference = 251.2; // 2 * PI * 40
+      const offset = circumference - (vocabPercent / 100) * circumference;
+
+      document.getElementById('vocab-ring').style.strokeDashoffset = offset;
+      document.getElementById('vocab-percent').textContent = vocabPercent + '%';
+      document.getElementById('vocab-detail').textContent = `${vocabCount} / ${vocabTotal}`;
+
+      // 連續天數
+      document.getElementById('streak-value').textContent = stats.dailyStreak || 0;
+
+      // 遊戲次數
+      const totalGames = Object.values(stats.gamesPlayed || {}).reduce((a, b) => a + b, 0);
+      document.getElementById('games-value').textContent = totalGames;
+
+      // 最高分
+      document.getElementById('best-score').textContent = stats.bestScores?.duel || 0;
+
+      // 成就牆
+      const achievementsGrid = document.getElementById('achievements-grid');
+      achievementsGrid.innerHTML = '';
+
+      allAchievements.forEach(achievement => {
+        const isUnlocked = achievements.unlocked?.includes(achievement.id);
+        const badge = document.createElement('div');
+        badge.className = `achievement-badge ${isUnlocked ? 'unlocked' : 'locked'}`;
+        badge.innerHTML = `
+          <span class="badge-icon">${achievement.icon}</span>
+          <span class="badge-name">${achievement.name}</span>
+        `;
+        badge.title = achievement.description;
+        achievementsGrid.appendChild(badge);
+      });
+    }
+
     // 初始化
     checkAuth();
+    loadStatistics();
   </script>
 </body>
 </html>

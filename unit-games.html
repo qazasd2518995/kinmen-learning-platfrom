@@ -4,7 +4,9 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>遊戲與活動 - 金聲玉語</title>
-  <meta name="description" content="金門話學習遊戲：連連看、分類、迷宮、賓果">
+  <link rel="icon" type="image/png" href="favicon.png">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <meta name="description" content="金門話學習遊戲：連連看、分類、迷宮、賓果、閃電決鬥">
 
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -888,6 +890,211 @@
     }
 
     /* ========================================
+       閃電決鬥遊戲
+       ======================================== */
+    .duel-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+      padding: 20px;
+      position: relative;
+    }
+
+    .duel-stats {
+      display: flex;
+      justify-content: space-between;
+      width: 100%;
+      max-width: 400px;
+      font-size: 1.125rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+    }
+
+    .duel-score {
+      color: var(--kinmen-gold-dark);
+    }
+
+    .duel-timer-container {
+      width: 100%;
+      max-width: 400px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .duel-timer-bar {
+      flex: 1;
+      height: 12px;
+      background: var(--bg-secondary);
+      border-radius: 6px;
+      overflow: hidden;
+    }
+
+    .duel-timer-fill {
+      height: 100%;
+      width: 100%;
+      background: linear-gradient(90deg, var(--kinmen-green) 0%, var(--kinmen-gold) 50%, var(--kinmen-red) 100%);
+      border-radius: 6px;
+      transition: width 0.1s linear;
+    }
+
+    .duel-timer-text {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--text-accent);
+      min-width: 40px;
+      text-align: right;
+    }
+
+    .duel-question {
+      position: relative;
+      width: 200px;
+      height: 200px;
+      background: var(--bg-card);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-md);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    .duel-image {
+      max-width: 90%;
+      max-height: 90%;
+      object-fit: contain;
+    }
+
+    .duel-feedback {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 4rem;
+      background: rgba(255, 255, 255, 0.9);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s ease;
+    }
+
+    .duel-feedback.visible {
+      opacity: 1;
+    }
+
+    .duel-options {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+      width: 100%;
+      max-width: 400px;
+    }
+
+    .duel-option {
+      padding: 16px 20px;
+      font-size: 1.125rem;
+      font-weight: 600;
+      background: var(--bg-card);
+      border: 2px solid var(--bg-secondary);
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      transition: all var(--duration-fast) var(--ease-out);
+      min-height: var(--touch-target-comfortable);
+    }
+
+    .duel-option:hover {
+      border-color: var(--kinmen-gold);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+    }
+
+    .duel-option:active {
+      transform: scale(0.98);
+    }
+
+    .duel-option.correct {
+      background: var(--kinmen-green-light);
+      border-color: var(--kinmen-green);
+      animation: duelCorrect 0.5s var(--ease-out);
+    }
+
+    .duel-option.wrong {
+      background: var(--kinmen-red-lighter);
+      border-color: var(--kinmen-red);
+      animation: duelWrong 0.5s var(--ease-out);
+    }
+
+    .duel-option.reveal {
+      background: var(--kinmen-green-lighter);
+      border-color: var(--kinmen-green);
+    }
+
+    .duel-option:disabled {
+      pointer-events: none;
+      opacity: 0.7;
+    }
+
+    @keyframes duelCorrect {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+      100% { transform: scale(1); }
+    }
+
+    @keyframes duelWrong {
+      0%, 100% { transform: translateX(0); }
+      20% { transform: translateX(-8px); }
+      40% { transform: translateX(8px); }
+      60% { transform: translateX(-4px); }
+      80% { transform: translateX(4px); }
+    }
+
+    .duel-start-screen {
+      position: absolute;
+      inset: 0;
+      background: rgba(253, 246, 240, 0.98);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      text-align: center;
+      border-radius: var(--radius-lg);
+      z-index: 10;
+    }
+
+    .duel-start-screen.hidden {
+      display: none;
+    }
+
+    .duel-start-icon {
+      font-size: 4rem;
+      animation: duelPulse 1.5s ease-in-out infinite;
+    }
+
+    @keyframes duelPulse {
+      0%, 100% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.1); opacity: 0.8; }
+    }
+
+    .duel-start-screen h3 {
+      font-family: var(--font-display);
+      font-size: 1.5rem;
+      color: var(--text-accent);
+    }
+
+    .duel-start-screen p {
+      color: var(--text-secondary);
+    }
+
+    .complete-score {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--kinmen-gold-dark);
+      margin-top: 8px;
+    }
+
+    /* ========================================
        完成畫面
        ======================================== */
     .game-complete {
@@ -1737,6 +1944,19 @@
           <p class="game-card-desc">看提示找水果</p>
         </div>
       </div>
+
+      <div class="game-card" data-game="duel">
+        <div class="game-card-icon">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"/>
+            <polyline points="12 6 12 12 16 14"/>
+          </svg>
+        </div>
+        <div class="game-card-content">
+          <h3 class="game-card-title">閃電決鬥</h3>
+          <p class="game-card-desc">計時搶答挑戰</p>
+        </div>
+      </div>
     </div>
 
     <!-- 連連看遊戲 -->
@@ -1947,10 +2167,69 @@
         <button class="restart-btn" id="restart-bingo">再玩一次</button>
       </div>
     </div>
+
+    <!-- 閃電決鬥遊戲 -->
+    <div id="duel-area" class="game-area">
+      <div class="game-header">
+        <h2 class="game-title">閃電決鬥</h2>
+        <p class="game-instruction">看到蔬果圖片，在時間內選出正確的金門話名稱！</p>
+      </div>
+
+      <div class="duel-container">
+        <!-- 進度和分數 -->
+        <div class="duel-stats">
+          <div class="duel-progress">題目：<span id="duel-current">1</span> / <span id="duel-total">10</span></div>
+          <div class="duel-score">得分：<span id="duel-score">0</span></div>
+        </div>
+
+        <!-- 計時器 -->
+        <div class="duel-timer-container">
+          <div class="duel-timer-bar">
+            <div class="duel-timer-fill" id="duel-timer-fill"></div>
+          </div>
+          <span class="duel-timer-text" id="duel-timer-text">3.0</span>
+        </div>
+
+        <!-- 題目圖片 -->
+        <div class="duel-question">
+          <img id="duel-image" class="duel-image" src="" alt="蔬果圖片">
+          <div class="duel-feedback" id="duel-feedback"></div>
+        </div>
+
+        <!-- 選項按鈕 -->
+        <div class="duel-options" id="duel-options">
+          <button class="duel-option" data-index="0"></button>
+          <button class="duel-option" data-index="1"></button>
+          <button class="duel-option" data-index="2"></button>
+          <button class="duel-option" data-index="3"></button>
+        </div>
+
+        <!-- 開始按鈕 -->
+        <div class="duel-start-screen" id="duel-start-screen">
+          <div class="duel-start-icon">⚡</div>
+          <h3>準備好了嗎？</h3>
+          <p>10 題計時搶答挑戰</p>
+          <p>每題 3 秒，答對得分！</p>
+          <button class="maze-btn" id="duel-start-btn">開始挑戰</button>
+        </div>
+      </div>
+
+      <div class="game-complete" id="duel-complete">
+        <div class="complete-icon">
+          <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+            <polyline points="20 6 9 17 4 12"/>
+          </svg>
+        </div>
+        <h3 class="complete-title">挑戰完成！</h3>
+        <p class="complete-message" id="duel-result">你答對了 8 / 10 題！</p>
+        <p class="complete-score" id="duel-final-score">最終得分：80 分</p>
+        <button class="restart-btn" id="restart-duel">再玩一次</button>
+      </div>
+    </div>
   </main>
 
   <script type="module">
-    import { getLocalProgress, initProgress } from './js/api.js';
+    import { getLocalProgress, initProgress, recordGamePlayed } from './js/api.js';
 
     let vocabulary = [];
 
@@ -1966,6 +2245,7 @@
         initSorting();
         initMaze();
         initBingo();
+        initDuel();
       } catch (error) {
         console.error('載入失敗:', error);
       }
@@ -2066,6 +2346,8 @@
           updateMatchingScore();
 
           if (matchedCount === matchingPairs.length) {
+            // 記錄遊戲完成
+            recordGamePlayed('matching', 100);
             setTimeout(() => {
               document.getElementById('matching-complete').classList.add('visible');
             }, 500);
@@ -2259,6 +2541,8 @@
           document.querySelectorAll('.sorting-category').forEach(c => c.classList.remove('waiting'));
 
           if (sortedCount === sortingItems.length) {
+            // 記錄遊戲完成
+            recordGamePlayed('sorting', 100);
             setTimeout(() => {
               document.getElementById('sorting-complete').classList.add('visible');
             }, 500);
@@ -2625,6 +2909,8 @@
     function nextMaze() {
       currentMazeIndex++;
       if (currentMazeIndex >= mazeTargets.length) {
+        // 記錄遊戲完成
+        recordGamePlayed('maze', 100);
         document.getElementById('maze-complete').classList.add('visible');
       } else {
         clearMaze();
@@ -2755,6 +3041,8 @@
               currentBingoQuestion++;
               updateBingoQuestion();
             } else {
+              // 記錄遊戲完成
+              recordGamePlayed('bingo', 100);
               document.getElementById('bingo-complete').classList.add('visible');
             }
           }, 800);
@@ -2796,6 +3084,178 @@
       currentBingoQuestion = 0;
       document.getElementById('bingo-complete').classList.remove('visible');
       startBingo();
+    }
+
+    // ========================================
+    // 閃電決鬥遊戲
+    // ========================================
+    let duelQuestions = [];
+    let currentDuelQuestion = 0;
+    let duelScore = 0;
+    let duelCorrectCount = 0;
+    let duelTimer = null;
+    let duelTimeLeft = 3.0;
+    const DUEL_TIME_LIMIT = 3.0;
+    const DUEL_TOTAL_QUESTIONS = 10;
+
+    function initDuel() {
+      document.getElementById('duel-start-btn').addEventListener('click', startDuel);
+      document.getElementById('restart-duel').addEventListener('click', restartDuel);
+
+      // 綁定選項按鈕
+      document.querySelectorAll('.duel-option').forEach(btn => {
+        btn.addEventListener('click', () => selectDuelOption(btn));
+      });
+    }
+
+    function startDuel() {
+      // 重置狀態
+      currentDuelQuestion = 0;
+      duelScore = 0;
+      duelCorrectCount = 0;
+
+      // 隱藏開始畫面
+      document.getElementById('duel-start-screen').classList.add('hidden');
+      document.getElementById('duel-complete').classList.remove('visible');
+
+      // 生成題目（隨機選擇 10 個詞彙）
+      const shuffled = [...vocabulary].sort(() => Math.random() - 0.5);
+      duelQuestions = shuffled.slice(0, DUEL_TOTAL_QUESTIONS);
+
+      // 更新總題數
+      document.getElementById('duel-total').textContent = DUEL_TOTAL_QUESTIONS;
+
+      // 開始第一題
+      showDuelQuestion();
+    }
+
+    function showDuelQuestion() {
+      if (currentDuelQuestion >= duelQuestions.length) {
+        endDuel();
+        return;
+      }
+
+      const question = duelQuestions[currentDuelQuestion];
+
+      // 更新進度
+      document.getElementById('duel-current').textContent = currentDuelQuestion + 1;
+      document.getElementById('duel-score').textContent = duelScore;
+
+      // 顯示圖片
+      document.getElementById('duel-image').src = question.image;
+
+      // 生成選項（1 正確 + 3 錯誤）
+      const wrongOptions = vocabulary
+        .filter(v => v.id !== question.id)
+        .sort(() => Math.random() - 0.5)
+        .slice(0, 3);
+
+      const options = [question, ...wrongOptions].sort(() => Math.random() - 0.5);
+
+      // 更新按鈕
+      const buttons = document.querySelectorAll('.duel-option');
+      buttons.forEach((btn, index) => {
+        btn.textContent = options[index].pinyin;
+        btn.dataset.correct = options[index].id === question.id ? 'true' : 'false';
+        btn.classList.remove('correct', 'wrong', 'reveal');
+        btn.disabled = false;
+      });
+
+      // 隱藏反饋
+      document.getElementById('duel-feedback').classList.remove('visible');
+
+      // 開始計時
+      startDuelTimer();
+    }
+
+    function startDuelTimer() {
+      duelTimeLeft = DUEL_TIME_LIMIT;
+      updateDuelTimerDisplay();
+
+      duelTimer = setInterval(() => {
+        duelTimeLeft -= 0.1;
+        updateDuelTimerDisplay();
+
+        if (duelTimeLeft <= 0) {
+          clearInterval(duelTimer);
+          duelTimeout();
+        }
+      }, 100);
+    }
+
+    function updateDuelTimerDisplay() {
+      const percentage = (duelTimeLeft / DUEL_TIME_LIMIT) * 100;
+      document.getElementById('duel-timer-fill').style.width = percentage + '%';
+      document.getElementById('duel-timer-text').textContent = Math.max(0, duelTimeLeft).toFixed(1);
+    }
+
+    function selectDuelOption(btn) {
+      clearInterval(duelTimer);
+
+      const isCorrect = btn.dataset.correct === 'true';
+
+      // 禁用所有按鈕
+      document.querySelectorAll('.duel-option').forEach(b => b.disabled = true);
+
+      if (isCorrect) {
+        btn.classList.add('correct');
+        document.getElementById('duel-feedback').textContent = '✓';
+        document.getElementById('duel-feedback').classList.add('visible');
+
+        // 計分：剩餘時間越多分數越高
+        const timeBonus = Math.floor(duelTimeLeft * 10);
+        duelScore += 10 + timeBonus;
+        duelCorrectCount++;
+      } else {
+        btn.classList.add('wrong');
+        document.getElementById('duel-feedback').textContent = '✗';
+        document.getElementById('duel-feedback').classList.add('visible');
+
+        // 顯示正確答案
+        document.querySelectorAll('.duel-option').forEach(b => {
+          if (b.dataset.correct === 'true') b.classList.add('reveal');
+        });
+      }
+
+      document.getElementById('duel-score').textContent = duelScore;
+
+      // 延遲後進入下一題
+      setTimeout(() => {
+        currentDuelQuestion++;
+        showDuelQuestion();
+      }, 1200);
+    }
+
+    function duelTimeout() {
+      // 時間到，顯示正確答案
+      document.querySelectorAll('.duel-option').forEach(btn => {
+        btn.disabled = true;
+        if (btn.dataset.correct === 'true') btn.classList.add('reveal');
+      });
+
+      document.getElementById('duel-feedback').textContent = '⏱';
+      document.getElementById('duel-feedback').classList.add('visible');
+
+      setTimeout(() => {
+        currentDuelQuestion++;
+        showDuelQuestion();
+      }, 1200);
+    }
+
+    function endDuel() {
+      // 記錄遊戲完成和分數
+      recordGamePlayed('duel', duelScore);
+
+      document.getElementById('duel-result').textContent =
+        `你答對了 ${duelCorrectCount} / ${DUEL_TOTAL_QUESTIONS} 題！`;
+      document.getElementById('duel-final-score').textContent =
+        `最終得分：${duelScore} 分`;
+      document.getElementById('duel-complete').classList.add('visible');
+    }
+
+    function restartDuel() {
+      document.getElementById('duel-complete').classList.remove('visible');
+      document.getElementById('duel-start-screen').classList.remove('hidden');
     }
 
     // 初始化

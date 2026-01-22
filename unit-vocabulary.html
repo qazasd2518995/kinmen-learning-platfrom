@@ -4,6 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>認識蔬果 - 金聲玉語</title>
+  <link rel="icon" type="image/png" href="favicon.png">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
   <meta name="description" content="學習金門話蔬果詞彙">
 
   <!-- Fonts -->
@@ -1925,7 +1927,7 @@
   <audio id="audio-player" playsinline preload="auto"></audio>
 
   <script type="module">
-    import { getLocalProgress, saveVocabularyProgress, initProgress } from './js/api.js';
+    import { getLocalProgress, saveVocabularyProgress, initProgress, recordVocabularyLearned } from './js/api.js';
 
     // 載入詞彙資料
     let vocabulary = [];
@@ -2032,6 +2034,9 @@
         flashcard.classList.toggle('flipped');
         if (flashcard.classList.contains('flipped')) {
           viewedCards.add(currentCardIndex);
+          // 記錄詞彙學習（用於成就系統）
+          const vocabId = vocabulary[currentCardIndex].id;
+          recordVocabularyLearned(vocabId);
           updateOverallProgress();
           updateProgressDots();
         }
