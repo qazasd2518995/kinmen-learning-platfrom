@@ -85,6 +85,28 @@ button {
   border: none;
   background: none;
   cursor: pointer;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* 確保所有可點擊元素在手機上正常運作 */
+.nav-item,
+.menu-toggle,
+.refresh-btn,
+.logout-btn,
+.attention-action,
+.class-card,
+.class-list-item,
+.action-btn,
+.back-btn,
+.table-action-btn,
+.copy-btn-small,
+.create-class-btn,
+.btn-primary,
+.btn-secondary,
+.modal-close {
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: rgba(44, 95, 110, 0.1);
 }
 
 a {
@@ -292,11 +314,13 @@ a {
   background: rgba(0, 0, 0, 0.5);
   z-index: 99;
   opacity: 0;
+  pointer-events: none;
   transition: opacity 0.3s;
 }
 
 .sidebar-overlay.visible {
   opacity: 1;
+  pointer-events: auto;
 }
 
 /* ========================================
