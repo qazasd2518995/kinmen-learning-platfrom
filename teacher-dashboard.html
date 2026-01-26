@@ -534,14 +534,19 @@
         return;
       }
 
+      // 先綁定事件（確保 UI 可以操作）
+      bindEvents();
+
       // 更新 UI
       updateTeacherInfo();
 
       // 載入數據
-      await loadAllData();
-
-      // 綁定事件
-      bindEvents();
+      try {
+        await loadAllData();
+      } catch (error) {
+        console.error('載入數據失敗:', error);
+        showToast('載入數據失敗，請重新整理', 'error');
+      }
 
       // 隱藏載入動畫
       hideLoader();
