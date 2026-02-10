@@ -2370,7 +2370,7 @@
         <div class="checkout-items" id="checkout-items"></div>
         <div class="checkout-total">
           <span>總計</span>
-          <span id="checkout-total-price">0 蚊</span>
+          <span id="checkout-total-price">0 箍</span>
         </div>
         <button class="pay-btn" id="pay-btn">付款完成</button>
       </div>
@@ -2394,7 +2394,7 @@
           </div>
           <div class="stat-item">
             <div class="stat-value" id="stat-total">0</div>
-            <div class="stat-label">總金額（蚊）</div>
+            <div class="stat-label">總金額（箍）</div>
           </div>
           <div class="stat-item">
             <div class="stat-value" id="stat-dialogues">0</div>
@@ -2506,7 +2506,7 @@
             <img src="${item.image}" alt="${item.chinese}" onerror="this.parentElement.textContent='&#127822;'">
           </div>
           <div class="stall-name">${item.chinese}</div>
-          <div class="stall-price">一斤 ${item.price} 蚊</div>
+          <div class="stall-price">一斤 ${item.price} 箍</div>
         `;
 
         el.addEventListener('click', () => selectItem(item));
@@ -2590,7 +2590,7 @@
         addMessage('customer', `${item.chinese}一斤佗濟錢？`, `${item.pinyin} tsit-kun tuā-tsē-tsînn?`);
 
         setTimeout(() => {
-          addMessage('vendor', `一斤${item.price}蚊，誠新鮮！`, `tsit-kun ${numberToPinyin(item.price)}-bûn, tsiânn sin-sian!`);
+          addMessage('vendor', `一斤${item.price}箍，誠新鮮！`, `tsit-kun ${numberToPinyin(item.price)}-khoo, tsiânn sin-sian!`);
 
           showResponseOptions([
             {
@@ -2613,7 +2613,7 @@
           const discount = Math.random() > 0.5;
           if (discount) {
             item.price = Math.max(20, item.price - 10);
-            addMessage('vendor', `好啦，算你${item.price}蚊就好`, `hó lah, sǹg lí ${numberToPinyin(item.price)}-bûn tō hó`);
+            addMessage('vendor', `好啦，算你${item.price}箍就好`, `hó lah, sǹg lí ${numberToPinyin(item.price)}-khoo tō hó`);
           } else {
             addMessage('vendor', `無法度較俗啦，這已經誠便宜了`, `bô-huat-tōo khah-sio̍k lah`);
           }
@@ -2633,7 +2633,7 @@
         const total = item.quantity * item.price;
 
         setTimeout(() => {
-          addMessage('vendor', `${item.quantity}斤，總共${total}蚊`, `${numberToPinyin(item.quantity)}-kun, tsóng-kiōng ${numberToPinyin(total)}-bûn`);
+          addMessage('vendor', `${item.quantity}斤，總共${total}箍`, `${numberToPinyin(item.quantity)}-kun, tsóng-kiōng ${numberToPinyin(total)}-khoo`);
 
           showResponseOptions([
             {
@@ -2745,13 +2745,13 @@
         el.className = 'checkout-item';
         el.innerHTML = `
           <span>${item.name} x ${item.quantity}斤</span>
-          <span>${item.total} 蚊</span>
+          <span>${item.total} 箍</span>
         `;
         itemsEl.appendChild(el);
         grandTotal += item.total;
       });
 
-      document.getElementById('checkout-total-price').textContent = `${grandTotal} 蚊`;
+      document.getElementById('checkout-total-price').textContent = `${grandTotal} 箍`;
     }
 
     // 完成購物

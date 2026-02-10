@@ -1361,7 +1361,7 @@
           <p class="answer-label">總共多少錢？</p>
           <div class="answer-input-group">
             <input type="number" class="answer-input" id="answer-input" placeholder="0">
-            <span class="answer-unit">蚊</span>
+            <span class="answer-unit">箍</span>
           </div>
           <button class="check-answer-btn" id="check-answer-btn">確認答案</button>
         </div>
@@ -1630,7 +1630,7 @@
         el.innerHTML = `
           <span class="item-name">${item.chinese} x ${item.quantity} 斤</span>
           <div class="item-price">
-            <span class="price-text">${item.pricePerUnit} 蚊/斤</span>
+            <span class="price-text">${item.pricePerUnit} 箍/斤</span>
           </div>
         `;
         container.appendChild(el);
@@ -1651,7 +1651,7 @@
         feedback.classList.add('visible', 'correct');
         calcScore++;
       } else {
-        feedback.textContent = `答案是 ${question.total} 蚊`;
+        feedback.textContent = `答案是 ${question.total} 箍`;
         feedback.classList.add('visible', 'incorrect');
       }
 

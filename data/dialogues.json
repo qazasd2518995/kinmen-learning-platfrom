@@ -214,7 +214,7 @@
       { "chinese": "九", "pinyin": "káu", "value": 9 },
       { "chinese": "十", "pinyin": "tsa̍p", "value": 10 },
       { "chinese": "斤", "pinyin": "kun", "meaning": "斤（重量單位）" },
-      { "chinese": "蚊", "pinyin": "bûn", "meaning": "元（貨幣單位）" }
+      { "chinese": "箍", "pinyin": "khoo", "meaning": "元（貨幣單位）" }
     ]
   }
 }
