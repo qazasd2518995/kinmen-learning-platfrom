@@ -126,15 +126,15 @@
       "section": "intro",
       "vocabulary": [
         {
-          "word": "柚仔",
-          "pinyin": "iū-á",
-          "audioFile": "audio/iu-a.mp3",
+          "word": "柚",
+          "pinyin": "iū",
+          "audioFile": "audio/iu.mp3",
           "position": { "x": "25%", "y": "8%" }
         },
         {
           "word": "蘋果",
-          "pinyin": "phōng-kó",
-          "audioFile": "audio/phong-ko.mp3",
+          "pinyin": "phîng-kó",
+          "audioFile": "audio/phing-ko.mp3",
           "position": { "x": "75%", "y": "8%" }
         }
       ]
@@ -146,9 +146,9 @@
       "section": "intro",
       "vocabulary": [
         {
-          "word": "茄仔",
-          "pinyin": "kiô-á",
-          "audioFile": "audio/kio-a.mp3",
+          "word": "茄",
+          "pinyin": "kiô",
+          "audioFile": "audio/kio.mp3",
           "position": { "x": "25%", "y": "8%" }
         },
         {
@@ -172,9 +172,9 @@
           "position": { "x": "25%", "y": "8%" }
         },
         {
-          "word": "蕃薯",
-          "pinyin": "han-tsî",
-          "audioFile": "audio/han-tsi.mp3",
+          "word": "番薯",
+          "pinyin": "an-tsîr",
+          "audioFile": "audio/an-tsir.mp3",
           "position": { "x": "75%", "y": "8%" }
         }
       ]
@@ -186,13 +186,13 @@
       "section": "intro",
       "vocabulary": [
         {
-          "word": "菌碻",
+          "word": "蕳砃",
           "pinyin": "kan-tan",
           "audioFile": "audio/kan-tan.mp3",
           "position": { "x": "28%", "y": "8%" }
         },
         {
-          "word": "林仔拔",
+          "word": "林仔菝",
           "pinyin": "nâi-á-pút",
           "audioFile": "audio/nai-a-put.mp3",
           "position": { "x": "78%", "y": "8%" }
@@ -207,12 +207,12 @@
       "vocabulary": [
         {
           "word": "葡萄",
-          "pinyin": "phô-tô",
-          "audioFile": "audio/pho-to.mp3",
+          "pinyin": "phû-tô",
+          "audioFile": "audio/phu-to.mp3",
           "position": { "x": "25%", "y": "8%" }
         },
         {
-          "word": "香蕉",
+          "word": "弓蕉",
           "pinyin": "king-tsio",
           "audioFile": "audio/king-tsio.mp3",
           "position": { "x": "75%", "y": "8%" }
@@ -232,9 +232,9 @@
           "position": { "x": "25%", "y": "8%" }
         },
         {
-          "word": "芭樂",
-          "pinyin": "ná-pua̍t-á",
-          "audioFile": "audio/na-puat-a.mp3",
+          "word": "水梨",
+          "pinyin": "tsuí-lâi",
+          "audioFile": "audio/tsui-lai.mp3",
           "position": { "x": "75%", "y": "8%" }
         }
       ]
@@ -246,15 +246,15 @@
       "section": "intro",
       "vocabulary": [
         {
-          "word": "刺瓜仔",
-          "pinyin": "tshì-kue-á",
-          "audioFile": "audio/tshi-kue-a.mp3",
+          "word": "小刺瓜",
+          "pinyin": "sió-tshì-kue",
+          "audioFile": "audio/sio-tshi-kue.mp3",
           "position": { "x": "25%", "y": "8%" }
         },
         {
-          "word": "番茄",
-          "pinyin": "thoo-má-too",
-          "audioFile": "audio/thoo-ma-too.mp3",
+          "word": "臭柿仔",
+          "pinyin": "tshàu-khī-á",
+          "audioFile": "audio/tshau-khi-a.mp3",
           "position": { "x": "75%", "y": "8%" }
         }
       ]
@@ -274,7 +274,6 @@
         {
           "word": "菜花",
           "pinyin": "tshài-hue",
-          "audioFile": "audio/tshai-hue.mp3",
           "position": { "x": "75%", "y": "8%" }
         }
       ]
@@ -373,56 +372,160 @@
       "id": 26,
       "image": "slides/slide-26.png",
       "type": "dialogue",
-      "section": "dialogue"
+      "section": "dialogue",
+      "title": "報價用語",
+      "dialogues": [
+        {
+          "role": "頭家",
+          "text": "一斤一百箍",
+          "audioFile": "audio/dialogue-pricing-1.mp3",
+          "position": { "x": "92%", "y": "35%" }
+        }
+      ]
     },
     {
       "id": 27,
       "image": "slides/slide-27.png",
       "type": "dialogue",
-      "section": "dialogue"
+      "section": "dialogue",
+      "title": "報價用語",
+      "dialogues": [
+        {
+          "role": "頭家",
+          "text": "今仔日有較俗喔",
+          "audioFile": "audio/dialogue-pricing-2.mp3",
+          "position": { "x": "92%", "y": "35%" }
+        }
+      ]
     },
     {
       "id": 28,
       "image": "slides/slide-28.png",
       "type": "dialogue",
-      "section": "dialogue"
+      "section": "dialogue",
+      "title": "介紹商品",
+      "dialogues": [
+        {
+          "role": "頭家",
+          "text": "這誠新鮮",
+          "audioFile": "audio/dialogue-intro-1.mp3",
+          "position": { "x": "92%", "y": "35%" }
+        }
+      ]
     },
     {
       "id": 29,
       "image": "slides/slide-29.png",
       "type": "dialogue",
-      "section": "dialogue"
+      "section": "dialogue",
+      "title": "介紹商品",
+      "dialogues": [
+        {
+          "role": "頭家",
+          "text": "今仔日才來的",
+          "audioFile": "audio/dialogue-intro-2.mp3",
+          "position": { "x": "92%", "y": "25%" }
+        },
+        {
+          "role": "頭家",
+          "text": "這誠好食喔",
+          "audioFile": "audio/dialogue-intro-3.mp3",
+          "position": { "x": "92%", "y": "55%" }
+        }
+      ]
     },
     {
       "id": 30,
       "image": "slides/slide-30.png",
       "type": "dialogue",
       "section": "dialogue",
-      "title": "人客常講"
+      "title": "詢問需求",
+      "dialogues": [
+        {
+          "role": "頭家",
+          "text": "欲買啥貨？",
+          "audioFile": "audio/dialogue-inquiry-1.mp3",
+          "position": { "x": "92%", "y": "25%" }
+        },
+        {
+          "role": "頭家",
+          "text": "欲偌濟？",
+          "audioFile": "audio/dialogue-inquiry-2.mp3",
+          "position": { "x": "92%", "y": "55%" }
+        }
+      ]
     },
     {
       "id": 31,
       "image": "slides/slide-31.png",
       "type": "dialogue",
-      "section": "dialogue"
+      "section": "dialogue",
+      "title": "人客常講",
+      "dialogues": [
+        {
+          "role": "人客",
+          "text": "這个一斤偌濟錢？",
+          "audioFile": "audio/dialogue-customer-1.mp3",
+          "position": { "x": "92%", "y": "35%" }
+        }
+      ]
     },
     {
       "id": 32,
       "image": "slides/slide-32.png",
       "type": "dialogue",
-      "section": "dialogue"
+      "section": "dialogue",
+      "title": "人客常講",
+      "dialogues": [
+        {
+          "role": "人客",
+          "text": "會使算我較俗無？",
+          "audioFile": "audio/dialogue-customer-2.mp3",
+          "position": { "x": "92%", "y": "35%" }
+        }
+      ]
     },
     {
       "id": 33,
       "image": "slides/slide-33.png",
       "type": "dialogue",
-      "section": "dialogue"
+      "section": "dialogue",
+      "title": "人客常講",
+      "dialogues": [
+        {
+          "role": "人客",
+          "text": "我欲買三斤",
+          "audioFile": "audio/dialogue-customer-3.mp3",
+          "position": { "x": "92%", "y": "35%" }
+        }
+      ]
     },
     {
       "id": 34,
       "image": "slides/slide-34.png",
       "type": "dialogue",
-      "section": "dialogue"
+      "section": "dialogue",
+      "title": "討價還價",
+      "dialogues": [
+        {
+          "role": "人客",
+          "text": "傷貴啊！",
+          "audioFile": "audio/dialogue-customer-4.mp3",
+          "position": { "x": "92%", "y": "15%" }
+        },
+        {
+          "role": "頭家",
+          "text": "無法度較俗啦",
+          "audioFile": "audio/dialogue-bargain-1.mp3",
+          "position": { "x": "92%", "y": "40%" }
+        },
+        {
+          "role": "頭家",
+          "text": "好啦，算你八十就好",
+          "audioFile": "audio/dialogue-bargain-2.mp3",
+          "position": { "x": "92%", "y": "65%" }
+        }
+      ]
     },
     {
       "id": 35,
@@ -449,7 +552,22 @@
       "id": 36,
       "image": "slides/slide-36.png",
       "type": "dialogue",
-      "section": "dialogue"
+      "section": "dialogue",
+      "title": "買菜對話",
+      "dialogues": [
+        {
+          "role": "人客",
+          "text": "這个白菜一斤偌濟錢？",
+          "audioFile": "audio/dialogue-veg-1a.mp3",
+          "position": { "x": "92%", "y": "25%" }
+        },
+        {
+          "role": "頭家",
+          "text": "五十箍啦！真新鮮，今仔日早起才挽的",
+          "audioFile": "audio/dialogue-veg-1b.mp3",
+          "position": { "x": "92%", "y": "55%" }
+        }
+      ]
     },
     {
       "id": 37,

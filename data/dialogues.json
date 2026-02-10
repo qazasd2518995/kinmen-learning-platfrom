@@ -10,16 +10,16 @@
           "id": 1,
           "role": "vendor",
           "roleName": "頭家",
-          "chinese": "一斤一百蚊",
-          "pinyin": "tsit-kun tsit-pah-bûn",
+          "chinese": "一斤一百箍",
+          "pinyin": "tsi̍t-kun tsi̍t-pah-khoo",
           "audioFile": "audio/dialogue-pricing-1.mp3"
         },
         {
           "id": 2,
           "role": "vendor",
           "roleName": "頭家",
-          "chinese": "今份日有較俗喔",
-          "pinyin": "kin-hūn-ji̍t ū khah-sio̍k oo",
+          "chinese": "今仔日有較俗喔",
+          "pinyin": "kin-á-li̍t ū khah sio̍k--ooh",
           "audioFile": "audio/dialogue-pricing-2.mp3"
         }
       ]
@@ -41,8 +41,8 @@
           "id": 2,
           "role": "vendor",
           "roleName": "頭家",
-          "chinese": "今份日才來的",
-          "pinyin": "kin-hūn-ji̍t tsiah lâi ê",
+          "chinese": "今仔日才來的",
+          "pinyin": "kin-á-li̍t tsiah-lâi--ê",
           "audioFile": "audio/dialogue-intro-2.mp3"
         },
         {
@@ -50,7 +50,7 @@
           "role": "vendor",
           "roleName": "頭家",
           "chinese": "這誠好食喔",
-          "pinyin": "tse tsiânn hó-tsia̍h oo",
+          "pinyin": "tse tsiânn hó-tsia̍h—ooh",
           "audioFile": "audio/dialogue-intro-3.mp3"
         }
       ]
@@ -65,7 +65,7 @@
           "role": "vendor",
           "roleName": "頭家",
           "chinese": "欲買啥貨？",
-          "pinyin": "berh bé siánn-huè?",
+          "pinyin": "berh bué sánn-hèr?",
           "audioFile": "audio/dialogue-inquiry-1.mp3"
         },
         {
@@ -73,7 +73,7 @@
           "role": "vendor",
           "roleName": "頭家",
           "chinese": "欲偌濟？",
-          "pinyin": "berh guā-tsē?",
+          "pinyin": "berh guā-tsuē?",
           "audioFile": "audio/dialogue-inquiry-2.mp3"
         },
         {
@@ -81,8 +81,7 @@
           "role": "vendor",
           "roleName": "頭家",
           "chinese": "欲幾斤？",
-          "pinyin": "berh kuí-kun?",
-          "audioFile": "audio/dialogue-inquiry-3.mp3"
+          "pinyin": "berh kuí-kun?"
         }
       ]
     },
@@ -95,8 +94,8 @@
           "id": 1,
           "role": "customer",
           "roleName": "人客",
-          "chinese": "這个一斤佗濟錢？",
-          "pinyin": "tsit-ê tsit-kun tuā-tsē-tsînn?",
+          "chinese": "這个一斤偌濟錢？",
+          "pinyin": "tsi̍t-ê tsi̍t-kun guā-tsuē tsînn?",
           "audioFile": "audio/dialogue-customer-1.mp3"
         },
         {
@@ -112,8 +111,16 @@
           "role": "customer",
           "roleName": "人客",
           "chinese": "我欲買三斤",
-          "pinyin": "guá berh bé sann-kun",
+          "pinyin": "guá berh-bué sann-kun",
           "audioFile": "audio/dialogue-customer-3.mp3"
+        },
+        {
+          "id": 4,
+          "role": "customer",
+          "roleName": "人客",
+          "chinese": "傷貴啊！",
+          "pinyin": "siunn-kuì--ah!",
+          "audioFile": "audio/dialogue-customer-4.mp3"
         }
       ]
     },
@@ -124,27 +131,19 @@
       "dialogues": [
         {
           "id": 1,
-          "role": "customer",
-          "roleName": "人客",
-          "chinese": "傷貴啊！",
-          "pinyin": "siunn-kuì ah!",
+          "role": "vendor",
+          "roleName": "頭家",
+          "chinese": "無法度較俗啦",
+          "pinyin": "bô-huat-tōo khah-sio̍k--lah",
           "audioFile": "audio/dialogue-bargain-1.mp3"
         },
         {
           "id": 2,
           "role": "vendor",
           "roleName": "頭家",
-          "chinese": "無法度較俗啦",
-          "pinyin": "bô-huat-tōo khah-sio̍k lah",
-          "audioFile": "audio/dialogue-bargain-2.mp3"
-        },
-        {
-          "id": 3,
-          "role": "vendor",
-          "roleName": "頭家",
           "chinese": "好啦，算你八十就好",
-          "pinyin": "hó lah, sǹg lí peh-tsa̍p tō hó",
-          "audioFile": "audio/dialogue-bargain-3.mp3"
+          "pinyin": "hó--lah，sǹg lír pueh-tsa̍p lō hó",
+          "audioFile": "audio/dialogue-bargain-2.mp3"
         }
       ]
     },
@@ -160,14 +159,14 @@
               "role": "customer",
               "roleName": "人客",
               "chinese": "這个水梨有甜無？",
-              "pinyin": "tsit-ê tsuí-lâi ū tinn bô?",
+              "pinyin": "tsi̍t-ê tsuí-lâi ū tinn bô?",
               "audioFile": "audio/dialogue-fruit-1a.mp3"
             },
             {
               "role": "vendor",
               "roleName": "頭家",
-              "chinese": "足甜的啦！你試看覓就知。",
-              "pinyin": "tsiok-tinn ê lah! lí tshì-khuànn-māi tō tsai.",
+              "chinese": "足甜的啦！",
+              "pinyin": "tsiok-tinn ê --lah!",
               "audioFile": "audio/dialogue-fruit-1b.mp3"
             }
           ]
@@ -185,23 +184,16 @@
             {
               "role": "customer",
               "roleName": "人客",
-              "chinese": "這个白菜一斤佗濟錢？",
-              "pinyin": "tsit-ê pe̍h-tshài tsit-kun tuā-tsē-tsînn?",
+              "chinese": "這个白菜一斤偌濟錢？",
+              "pinyin": "tsi̍t-ê pe̍h-tshài tsi̍t-kun guā-tsuē tsînn?",
               "audioFile": "audio/dialogue-veg-1a.mp3"
             },
             {
               "role": "vendor",
               "roleName": "頭家",
-              "chinese": "五十蚊啦！真新鮮，今份日早起才挶的。",
-              "pinyin": "gōo-tsa̍p-bûn lah! tsin sin-sian, kin-hūn-ji̍t tsá-khí tsiah bán ê.",
+              "chinese": "五十箍啦！真新鮮，今仔日早起才挽的",
+              "pinyin": "gōo-tsa̍p khoo--lah! tsin sin-sian, kin-á-li̍t tsá-khí tsiah bán--ê",
               "audioFile": "audio/dialogue-veg-1b.mp3"
-            },
-            {
-              "role": "customer",
-              "roleName": "人客",
-              "chinese": "會使算我較俗啦無？我欲買三斤。",
-              "pinyin": "ē-sái sǹg guá khah-sio̍k lah bô? guá berh bé sann-kun.",
-              "audioFile": "audio/dialogue-veg-1c.mp3"
             }
           ]
         }
