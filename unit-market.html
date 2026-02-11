@@ -2359,7 +2359,7 @@
     </section>
 
     <!-- 完成畫面 -->
-    <section class="complete-section" id="complete-section">
+    <section class="complete-section" id="complete-section" style="display:none">
       <div class="complete-card">
         <div class="complete-icon">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
@@ -2765,7 +2765,9 @@
     // 完成購物
     function completeShopping() {
       document.getElementById('shopping-section').classList.remove('active');
-      document.getElementById('complete-section').classList.add('active');
+      const completeEl = document.getElementById('complete-section');
+      completeEl.style.display = 'flex';
+      completeEl.classList.add('active');
 
       const grandTotal = cart.reduce((sum, item) => sum + item.total, 0);
 
@@ -2776,6 +2778,7 @@
 
     // 重新開始
     function restart() {
+      document.getElementById('complete-section').style.display = 'none';
       document.getElementById('complete-section').classList.remove('active');
       document.getElementById('shopping-section').classList.remove('active');
       document.getElementById('intro-section').style.display = 'block';
