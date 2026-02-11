@@ -2657,6 +2657,11 @@
 
           if (shoppingList.every(s => s.bought)) {
             showCheckout();
+          } else {
+            // 滾動回攤位區繼續選購
+            setTimeout(() => {
+              document.querySelector('.market-area').scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }, 100);
           }
         }, 1000);
       }, 800);
@@ -2730,7 +2735,8 @@
 
     // 顯示結帳
     function showCheckout() {
-      document.getElementById('checkout-area').classList.add('active');
+      const checkoutArea = document.getElementById('checkout-area');
+      checkoutArea.classList.add('active');
 
       const itemsEl = document.getElementById('checkout-items');
       itemsEl.innerHTML = '';
@@ -2749,6 +2755,11 @@
       });
 
       document.getElementById('checkout-total-price').textContent = `${grandTotal} 箍`;
+
+      // 自動滾動到結帳區
+      setTimeout(() => {
+        checkoutArea.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }, 100);
     }
 
     // 完成購物
