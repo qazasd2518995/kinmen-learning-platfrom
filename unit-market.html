@@ -2537,6 +2537,13 @@
       if (window.innerWidth < 768) {
         setTimeout(() => {
           dialogueArea.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          // 再次滾動確保回應選項也能看到
+          setTimeout(() => {
+            const responseOpts = document.getElementById('response-options');
+            if (responseOpts.children.length > 0) {
+              responseOpts.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }
+          }, 500);
         }, 100);
       }
 
@@ -2693,6 +2700,13 @@
 
       messagesEl.appendChild(el);
       messagesEl.scrollTop = messagesEl.scrollHeight;
+
+      // 手機版：確保最新訊息在畫面中可見
+      if (window.innerWidth < 768) {
+        setTimeout(() => {
+          messagesEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }, 50);
+      }
     }
 
     // 顯示回應選項
@@ -2713,6 +2727,13 @@
         });
         container.appendChild(btn);
       });
+
+      // 手機版：確保回應選項可見
+      if (window.innerWidth < 768) {
+        setTimeout(() => {
+          container.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }, 150);
+      }
     }
 
     // 數字轉拼音
