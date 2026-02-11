@@ -1404,25 +1404,18 @@
         font-size: 1rem;
       }
 
-      /* 市場區 Dashboard - 三面板佈局 */
-      .market-section {
+      /* 市場區 - 桌面版垂直佈局 */
+      .shopping-section.active {
+        display: block;
         height: 100%;
         padding: var(--dashboard-gap);
-        display: grid;
-        grid-template-areas:
-          "stalls dialogue cart"
-          "progress progress progress";
-        grid-template-columns: 280px 1fr 240px;
-        grid-template-rows: 1fr auto;
-        gap: var(--dashboard-gap);
-        overflow: hidden;
+        overflow-y: auto;
       }
 
       /* 攤位區域 */
       .stall-grid {
-        grid-area: stalls;
         display: grid;
-        grid-template-columns: repeat(2, 1fr);
+        grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
         gap: 10px;
         align-content: start;
         overflow-y: auto;
@@ -1462,15 +1455,8 @@
       }
 
       /* 對話區域 */
-      .dialogue-area {
-        grid-area: dialogue;
-        display: flex;
-        flex-direction: column;
-        overflow: hidden;
-        padding: 16px;
-        background: var(--bg-card);
-        border-radius: var(--radius-lg);
-        box-shadow: var(--shadow-md);
+      .dialogue-area.active {
+        display: block;
       }
 
       .dialogue-header {
@@ -1560,10 +1546,6 @@
 
     /* Desktop Large (>=1400px) */
     @media (min-width: 1400px) {
-      .market-section {
-        grid-template-columns: 320px 1fr 280px;
-      }
-
       .stall-card {
         padding: 14px;
       }
@@ -2533,19 +2515,17 @@
       dialogueArea.classList.add('active');
       document.getElementById('checkout-area').classList.remove('active');
 
-      // 手機版自動滾動到對話區
-      if (window.innerWidth < 768) {
+      // 自動滾動到對話區
+      setTimeout(() => {
+        dialogueArea.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        // 再次滾動確保回應選項也能看到
         setTimeout(() => {
-          dialogueArea.scrollIntoView({ behavior: 'smooth', block: 'start' });
-          // 再次滾動確保回應選項也能看到
-          setTimeout(() => {
-            const responseOpts = document.getElementById('response-options');
-            if (responseOpts.children.length > 0) {
-              responseOpts.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-            }
-          }, 500);
-        }, 100);
-      }
+          const responseOpts = document.getElementById('response-options');
+          if (responseOpts.children.length > 0) {
+            responseOpts.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+          }
+        }, 500);
+      }, 100);
 
       // 開始對話
       startDialogue(listItem);
@@ -2701,12 +2681,10 @@
       messagesEl.appendChild(el);
       messagesEl.scrollTop = messagesEl.scrollHeight;
 
-      // 手機版：確保最新訊息在畫面中可見
-      if (window.innerWidth < 768) {
-        setTimeout(() => {
-          messagesEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-        }, 50);
-      }
+      // 確保最新訊息在畫面中可見
+      setTimeout(() => {
+        messagesEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }, 50);
     }
 
     // 顯示回應選項
@@ -2728,12 +2706,10 @@
         container.appendChild(btn);
       });
 
-      // 手機版：確保回應選項可見
-      if (window.innerWidth < 768) {
-        setTimeout(() => {
-          container.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-        }, 150);
-      }
+      // 確保回應選項可見
+      setTimeout(() => {
+        container.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }, 150);
     }
 
     // 數字轉拼音
