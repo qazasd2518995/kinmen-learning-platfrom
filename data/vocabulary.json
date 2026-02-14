@@ -12,7 +12,7 @@
       "chinese": "冰箱",
       "pinyin": "ping-siunn",
       "category": "item",
-      "image": "slides/slide-02.png",
+      "image": "images/vocabulary/01-冰箱.png",
       "audioFile": "audio/ping-siunn.mp3"
     },
     {
@@ -20,7 +20,7 @@
       "chinese": "菜籃",
       "pinyin": "tshái-nâ",
       "category": "item",
-      "image": "slides/slide-02.png",
+      "image": "images/vocabulary/02-菜籃.png",
       "audioFile": "audio/tshai-na.mp3"
     },
     {
@@ -28,7 +28,7 @@
       "chinese": "草莓",
       "pinyin": "tsháu-m̂",
       "category": "fruit",
-      "image": "slides/slide-03.png",
+      "image": "images/vocabulary/03-草莓.png",
       "audioFile": "audio/tshau-m.mp3"
     },
     {
@@ -36,7 +36,7 @@
       "chinese": "蘆黍",
       "pinyin": "lôo-súe",
       "category": "vegetable",
-      "image": "slides/slide-03.png",
+      "image": "images/vocabulary/04-蘆黍.png",
       "audioFile": "audio/loo-sue.mp3"
     },
     {
@@ -44,7 +44,7 @@
       "chinese": "苦瓜",
       "pinyin": "khóo-kue",
       "category": "vegetable",
-      "image": "slides/slide-04.png",
+      "image": "images/vocabulary/05-苦瓜.png",
       "audioFile": "audio/khoo-kue.mp3"
     },
     {
@@ -52,7 +52,7 @@
       "chinese": "金瓜",
       "pinyin": "kim-kue",
       "category": "vegetable",
-      "image": "slides/slide-04.png",
+      "image": "images/vocabulary/06-金瓜.png",
       "audioFile": "audio/kim-kue.mp3"
     },
     {
@@ -60,7 +60,7 @@
       "chinese": "龍眼",
       "pinyin": "gîng-ngái",
       "category": "fruit",
-      "image": "slides/slide-05.png",
+      "image": "images/vocabulary/07-龍眼.png",
       "audioFile": "audio/ging-ngai.mp3"
     },
     {
@@ -68,7 +68,7 @@
       "chinese": "柑",
       "pinyin": "kam",
       "category": "fruit",
-      "image": "slides/slide-05.png",
+      "image": "images/vocabulary/08-柑.png",
       "audioFile": "audio/kam.mp3"
     },
     {
@@ -76,7 +76,7 @@
       "chinese": "紅菜頭",
       "pinyin": "âng-tshài-thâu",
       "category": "vegetable",
-      "image": "slides/slide-06.png",
+      "image": "images/vocabulary/09-紅菜頭.png",
       "audioFile": "audio/ang-tshai-thau.mp3"
     },
     {
@@ -84,7 +84,7 @@
       "chinese": "檨仔",
       "pinyin": "suāinn-á",
       "category": "fruit",
-      "image": "slides/slide-06.png",
+      "image": "images/vocabulary/10-檨仔.png",
       "audioFile": "audio/suainn-a.mp3"
     },
     {
@@ -92,7 +92,7 @@
       "chinese": "柚",
       "pinyin": "iū",
       "category": "fruit",
-      "image": "slides/slide-07.png",
+      "image": "images/vocabulary/11-柚.png",
       "audioFile": "audio/iu.mp3"
     },
     {
@@ -100,7 +100,7 @@
       "chinese": "蘋果",
       "pinyin": "phîng-kó",
       "category": "fruit",
-      "image": "slides/slide-07.png",
+      "image": "images/vocabulary/12-蘋果.png",
       "audioFile": "audio/phing-ko.mp3"
     },
     {
@@ -108,7 +108,7 @@
       "chinese": "茄",
       "pinyin": "kiô",
       "category": "vegetable",
-      "image": "slides/slide-08.png",
+      "image": "images/vocabulary/13-茄.png",
       "audioFile": "audio/kio.mp3"
     },
     {
@@ -116,7 +116,7 @@
       "chinese": "菜頭",
       "pinyin": "tshài-thâu",
       "category": "vegetable",
-      "image": "slides/slide-08.png",
+      "image": "images/vocabulary/14-菜頭.png",
       "audioFile": "audio/tshai-thau.mp3"
     },
     {
@@ -124,7 +124,7 @@
       "chinese": "高麗菜",
       "pinyin": "ko-lê-tshài",
       "category": "vegetable",
-      "image": "slides/slide-09.png",
+      "image": "images/vocabulary/15-高麗菜.png",
       "audioFile": "audio/ko-le-tshai.mp3"
     },
     {
@@ -132,7 +132,7 @@
       "chinese": "番薯",
       "pinyin": "an-tsîr",
       "category": "vegetable",
-      "image": "slides/slide-09.png",
+      "image": "images/vocabulary/16-番薯.png",
       "audioFile": "audio/an-tsir.mp3"
     },
     {
@@ -141,7 +141,7 @@
       "chineseAlt": "馬鈴薯",
       "pinyin": "kan-tan",
       "category": "vegetable",
-      "image": "slides/slide-10.png",
+      "image": "images/vocabulary/17-蕳砃.png",
       "audioFile": "audio/kan-tan.mp3"
     },
     {
@@ -150,7 +150,7 @@
       "chineseAlt": "芭樂",
       "pinyin": "nâi-á-pút",
       "category": "fruit",
-      "image": "slides/slide-10.png",
+      "image": "images/vocabulary/18-林仔菝.png",
       "audioFile": "audio/nai-a-put.mp3"
     },
     {
@@ -158,7 +158,7 @@
       "chinese": "葡萄",
       "pinyin": "phû-tô",
       "category": "fruit",
-      "image": "slides/slide-11.png",
+      "image": "images/vocabulary/19-葡萄.png",
       "audioFile": "audio/phu-to.mp3"
     },
     {
@@ -166,7 +166,7 @@
       "chinese": "弓蕉",
       "pinyin": "king-tsio",
       "category": "fruit",
-      "image": "slides/slide-11.png",
+      "image": "images/vocabulary/20-弓蕉.png",
       "audioFile": "audio/king-tsio.mp3"
     },
     {
@@ -174,7 +174,7 @@
       "chinese": "王梨",
       "pinyin": "ông-lâi",
       "category": "fruit",
-      "image": "slides/slide-12.png",
+      "image": "images/vocabulary/21-王梨.png",
       "audioFile": "audio/ong-lai.mp3"
     },
     {
@@ -182,7 +182,7 @@
       "chinese": "水梨",
       "pinyin": "tsuí-lâi",
       "category": "fruit",
-      "image": "slides/slide-12.png",
+      "image": "images/vocabulary/22-水梨.png",
       "audioFile": "audio/tsui-lai.mp3"
     },
     {
@@ -191,7 +191,7 @@
       "chineseAlt": "番茄",
       "pinyin": "tshàu-khī-á",
       "category": "vegetable",
-      "image": "slides/slide-13.png",
+      "image": "images/vocabulary/23-臭柿仔.png",
       "audioFile": "audio/tshau-khi-a.mp3"
     },
     {
@@ -199,7 +199,7 @@
       "chinese": "菜花",
       "pinyin": "tshài-hue",
       "category": "vegetable",
-      "image": "slides/slide-14.png",
+      "image": "images/vocabulary/24-菜花.png",
       "audioFile": "audio/tshai-hue.mp3"
     },
     {
@@ -207,7 +207,7 @@
       "chinese": "小刺瓜",
       "pinyin": "sió-tshì-kue",
       "category": "vegetable",
-      "image": "slides/slide-13.png",
+      "image": "images/vocabulary/25-小刺瓜.png",
       "audioFile": "audio/sio-tshi-kue.mp3"
     }
   ]
