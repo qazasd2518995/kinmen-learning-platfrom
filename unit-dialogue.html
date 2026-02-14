@@ -1501,12 +1501,20 @@
       dialogueData.numbers.items.forEach(num => {
         const item = document.createElement('div');
         item.className = 'number-item';
+        item.style.cursor = num.audioFile ? 'pointer' : 'default';
         item.innerHTML = `
           <div class="number-chinese">${num.chinese}</div>
           <div class="number-pinyin">${num.pinyin}</div>
           ${num.value !== undefined ? `<div class="number-value">${num.value}</div>` : ''}
           ${num.meaning ? `<div class="number-value">${num.meaning}</div>` : ''}
         `;
+        if (num.audioFile) {
+          item.addEventListener('click', () => {
+            const audio = document.getElementById('audio-player');
+            audio.src = num.audioFile;
+            audio.play();
+          });
+        }
         numbersGrid.appendChild(item);
       });
     }

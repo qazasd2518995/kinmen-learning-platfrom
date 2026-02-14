@@ -81,7 +81,8 @@
           "role": "vendor",
           "roleName": "頭家",
           "chinese": "欲幾斤？",
-          "pinyin": "berh kuí-kun?"
+          "pinyin": "berh kuí-kun?",
+          "audioFile": "audio/dialogue-inquiry-3.mp3"
         }
       ]
     },
@@ -203,18 +204,18 @@
   "numbers": {
     "title": "數字與單位",
     "items": [
-      { "chinese": "一", "pinyin": "tsit", "value": 1 },
-      { "chinese": "二", "pinyin": "nn̄g", "value": 2 },
-      { "chinese": "三", "pinyin": "sann", "value": 3 },
-      { "chinese": "四", "pinyin": "sì", "value": 4 },
-      { "chinese": "五", "pinyin": "gōo", "value": 5 },
-      { "chinese": "六", "pinyin": "la̍k", "value": 6 },
-      { "chinese": "七", "pinyin": "tshit", "value": 7 },
-      { "chinese": "八", "pinyin": "peh", "value": 8 },
-      { "chinese": "九", "pinyin": "káu", "value": 9 },
-      { "chinese": "十", "pinyin": "tsa̍p", "value": 10 },
-      { "chinese": "斤", "pinyin": "kun", "meaning": "斤（重量單位）" },
-      { "chinese": "箍", "pinyin": "khoo", "meaning": "元（貨幣單位）" }
+      { "chinese": "一", "pinyin": "tsit", "value": 1, "audioFile": "audio/number-tsit.mp3" },
+      { "chinese": "二", "pinyin": "nn̄g", "value": 2, "audioFile": "audio/number-nng.mp3" },
+      { "chinese": "三", "pinyin": "sann", "value": 3, "audioFile": "audio/number-sann.mp3" },
+      { "chinese": "四", "pinyin": "sì", "value": 4, "audioFile": "audio/number-si.mp3" },
+      { "chinese": "五", "pinyin": "gōo", "value": 5, "audioFile": "audio/number-goo.mp3" },
+      { "chinese": "六", "pinyin": "la̍k", "value": 6, "audioFile": "audio/number-lak.mp3" },
+      { "chinese": "七", "pinyin": "tshit", "value": 7, "audioFile": "audio/number-tshit.mp3" },
+      { "chinese": "八", "pinyin": "pueh", "value": 8, "audioFile": "audio/number-peh.mp3" },
+      { "chinese": "九", "pinyin": "káu", "value": 9, "audioFile": "audio/number-kau.mp3" },
+      { "chinese": "十", "pinyin": "tsa̍p", "value": 10, "audioFile": "audio/number-tsap.mp3" },
+      { "chinese": "斤", "pinyin": "kun", "meaning": "斤（重量單位）", "audioFile": "audio/unit-kun.mp3" },
+      { "chinese": "箍", "pinyin": "khoo", "meaning": "元（貨幣單位）", "audioFile": "audio/unit-khoo.mp3" }
     ]
   }
 }
