@@ -419,6 +419,115 @@
       opacity: 0.6;
     }
 
+    /* 保存按鈕與反饋 */
+    .think-actions {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 12px;
+      gap: 12px;
+    }
+
+    .save-btn {
+      padding: 10px 24px;
+      background: linear-gradient(135deg, var(--kinmen-ocean) 0%, #4A7A91 100%);
+      color: white;
+      font-weight: 600;
+      border-radius: var(--radius-md);
+      transition: all var(--duration-normal) var(--ease-out);
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      min-height: var(--touch-target-min);
+    }
+
+    .save-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md), var(--glow-ocean);
+    }
+
+    .save-btn:active {
+      transform: translateY(0);
+    }
+
+    .save-btn svg {
+      width: 18px;
+      height: 18px;
+    }
+
+    .save-btn.saved {
+      background: linear-gradient(135deg, var(--kinmen-green) 0%, #5A8A4A 100%);
+      box-shadow: var(--shadow-md), var(--glow-green);
+    }
+
+    .input-feedback {
+      font-size: 0.875rem;
+      color: var(--text-secondary);
+      opacity: 0;
+      transition: all var(--duration-normal) var(--ease-out);
+    }
+
+    .input-feedback.show {
+      opacity: 1;
+    }
+
+    .input-feedback.success {
+      color: var(--kinmen-green);
+    }
+
+    .input-counter {
+      font-size: 0.875rem;
+      color: var(--text-secondary);
+      padding: 6px 12px;
+      background: var(--bg-secondary);
+      border-radius: var(--radius-sm);
+    }
+
+    .input-counter strong {
+      color: var(--kinmen-gold-dark);
+      font-weight: 700;
+    }
+
+    /* Toast 提示 */
+    .toast-container {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 1000;
+      pointer-events: none;
+    }
+
+    .toast {
+      background: var(--text-primary);
+      color: white;
+      padding: 12px 24px;
+      border-radius: var(--radius-md);
+      box-shadow: var(--shadow-lg);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: all var(--duration-normal) var(--ease-out);
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .toast.success {
+      background: linear-gradient(135deg, var(--kinmen-green) 0%, #5A8A4A 100%);
+    }
+
+    .toast svg {
+      width: 20px;
+      height: 20px;
+      flex-shrink: 0;
+    }
+
     /* 知識補充 */
     .info-box {
       background: linear-gradient(135deg, var(--kinmen-ocean-light) 0%, rgba(197, 221, 232, 0.5) 100%);
@@ -1248,7 +1357,21 @@
             </svg>
             寫下你記得的五個水果金門話
           </div>
-          <textarea class="think-textarea" placeholder="例如：王梨 (ông-lâi)、柑 (kam)..."></textarea>
+          <textarea class="think-textarea" id="textarea-q1" placeholder="例如：王梨 (ông-lâi)、柑 (kam)...&#10;每行寫一個水果，系統會自動計算數量"></textarea>
+          <div class="think-actions">
+            <div class="input-counter" id="counter-q1">已輸入：<strong>0</strong> 個水果</div>
+            <div style="display: flex; align-items: center; gap: 12px;">
+              <span class="input-feedback" id="feedback-q1"></span>
+              <button class="save-btn" data-question="1">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/>
+                  <polyline points="17 21 17 13 7 13 7 21"/>
+                  <polyline points="7 3 7 8 15 8"/>
+                </svg>
+                保存
+              </button>
+            </div>
+          </div>
         </div>
 
         <div class="nav-buttons">
@@ -1300,7 +1423,18 @@
             </svg>
             你還知道哪些金門話中的外來語嗎？
           </div>
-          <textarea class="think-textarea" placeholder="寫下你知道的金門話外來語..."></textarea>
+          <textarea class="think-textarea" id="textarea-q2" placeholder="寫下你知道的金門話外來語...&#10;例如：雪文（肥皂）、咖啡、紅毛土（水泥）等"></textarea>
+          <div class="think-actions">
+            <span class="input-feedback" id="feedback-q2"></span>
+            <button class="save-btn" data-question="2">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/>
+                <polyline points="17 21 17 13 7 13 7 21"/>
+                <polyline points="7 3 7 8 15 8"/>
+              </svg>
+              保存
+            </button>
+          </div>
         </div>
 
         <div class="nav-buttons">
@@ -1360,7 +1494,18 @@
             </svg>
             想一想：學習金門話對你來說有什麼意義？
           </div>
-          <textarea class="think-textarea" placeholder="為什麼學習金門話很重要？對你來說有什麼意義？"></textarea>
+          <textarea class="think-textarea" id="textarea-q3" placeholder="為什麼學習金門話很重要？對你來說有什麼意義？&#10;可以從文化傳承、家庭溝通、認識家鄉等方面思考"></textarea>
+          <div class="think-actions">
+            <span class="input-feedback" id="feedback-q3"></span>
+            <button class="save-btn" data-question="3">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/>
+                <polyline points="17 21 17 13 7 13 7 21"/>
+                <polyline points="7 3 7 8 15 8"/>
+              </svg>
+              保存
+            </button>
+          </div>
         </div>
 
         <div class="nav-buttons">
@@ -1377,6 +1522,16 @@
             </svg>
           </button>
         </div>
+      </div>
+    </div>
+
+    <!-- Toast 提示容器 -->
+    <div class="toast-container" id="toast-container">
+      <div class="toast" id="toast">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polyline points="20 6 9 17 4 12"/>
+        </svg>
+        <span id="toast-message">已保存！</span>
       </div>
     </div>
 
@@ -1405,6 +1560,8 @@
         renderVocabGrid(fruits);
 
         setupTabNavigation();
+        setupTextareaFeedback();
+        loadSavedData();
       } catch (error) {
         console.error('載入失敗:', error);
       }
@@ -1457,6 +1614,8 @@
           const isComplete = btn.dataset.complete;
 
           if (isComplete) {
+            // 自動保存所有內容
+            saveAllTextareas();
             // 顯示完成畫面
             contents.forEach(c => c.classList.remove('active'));
             tabs.forEach(t => t.classList.remove('active'));
@@ -1481,6 +1640,179 @@
           c.classList.toggle('active', c.dataset.content === tabId);
         });
       }
+    }
+
+    // 設置文字輸入反饋系統
+    function setupTextareaFeedback() {
+      // 問題一：計算水果數量
+      const textarea1 = document.getElementById('textarea-q1');
+      const counter1 = document.getElementById('counter-q1');
+
+      if (textarea1 && counter1) {
+        textarea1.addEventListener('input', () => {
+          updateFruitCounter(textarea1, counter1);
+        });
+      }
+
+      // 設置保存按鈕
+      document.querySelectorAll('.save-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const questionNum = btn.dataset.question;
+          saveTextarea(questionNum, btn);
+        });
+      });
+
+      // 設置自動保存（當離開輸入框時）
+      document.querySelectorAll('.think-textarea').forEach(textarea => {
+        textarea.addEventListener('blur', () => {
+          const id = textarea.id;
+          const questionNum = id.replace('textarea-q', '');
+          const btn = document.querySelector(`.save-btn[data-question="${questionNum}"]`);
+          if (textarea.value.trim()) {
+            autoSaveTextarea(questionNum, textarea.value);
+          }
+        });
+      });
+    }
+
+    // 計算輸入的水果數量
+    function updateFruitCounter(textarea, counter) {
+      const text = textarea.value.trim();
+      if (!text) {
+        counter.innerHTML = '已輸入：<strong>0</strong> 個水果';
+        return;
+      }
+
+      // 計算行數或逗號/頓號分隔的項目數
+      const lines = text.split(/[\n,、，]/g).filter(line => line.trim().length > 0);
+      const count = lines.length;
+
+      let countDisplay = `已輸入：<strong>${count}</strong> 個水果`;
+      if (count >= 5) {
+        countDisplay += ' <span style="color: var(--kinmen-green);">✓ 達標！</span>';
+      } else {
+        countDisplay += ` <span style="color: var(--text-secondary);">(目標：5個)</span>`;
+      }
+
+      counter.innerHTML = countDisplay;
+    }
+
+    // 保存單個文字區域
+    function saveTextarea(questionNum, btn) {
+      const textarea = document.getElementById(`textarea-q${questionNum}`);
+      const feedback = document.getElementById(`feedback-q${questionNum}`);
+      const value = textarea ? textarea.value.trim() : '';
+
+      if (!value) {
+        // 空白內容提示
+        showFeedback(feedback, '請先輸入內容', 'warning');
+        return;
+      }
+
+      // 保存到 localStorage
+      localStorage.setItem(`kinmen-review-q${questionNum}`, value);
+
+      // 更新按鈕狀態
+      btn.classList.add('saved');
+      btn.innerHTML = `
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polyline points="20 6 9 17 4 12"/>
+        </svg>
+        已保存
+      `;
+
+      // 顯示反饋
+      showFeedback(feedback, '已成功保存！', 'success');
+      showToast('回答已保存！');
+
+      // 3秒後恢復按鈕狀態
+      setTimeout(() => {
+        btn.classList.remove('saved');
+        btn.innerHTML = `
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/>
+            <polyline points="17 21 17 13 7 13 7 21"/>
+            <polyline points="7 3 7 8 15 8"/>
+          </svg>
+          保存
+        `;
+      }, 3000);
+    }
+
+    // 自動保存（靜默）
+    function autoSaveTextarea(questionNum, value) {
+      localStorage.setItem(`kinmen-review-q${questionNum}`, value);
+    }
+
+    // 保存所有文字區域
+    function saveAllTextareas() {
+      for (let i = 1; i <= 3; i++) {
+        const textarea = document.getElementById(`textarea-q${i}`);
+        if (textarea && textarea.value.trim()) {
+          localStorage.setItem(`kinmen-review-q${i}`, textarea.value.trim());
+        }
+      }
+    }
+
+    // 載入已保存的數據
+    function loadSavedData() {
+      for (let i = 1; i <= 3; i++) {
+        const savedValue = localStorage.getItem(`kinmen-review-q${i}`);
+        const textarea = document.getElementById(`textarea-q${i}`);
+
+        if (savedValue && textarea) {
+          textarea.value = savedValue;
+
+          // 如果是問題一，更新計數器
+          if (i === 1) {
+            const counter = document.getElementById('counter-q1');
+            if (counter) {
+              updateFruitCounter(textarea, counter);
+            }
+          }
+
+          // 顯示已有保存數據的提示
+          const feedback = document.getElementById(`feedback-q${i}`);
+          if (feedback) {
+            showFeedback(feedback, '已載入上次的回答', 'info');
+            setTimeout(() => {
+              feedback.classList.remove('show');
+            }, 3000);
+          }
+        }
+      }
+    }
+
+    // 顯示反饋訊息
+    function showFeedback(element, message, type) {
+      if (!element) return;
+
+      element.textContent = message;
+      element.classList.remove('success', 'warning', 'info');
+      element.classList.add('show');
+
+      if (type === 'success') {
+        element.style.color = 'var(--kinmen-green)';
+      } else if (type === 'warning') {
+        element.style.color = 'var(--kinmen-red)';
+      } else {
+        element.style.color = 'var(--kinmen-ocean)';
+      }
+    }
+
+    // 顯示 Toast 提示
+    function showToast(message) {
+      const toast = document.getElementById('toast');
+      const toastMessage = document.getElementById('toast-message');
+
+      if (!toast || !toastMessage) return;
+
+      toastMessage.textContent = message;
+      toast.classList.add('show', 'success');
+
+      setTimeout(() => {
+        toast.classList.remove('show', 'success');
+      }, 2500);
     }
 
     init();

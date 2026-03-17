@@ -739,7 +739,7 @@
 
     /* 完成畫面 */
     .complete-screen {
-      display: none;
+      display: none !important;
       text-align: center;
       padding: 48px 32px;
       background: linear-gradient(180deg, transparent 0%, var(--kinmen-gold-light) 100%);
@@ -747,7 +747,7 @@
       margin-top: 24px;
     }
     .complete-screen.visible {
-      display: block;
+      display: block !important;
       animation: completeAppear 0.5s var(--spring);
     }
     @keyframes completeAppear {
@@ -1015,9 +1015,9 @@
       }
 
       /* 完成畫面 */
-      .complete-screen {
+      .complete-screen.visible {
         height: 100%;
-        display: flex;
+        display: flex !important;
         flex-direction: column;
         justify-content: center;
         padding: 24px;
@@ -1617,12 +1617,14 @@
       const feedback = document.getElementById('calc-feedback');
       const nextBtn = document.getElementById('next-calc-btn');
       const input = document.getElementById('answer-input');
+      const checkBtn = document.getElementById('check-answer-btn');
 
       container.innerHTML = '';
       feedback.classList.remove('visible', 'correct', 'incorrect');
       nextBtn.classList.remove('visible');
       input.value = '';
       input.disabled = false;
+      checkBtn.disabled = false;
 
       question.items.forEach(item => {
         const el = document.createElement('div');
@@ -1642,14 +1644,23 @@
       const input = document.getElementById('answer-input');
       const feedback = document.getElementById('calc-feedback');
       const nextBtn = document.getElementById('next-calc-btn');
+      const checkBtn = document.getElementById('check-answer-btn');
+
+      // 防止重複點擊
+      if (checkBtn.disabled) return;
+      checkBtn.disabled = true;
 
       const answer = parseInt(input.value) || 0;
       input.disabled = true;
 
-      if (answer === question.total) {
+      const isCorrect = answer === question.total;
+      if (isCorrect) {
+        calcScore++;
+      }
+
+      if (isCorrect) {
         feedback.textContent = '答對了！';
         feedback.classList.add('visible', 'correct');
-        calcScore++;
       } else {
         feedback.textContent = `答案是 ${question.total} 箍`;
         feedback.classList.add('visible', 'incorrect');

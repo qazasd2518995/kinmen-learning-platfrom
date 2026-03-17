@@ -51,6 +51,7 @@
   /* 字體 */
   --font-display: 'Noto Serif TC', serif;
   --font-body: 'Noto Sans TC', sans-serif;
+  --font-pinyin: 'Noto Sans', 'Noto Sans TC', sans-serif;
 
   /* 尺寸 */
   --header-height: 64px;
@@ -177,6 +178,12 @@ input, textarea, select {
 
 .hidden {
   display: none !important;
+}
+
+/* 台羅拼音專用樣式 */
+.pinyin, .tailo, [data-pinyin] {
+  font-family: var(--font-pinyin);
+  font-feature-settings: "liga" 1, "calt" 1;
 }
 
 .icon {

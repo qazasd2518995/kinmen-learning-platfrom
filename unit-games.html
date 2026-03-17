@@ -347,7 +347,6 @@
       border-color: var(--kinmen-gold);
       background: var(--kinmen-gold-light);
       box-shadow: var(--shadow-md), var(--glow-gold);
-      transform: scale(1.05);
     }
 
     .matching-item.matched {
@@ -708,6 +707,69 @@
     @keyframes fruitPulse {
       0%, 100% { transform: scale(1); }
       50% { transform: scale(1.2); }
+    }
+
+    /* 找到目標的動畫 */
+    .maze-target-fruit.found .fruit-bg {
+      fill: #4CAF50 !important;
+      animation: foundPulse 0.5s ease-in-out 3;
+    }
+
+    .maze-target-fruit.found ellipse,
+    .maze-target-fruit.found path {
+      animation: foundBounce 0.5s ease-in-out;
+    }
+
+    @keyframes foundPulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.6; }
+    }
+
+    @keyframes foundBounce {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.3); }
+      100% { transform: scale(1); }
+    }
+
+    /* 成功訊息 */
+    .maze-success-msg {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+      color: white;
+      padding: 16px 32px;
+      border-radius: var(--radius-lg);
+      font-size: 1.25rem;
+      font-weight: 700;
+      box-shadow: var(--shadow-lg);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      z-index: 100;
+      animation: successPopIn 0.3s ease-out;
+    }
+
+    .maze-success-msg .fruit-name {
+      font-size: 1.5rem;
+      color: #FFF9E6;
+    }
+
+    @keyframes successPopIn {
+      0% { transform: translate(-50%, -50%) scale(0.5); opacity: 0; }
+      100% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+    }
+
+    /* 起點標記動畫 */
+    .maze-start-marker {
+      animation: startPulse 2s ease-in-out infinite;
+    }
+
+    @keyframes startPulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.7; }
     }
 
     .maze-controls {
@@ -1109,6 +1171,265 @@
 
     .duel-start-screen p {
       color: var(--text-secondary);
+    }
+
+    /* 連擊顯示 */
+    .duel-combo {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: linear-gradient(135deg, var(--kinmen-gold) 0%, #FF6B35 100%);
+      color: white;
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-weight: 700;
+      font-size: 0.9rem;
+      box-shadow: var(--shadow-md);
+      opacity: 0;
+      transform: scale(0.8);
+      transition: all 0.3s var(--ease-out);
+      z-index: 5;
+    }
+
+    .duel-combo.visible {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    .duel-combo.fire {
+      animation: comboFire 0.5s ease-out;
+      background: linear-gradient(135deg, #FF6B35 0%, #FF3D00 100%);
+    }
+
+    @keyframes comboFire {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.3); }
+      100% { transform: scale(1); }
+    }
+
+    /* Kahoot 風格頒獎畫面 */
+    .duel-award-screen {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: linear-gradient(180deg, #46178F 0%, #6B2FB3 50%, #9B59B6 100%);
+      z-index: 1000;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      animation: awardFadeIn 0.5s ease-out;
+    }
+
+    .duel-award-screen.visible {
+      display: flex;
+    }
+
+    @keyframes awardFadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    .award-confetti {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      overflow: hidden;
+    }
+
+    .confetti-piece {
+      position: absolute;
+      width: 10px;
+      height: 10px;
+      animation: confettiFall 3s linear infinite;
+    }
+
+    @keyframes confettiFall {
+      0% { transform: translateY(-100vh) rotate(0deg); opacity: 1; }
+      100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+    }
+
+    .award-content {
+      text-align: center;
+      color: white;
+      z-index: 1;
+      max-width: 400px;
+    }
+
+    .award-rank {
+      font-size: 5rem;
+      margin-bottom: 10px;
+      animation: rankBounce 0.8s ease-out 0.3s both;
+    }
+
+    @keyframes rankBounce {
+      0% { transform: scale(0) rotate(-10deg); opacity: 0; }
+      60% { transform: scale(1.2) rotate(5deg); }
+      100% { transform: scale(1) rotate(0deg); opacity: 1; }
+    }
+
+    .award-stars {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .award-star {
+      font-size: 2.5rem;
+      opacity: 0;
+      transform: scale(0);
+      animation: starPop 0.4s ease-out forwards;
+    }
+
+    .award-star:nth-child(1) { animation-delay: 0.5s; }
+    .award-star:nth-child(2) { animation-delay: 0.7s; }
+    .award-star:nth-child(3) { animation-delay: 0.9s; }
+    .award-star:nth-child(4) { animation-delay: 1.1s; }
+    .award-star:nth-child(5) { animation-delay: 1.3s; }
+
+    .award-star.empty {
+      filter: grayscale(1) opacity(0.3);
+    }
+
+    @keyframes starPop {
+      0% { transform: scale(0) rotate(-180deg); opacity: 0; }
+      100% { transform: scale(1) rotate(0deg); opacity: 1; }
+    }
+
+    .award-title {
+      font-family: var(--font-display);
+      font-size: 2rem;
+      margin-bottom: 10px;
+      text-shadow: 0 2px 10px rgba(0,0,0,0.3);
+      animation: titleSlide 0.6s ease-out 1.5s both;
+    }
+
+    @keyframes titleSlide {
+      from { transform: translateY(30px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+
+    .award-score {
+      font-size: 3rem;
+      font-weight: 800;
+      margin-bottom: 10px;
+      animation: scoreCount 0.8s ease-out 1.7s both;
+    }
+
+    @keyframes scoreCount {
+      from { transform: scale(0.5); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+
+    .award-details {
+      display: flex;
+      justify-content: center;
+      gap: 30px;
+      margin-bottom: 20px;
+      font-size: 1rem;
+      opacity: 0;
+      animation: detailsFade 0.5s ease-out 2s forwards;
+    }
+
+    @keyframes detailsFade {
+      to { opacity: 1; }
+    }
+
+    .award-detail {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .award-detail-value {
+      font-size: 1.5rem;
+      font-weight: 700;
+    }
+
+    .award-detail-label {
+      font-size: 0.85rem;
+      opacity: 0.8;
+    }
+
+    .award-message {
+      font-size: 1.1rem;
+      margin-bottom: 30px;
+      opacity: 0;
+      animation: messageFade 0.5s ease-out 2.3s forwards;
+    }
+
+    @keyframes messageFade {
+      to { opacity: 1; }
+    }
+
+    .award-buttons {
+      display: flex;
+      gap: 15px;
+      opacity: 0;
+      animation: buttonsFade 0.5s ease-out 2.5s forwards;
+    }
+
+    @keyframes buttonsFade {
+      to { opacity: 1; }
+    }
+
+    .award-btn {
+      padding: 14px 28px;
+      border-radius: 25px;
+      font-size: 1.1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      border: none;
+    }
+
+    .award-btn-primary {
+      background: linear-gradient(135deg, var(--kinmen-gold) 0%, #FFB347 100%);
+      color: #333;
+    }
+
+    .award-btn-secondary {
+      background: rgba(255,255,255,0.2);
+      color: white;
+      border: 2px solid rgba(255,255,255,0.4);
+    }
+
+    .award-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+    }
+
+    /* 音效控制按鈕 */
+    .duel-sound-toggle {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: var(--bg-card);
+      border: 2px solid var(--bg-secondary);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s ease;
+      z-index: 5;
+    }
+
+    .duel-sound-toggle:hover {
+      border-color: var(--kinmen-gold);
+    }
+
+    .duel-sound-toggle svg {
+      width: 20px;
+      height: 20px;
+      color: var(--text-secondary);
+    }
+
+    .duel-sound-toggle.muted svg {
+      color: var(--kinmen-red);
     }
 
     .complete-score {
@@ -1684,8 +2005,13 @@
       }
 
       .maze-wrapper {
-        width: 300px;
-        height: 300px;
+        width: min(350px, 85vw);
+        height: min(350px, 85vw);
+      }
+
+      .maze-svg {
+        width: 100%;
+        height: 100%;
       }
 
       .maze-question {
@@ -1698,8 +2024,19 @@
       }
 
       .maze-btn {
-        padding: 10px 20px;
-        font-size: 0.9rem;
+        padding: 12px 24px;
+        font-size: 1rem;
+        min-height: 48px;  /* 確保觸控目標夠大 */
+      }
+
+      /* 成功訊息手機版 */
+      .maze-success-msg {
+        font-size: 1.1rem;
+        padding: 14px 24px;
+      }
+
+      .maze-success-msg .fruit-name {
+        font-size: 1.3rem;
       }
     }
 
@@ -2021,7 +2358,7 @@
         <div class="sorting-items" id="sorting-items"></div>
 
         <div class="sorting-categories" id="sorting-categories">
-          <div class="sorting-category" data-color="green" data-accept="green">
+          <div class="sorting-category" data-color="green" data-accept="green,white-green">
             <div class="sorting-category-title">青色</div>
             <div class="sorting-category-items"></div>
           </div>
@@ -2029,7 +2366,7 @@
             <div class="sorting-category-title">紅/黃色</div>
             <div class="sorting-category-items"></div>
           </div>
-          <div class="sorting-category" data-color="white" data-accept="white">
+          <div class="sorting-category" data-color="white" data-accept="white,white-green">
             <div class="sorting-category-title">白色</div>
             <div class="sorting-category-items"></div>
           </div>
@@ -2066,7 +2403,7 @@
       </div>
 
       <div class="maze-container">
-        <div class="maze-question" id="maze-question">請幫阿公找到 <span id="maze-target">番茄</span>！</div>
+        <div class="maze-question" id="maze-question">請幫阿公找到 <span id="maze-target">臭柿仔</span>！</div>
 
         <div class="maze-game-layout">
           <!-- 左側蔬果選單 -->
@@ -2092,29 +2429,23 @@
                 </svg>
                 <span>玉米</span>
               </div>
-              <div class="maze-fruit-item" data-fruit="芭樂">
+              <div class="maze-fruit-item" data-fruit="水梨">
                 <svg viewBox="0 0 80 90">
-                  <!-- 芭樂 -->
-                  <ellipse cx="40" cy="50" rx="28" ry="32" fill="#A8D948"/>
-                  <ellipse cx="40" cy="50" rx="24" ry="28" fill="#C4E96E"/>
-                  <!-- 內部 -->
-                  <ellipse cx="40" cy="52" rx="16" ry="18" fill="#FFB6C1"/>
-                  <ellipse cx="40" cy="52" rx="12" ry="14" fill="#FF9EAA"/>
-                  <!-- 籽 -->
-                  <g fill="#8B4513">
-                    <circle cx="36" cy="48" r="1.5"/><circle cx="44" cy="48" r="1.5"/>
-                    <circle cx="34" cy="54" r="1.5"/><circle cx="40" cy="52" r="1.5"/><circle cx="46" cy="54" r="1.5"/>
-                    <circle cx="36" cy="58" r="1.5"/><circle cx="44" cy="58" r="1.5"/>
-                  </g>
+                  <!-- 水梨 -->
+                  <ellipse cx="40" cy="55" rx="24" ry="28" fill="#C9B037"/>
+                  <ellipse cx="40" cy="55" rx="20" ry="24" fill="#E8D66B"/>
+                  <!-- 高光 -->
+                  <ellipse cx="32" cy="45" rx="6" ry="8" fill="#F5E79E" opacity="0.6"/>
                   <!-- 蒂頭 -->
-                  <ellipse cx="40" cy="20" rx="4" ry="3" fill="#5D4E37"/>
-                  <path d="M36 20 Q40 12 44 20" fill="#2ECC71"/>
+                  <ellipse cx="40" cy="28" rx="3" ry="2" fill="#5D4E37"/>
+                  <rect x="38" y="18" width="4" height="12" fill="#8B6914" rx="1"/>
+                  <path d="M42 20 Q50 15 48 25" fill="#2ECC71"/>
                 </svg>
-                <span>芭樂</span>
+                <span>水梨</span>
               </div>
-              <div class="maze-fruit-item" data-fruit="番茄">
+              <div class="maze-fruit-item" data-fruit="臭柿仔">
                 <svg viewBox="0 0 80 85">
-                  <!-- 番茄 -->
+                  <!-- 臭柿仔 (番茄) -->
                   <ellipse cx="40" cy="50" rx="30" ry="28" fill="#E74C3C"/>
                   <ellipse cx="40" cy="48" rx="26" ry="24" fill="#EC7063"/>
                   <!-- 高光 -->
@@ -2123,7 +2454,7 @@
                   <path d="M28 26 Q32 22 36 24 Q38 20 40 18 Q42 20 44 24 Q48 22 52 26 Q48 30 44 28 Q42 32 40 30 Q38 32 36 28 Q32 30 28 26Z" fill="#27AE60"/>
                   <rect x="38" y="12" width="4" height="8" fill="#2ECC71" rx="1"/>
                 </svg>
-                <span>番茄</span>
+                <span>臭柿仔</span>
               </div>
             </div>
           </div>
@@ -2200,6 +2531,24 @@
       </div>
 
       <div class="duel-container">
+        <!-- 音效控制 -->
+        <button class="duel-sound-toggle" id="duel-sound-toggle" title="開啟/關閉音效">
+          <svg id="sound-on-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
+            <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/>
+          </svg>
+          <svg id="sound-off-icon" style="display:none" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
+            <line x1="23" y1="9" x2="17" y2="15"/>
+            <line x1="17" y1="9" x2="23" y2="15"/>
+          </svg>
+        </button>
+
+        <!-- 連擊顯示 -->
+        <div class="duel-combo" id="duel-combo">
+          <span id="combo-count">0</span>連擊！
+        </div>
+
         <!-- 進度和分數 -->
         <div class="duel-stats">
           <div class="duel-progress">題目：<span id="duel-current">1</span> / <span id="duel-total">10</span></div>
@@ -2242,16 +2591,38 @@
         </div>
       </div>
 
-      <div class="game-complete" id="duel-complete">
-        <div class="complete-icon">
-          <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
-            <polyline points="20 6 9 17 4 12"/>
-          </svg>
+      <div class="game-complete" id="duel-complete" style="display:none;">
+        <!-- 保留但隱藏，改用頒獎畫面 -->
+      </div>
+    </div>
+
+    <!-- Kahoot 風格頒獎畫面 -->
+    <div class="duel-award-screen" id="duel-award-screen">
+      <div class="award-confetti" id="award-confetti"></div>
+      <div class="award-content">
+        <div class="award-rank" id="award-rank"></div>
+        <div class="award-stars" id="award-stars"></div>
+        <h2 class="award-title" id="award-title">太棒了！</h2>
+        <div class="award-score" id="award-score">0</div>
+        <div class="award-details">
+          <div class="award-detail">
+            <span class="award-detail-value" id="award-correct">0</span>
+            <span class="award-detail-label">答對題數</span>
+          </div>
+          <div class="award-detail">
+            <span class="award-detail-value" id="award-combo">0</span>
+            <span class="award-detail-label">最高連擊</span>
+          </div>
+          <div class="award-detail">
+            <span class="award-detail-value" id="award-accuracy">0%</span>
+            <span class="award-detail-label">正確率</span>
+          </div>
         </div>
-        <h3 class="complete-title">挑戰完成！</h3>
-        <p class="complete-message" id="duel-result">你答對了 8 / 10 題！</p>
-        <p class="complete-score" id="duel-final-score">最終得分：80 分</p>
-        <button class="restart-btn" id="restart-duel">再玩一次</button>
+        <p class="award-message" id="award-message">繼續努力，下次會更好！</p>
+        <div class="award-buttons">
+          <button class="award-btn award-btn-primary" id="award-restart">再玩一次</button>
+          <button class="award-btn award-btn-secondary" id="award-close">返回</button>
+        </div>
       </div>
     </div>
   </main>
@@ -2422,19 +2793,19 @@
     const colorMapping = {
       '苦瓜': 'green',
       '高麗菜': 'green',
-      '刺瓜仔': 'green',
+      '小刺瓜': 'green',
       '金瓜': 'yellow',
       '柑': 'yellow',
       '王梨': 'yellow',
       '草莓': 'red',
-      '番茄': 'red',
+      '臭柿仔': 'red',
       '蘋果': 'red',
       '菜頭': 'white',
-      '菜花': 'white',
-      '蕃薯': 'brown',
-      '菌碻': 'brown',
+      '菜花': 'white-green',
+      '番薯': 'brown',
+      '蕳砃': 'brown',
       '葡萄': 'purple',
-      '茄仔': 'purple'
+      '茄': 'purple'
     };
 
     let sortingItems = [];
@@ -2592,7 +2963,7 @@
     // ========================================
     let mazeCanvas, mazeCtx;
     let isDrawing = false;
-    let mazeTargets = ['番茄', '玉米', '芭樂'];
+    let mazeTargets = ['臭柿仔', '玉米', '水梨'];
     let currentMazeIndex = 0;
 
     // 迷宮生成器 - 使用深度優先搜索算法
@@ -2670,8 +3041,23 @@
 
       const rows = grid.length;
       const cols = grid[0].length;
+      const svgNS = 'http://www.w3.org/2000/svg';
 
-      // 繪製牆壁
+      // 繪製淺色背景格子（讓路徑更清晰）
+      for (let y = 0; y < rows; y++) {
+        for (let x = 0; x < cols; x++) {
+          const rect = document.createElementNS(svgNS, 'rect');
+          rect.setAttribute('x', String(padding + x * cellSize + 3));
+          rect.setAttribute('y', String(padding + y * cellSize + 3));
+          rect.setAttribute('width', String(cellSize - 6));
+          rect.setAttribute('height', String(cellSize - 6));
+          rect.setAttribute('fill', '#FFF9E6');
+          rect.setAttribute('rx', '6');
+          wallsGroup.appendChild(rect);
+        }
+      }
+
+      // 繪製牆壁（使用較粗的線條和更明顯的顏色）
       let wallsPath = '';
 
       for (let y = 0; y < rows; y++) {
@@ -2707,39 +3093,53 @@
         }
       }
 
-      const pathEl = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+      const pathEl = document.createElementNS(svgNS, 'path');
       pathEl.setAttribute('d', wallsPath);
-      pathEl.setAttribute('stroke', '#333');
-      pathEl.setAttribute('stroke-width', '3');
+      pathEl.setAttribute('stroke', '#5D4037');
+      pathEl.setAttribute('stroke-width', '5');
       pathEl.setAttribute('stroke-linecap', 'round');
       pathEl.setAttribute('fill', 'none');
       wallsGroup.appendChild(pathEl);
 
-      // 使用 DOM API 創建 SVG 元素，避免 innerHTML 解析問題
-      const svgNS = 'http://www.w3.org/2000/svg';
+      // 繪製起點標記 - 更明顯的入口箭頭
+      const startY = padding + (rows - 1) * cellSize + cellSize / 2;
 
-      // 繪製起點標記 (在左側入口旁邊)
-      // 起點標記 - 放在入口左側
-      // 入口在左下角 (0, 6)，格子中心 y = 25 + 6*50 + 25 = 350
+      // 起點背景圓圈
+      const startCircle = document.createElementNS(svgNS, 'circle');
+      startCircle.setAttribute('cx', String(padding - 12));
+      startCircle.setAttribute('cy', String(startY));
+      startCircle.setAttribute('r', '22');
+      startCircle.setAttribute('fill', '#4CAF50');
+      startCircle.setAttribute('class', 'maze-start-marker');
+      itemsGroup.appendChild(startCircle);
+
+      // 起點箭頭
+      const startArrow = document.createElementNS(svgNS, 'path');
+      startArrow.setAttribute('d', `M${padding - 22},${startY} L${padding - 4},${startY} M${padding - 12},${startY - 8} L${padding - 4},${startY} L${padding - 12},${startY + 8}`);
+      startArrow.setAttribute('stroke', 'white');
+      startArrow.setAttribute('stroke-width', '4');
+      startArrow.setAttribute('stroke-linecap', 'round');
+      startArrow.setAttribute('stroke-linejoin', 'round');
+      startArrow.setAttribute('fill', 'none');
+      itemsGroup.appendChild(startArrow);
+
+      // 起點文字
       const startText = document.createElementNS(svgNS, 'text');
-      startText.setAttribute('x', '12');
-      startText.setAttribute('y', String(padding + (rows - 1) * cellSize + cellSize / 2));
-      startText.setAttribute('font-size', '12');
-      startText.setAttribute('fill', '#E74C3C');
+      startText.setAttribute('x', String(padding - 12));
+      startText.setAttribute('y', String(startY + 38));
+      startText.setAttribute('font-size', '13');
+      startText.setAttribute('fill', '#4CAF50');
       startText.setAttribute('font-weight', 'bold');
       startText.setAttribute('text-anchor', 'middle');
-      startText.setAttribute('dominant-baseline', 'middle');
-      startText.setAttribute('transform', 'rotate(-90, 12, ' + (padding + (rows - 1) * cellSize + cellSize / 2) + ')');
-      startText.textContent = 'Start';
+      startText.textContent = '入口';
       itemsGroup.appendChild(startText);
 
-      // 蔬果位置 - 每個水果放在不同的隨機位置
-      // 7x7 迷宮，格子座標 0-6，避開入口 (0,6)
+      // 蔬果位置 - 避開入口格子
       const availablePositions = [];
       for (let r = 0; r < rows; r++) {
         for (let c = 0; c < cols; c++) {
-          // 排除入口附近
-          if (!(c === 0 && r >= 5)) {
+          // 排除入口格子
+          if (!(c === 0 && r === rows - 1)) {
             availablePositions.push({ col: c, row: r });
           }
         }
@@ -2751,11 +3151,12 @@
         [availablePositions[i], availablePositions[j]] = [availablePositions[j], availablePositions[i]];
       }
 
-      // 為每個水果分配不同位置
+      // 為每個水果分配不同位置，並保存位置供檢測用
+      window.mazeFruitPositions = {};
       const fruitPositions = [
         { name: '玉米', ...availablePositions[0] },
-        { name: '番茄', ...availablePositions[1] },
-        { name: '芭樂', ...availablePositions[2] }
+        { name: '臭柿仔', ...availablePositions[1] },
+        { name: '水梨', ...availablePositions[2] }
       ];
 
       fruitPositions.forEach(fruit => {
@@ -2763,80 +3164,78 @@
         const fx = padding + fruit.col * cellSize + cellSize / 2;
         const fy = padding + fruit.row * cellSize + cellSize / 2;
 
+        // 保存位置供到達檢測用
+        window.mazeFruitPositions[fruit.name] = { x: fx, y: fy, radius: 30 };
+
         const g = document.createElementNS(svgNS, 'g');
         g.setAttribute('class', 'maze-target-fruit');
         g.setAttribute('data-fruit', fruit.name);
         g.setAttribute('transform', 'translate(' + fx + ', ' + fy + ')');
 
+        // 為目標水果添加底色圓圈（讓目標更明顯）
+        const bgCircle = document.createElementNS(svgNS, 'circle');
+        bgCircle.setAttribute('cx', '0');
+        bgCircle.setAttribute('cy', '0');
+        bgCircle.setAttribute('r', '30');
+        bgCircle.setAttribute('fill', 'rgba(255, 255, 255, 0.95)');
+        bgCircle.setAttribute('stroke', '#ddd');
+        bgCircle.setAttribute('stroke-width', '2');
+        bgCircle.setAttribute('class', 'fruit-bg');
+        g.appendChild(bgCircle);
+
         if (fruit.name === '玉米') {
           const e1 = document.createElementNS(svgNS, 'ellipse');
           e1.setAttribute('cx', '0'); e1.setAttribute('cy', '3');
-          e1.setAttribute('rx', '10'); e1.setAttribute('ry', '15');
+          e1.setAttribute('rx', '14'); e1.setAttribute('ry', '20');
           e1.setAttribute('fill', '#F4D03F');
           g.appendChild(e1);
 
           const e2 = document.createElementNS(svgNS, 'ellipse');
           e2.setAttribute('cx', '0'); e2.setAttribute('cy', '3');
-          e2.setAttribute('rx', '7'); e2.setAttribute('ry', '11');
+          e2.setAttribute('rx', '10'); e2.setAttribute('ry', '15');
           e2.setAttribute('fill', '#F7DC6F');
           g.appendChild(e2);
 
           const leaf = document.createElementNS(svgNS, 'path');
-          leaf.setAttribute('d', 'M-6 -10 Q0 -18 6 -10 Q0 -8 -6 -10Z');
+          leaf.setAttribute('d', 'M-8 -14 Q0 -24 8 -14 Q0 -12 -8 -14Z');
           leaf.setAttribute('fill', '#2ECC71');
           g.appendChild(leaf);
-        } else if (fruit.name === '番茄') {
+        } else if (fruit.name === '臭柿仔') {
+          // 臭柿仔 (番茄) - 稍大
           const e1 = document.createElementNS(svgNS, 'ellipse');
           e1.setAttribute('cx', '0'); e1.setAttribute('cy', '0');
-          e1.setAttribute('rx', '14'); e1.setAttribute('ry', '13');
+          e1.setAttribute('rx', '20'); e1.setAttribute('ry', '18');
           e1.setAttribute('fill', '#E74C3C');
           g.appendChild(e1);
 
           const leaf = document.createElementNS(svgNS, 'path');
-          leaf.setAttribute('d', 'M-6 -11 Q0 -15 6 -11 Q0 -9 -6 -11Z');
+          leaf.setAttribute('d', 'M-10 -15 Q0 -22 10 -15 Q0 -13 -10 -15Z');
           leaf.setAttribute('fill', '#27AE60');
           g.appendChild(leaf);
-        } else if (fruit.name === '芭樂') {
+        } else if (fruit.name === '水梨') {
+          // 水梨 - 稍大
           const e1 = document.createElementNS(svgNS, 'ellipse');
-          e1.setAttribute('cx', '0'); e1.setAttribute('cy', '0');
-          e1.setAttribute('rx', '13'); e1.setAttribute('ry', '15');
-          e1.setAttribute('fill', '#A8D948');
+          e1.setAttribute('cx', '0'); e1.setAttribute('cy', '3');
+          e1.setAttribute('rx', '16'); e1.setAttribute('ry', '20');
+          e1.setAttribute('fill', '#C9B037');
           g.appendChild(e1);
 
           const e2 = document.createElementNS(svgNS, 'ellipse');
-          e2.setAttribute('cx', '0'); e2.setAttribute('cy', '1');
-          e2.setAttribute('rx', '7'); e2.setAttribute('ry', '8');
-          e2.setAttribute('fill', '#FFB6C1');
+          e2.setAttribute('cx', '0'); e2.setAttribute('cy', '3');
+          e2.setAttribute('rx', '12'); e2.setAttribute('ry', '15');
+          e2.setAttribute('fill', '#E8D66B');
           g.appendChild(e2);
+
+          const stem = document.createElementNS(svgNS, 'rect');
+          stem.setAttribute('x', '-3'); stem.setAttribute('y', '-18');
+          stem.setAttribute('width', '6'); stem.setAttribute('height', '10');
+          stem.setAttribute('fill', '#8B6914');
+          stem.setAttribute('rx', '2');
+          g.appendChild(stem);
         }
 
         itemsGroup.appendChild(g);
       });
-
-      // 房子 (右上角格子內，座標 6,0)
-      const houseX = padding + 6 * cellSize + cellSize / 2;
-      const houseY = padding + 0 * cellSize + cellSize / 2;
-      const houseG = document.createElementNS(svgNS, 'g');
-      houseG.setAttribute('transform', 'translate(' + houseX + ', ' + houseY + ')');
-
-      const roof = document.createElementNS(svgNS, 'path');
-      roof.setAttribute('d', 'M-15 0 L0 -15 L15 0 Z');
-      roof.setAttribute('fill', '#F39C12');
-      houseG.appendChild(roof);
-
-      const body = document.createElementNS(svgNS, 'rect');
-      body.setAttribute('x', '-12'); body.setAttribute('y', '0');
-      body.setAttribute('width', '24'); body.setAttribute('height', '18');
-      body.setAttribute('fill', '#F39C12');
-      houseG.appendChild(body);
-
-      const door = document.createElementNS(svgNS, 'rect');
-      door.setAttribute('x', '-4'); door.setAttribute('y', '6');
-      door.setAttribute('width', '8'); door.setAttribute('height', '12');
-      door.setAttribute('fill', '#5D4037');
-      houseG.appendChild(door);
-
-      itemsGroup.appendChild(houseG);
     }
 
     function initMaze() {
@@ -2845,10 +3244,10 @@
 
       const mazeSvg = document.getElementById('maze-svg');
 
-      // 生成並渲染迷宮
-      const cols = 7;
-      const rows = 7;
-      const cellSize = 50;
+      // 生成並渲染迷宮 - 使用較簡單的 5x5 迷宮
+      const cols = 5;
+      const rows = 5;
+      const cellSize = 70;
       const padding = 25;
 
       const maze = generateMaze(cols, rows);
@@ -2912,7 +3311,7 @@
       isDrawing = true;
       mazeCtx.beginPath();
       mazeCtx.strokeStyle = '#C84B31';
-      mazeCtx.lineWidth = 4;
+      mazeCtx.lineWidth = 6;  // 加粗線條，方便手機觸控
       mazeCtx.lineCap = 'round';
       mazeCtx.lineJoin = 'round';
       const coords = getCanvasCoords(e);
@@ -2924,6 +3323,48 @@
       const coords = getCanvasCoords(e);
       mazeCtx.lineTo(coords.x, coords.y);
       mazeCtx.stroke();
+
+      // 檢測是否到達目標水果
+      checkTargetReached(coords);
+    }
+
+    // 檢測是否到達目標水果
+    function checkTargetReached(coords) {
+      const target = mazeTargets[currentMazeIndex];
+      const pos = window.mazeFruitPositions && window.mazeFruitPositions[target];
+      if (!pos) return;
+
+      const distance = Math.sqrt(Math.pow(coords.x - pos.x, 2) + Math.pow(coords.y - pos.y, 2));
+      if (distance <= pos.radius && !window.mazeTargetReached) {
+        window.mazeTargetReached = true;
+        showMazeSuccess();
+      }
+    }
+
+    // 顯示成功提示
+    function showMazeSuccess() {
+      const target = mazeTargets[currentMazeIndex];
+
+      // 播放成功動畫 - 讓目標水果閃爍
+      const targetFruit = document.querySelector(`.maze-target-fruit[data-fruit="${target}"]`);
+      if (targetFruit) {
+        targetFruit.classList.add('found');
+      }
+
+      // 顯示成功訊息
+      const successMsg = document.createElement('div');
+      successMsg.className = 'maze-success-msg';
+      successMsg.innerHTML = `<span>找到了！</span><span class="fruit-name">${target}</span>`;
+      document.querySelector('.maze-wrapper').appendChild(successMsg);
+
+      // 自動移除成功訊息並準備下一題
+      setTimeout(() => {
+        successMsg.remove();
+        if (targetFruit) {
+          targetFruit.classList.remove('found');
+        }
+        window.mazeTargetReached = false;
+      }, 1500);
     }
 
     function stopDrawing() {
@@ -2932,6 +3373,7 @@
 
     function clearMaze() {
       mazeCtx.clearRect(0, 0, mazeCanvas.width, mazeCanvas.height);
+      window.mazeTargetReached = false;
     }
 
     function nextMaze() {
@@ -2942,8 +3384,8 @@
         document.getElementById('maze-complete').classList.add('visible');
       } else {
         clearMaze();
-        const maze = generateMaze(7, 7);
-        renderMaze(maze, 50, 25);
+        const maze = generateMaze(5, 5);
+        renderMaze(maze, 70, 25);
         updateMazeTarget();
       }
     }
@@ -2952,8 +3394,8 @@
       currentMazeIndex = 0;
       document.getElementById('maze-complete').classList.remove('visible');
       clearMaze();
-      const maze = generateMaze(7, 7);
-      renderMaze(maze, 50, 25);
+      const maze = generateMaze(5, 5);
+      renderMaze(maze, 70, 25);
       updateMazeTarget();
     }
 
@@ -3115,7 +3557,7 @@
     }
 
     // ========================================
-    // 閃電決鬥遊戲
+    // 閃電決鬥遊戲（Kahoot 風格增強版）
     // ========================================
     let duelQuestions = [];
     let currentDuelQuestion = 0;
@@ -3126,9 +3568,261 @@
     const DUEL_TIME_LIMIT = 3.0;
     const DUEL_TOTAL_QUESTIONS = 10;
 
+    // 連擊系統
+    let duelCombo = 0;
+    let duelMaxCombo = 0;
+
+    // 音效系統
+    let audioContext = null;
+    let isSoundEnabled = true;
+    let bgmOscillator = null;
+    let bgmGain = null;
+    let tickInterval = null;
+
+    // 初始化音效系統
+    function initAudioContext() {
+      if (!audioContext) {
+        audioContext = new (window.AudioContext || window.webkitAudioContext)();
+      }
+      return audioContext;
+    }
+
+    // 播放正確音效（上升和弦）
+    function playCorrectSound() {
+      if (!isSoundEnabled) return;
+      const ctx = initAudioContext();
+      const now = ctx.currentTime;
+
+      // 創建上升的和弦音效
+      const frequencies = [523.25, 659.25, 783.99]; // C5, E5, G5
+      frequencies.forEach((freq, i) => {
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(freq, now + i * 0.08);
+        gain.gain.setValueAtTime(0, now + i * 0.08);
+        gain.gain.linearRampToValueAtTime(0.15, now + i * 0.08 + 0.05);
+        gain.gain.linearRampToValueAtTime(0, now + i * 0.08 + 0.3);
+        osc.start(now + i * 0.08);
+        osc.stop(now + i * 0.08 + 0.4);
+      });
+    }
+
+    // 播放連擊音效（更高的音調）
+    function playComboSound(combo) {
+      if (!isSoundEnabled) return;
+      const ctx = initAudioContext();
+      const now = ctx.currentTime;
+
+      // 根據連擊數提高音調
+      const baseFreq = 880 + combo * 50; // A5 + 連擊加成
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.type = 'square';
+      osc.frequency.setValueAtTime(baseFreq, now);
+      osc.frequency.linearRampToValueAtTime(baseFreq * 1.5, now + 0.1);
+      gain.gain.setValueAtTime(0.1, now);
+      gain.gain.linearRampToValueAtTime(0, now + 0.2);
+      osc.start(now);
+      osc.stop(now + 0.25);
+    }
+
+    // 播放錯誤音效（下降不協和音）
+    function playWrongSound() {
+      if (!isSoundEnabled) return;
+      const ctx = initAudioContext();
+      const now = ctx.currentTime;
+
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.type = 'sawtooth';
+      osc.frequency.setValueAtTime(200, now);
+      osc.frequency.linearRampToValueAtTime(100, now + 0.3);
+      gain.gain.setValueAtTime(0.1, now);
+      gain.gain.linearRampToValueAtTime(0, now + 0.3);
+      osc.start(now);
+      osc.stop(now + 0.35);
+    }
+
+    // 播放超時音效
+    function playTimeoutSound() {
+      if (!isSoundEnabled) return;
+      const ctx = initAudioContext();
+      const now = ctx.currentTime;
+
+      // 雙音下降
+      [300, 250].forEach((freq, i) => {
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(freq, now + i * 0.15);
+        gain.gain.setValueAtTime(0.1, now + i * 0.15);
+        gain.gain.linearRampToValueAtTime(0, now + i * 0.15 + 0.2);
+        osc.start(now + i * 0.15);
+        osc.stop(now + i * 0.15 + 0.25);
+      });
+    }
+
+    // 播放倒數緊張音效（滴答聲）
+    function playTickSound(timeLeft) {
+      if (!isSoundEnabled) return;
+      const ctx = initAudioContext();
+      const now = ctx.currentTime;
+
+      // 時間越少，音調越高，速度越快
+      const urgency = 1 - (timeLeft / DUEL_TIME_LIMIT);
+      const freq = 800 + urgency * 400;
+
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(freq, now);
+      gain.gain.setValueAtTime(0.05 + urgency * 0.05, now);
+      gain.gain.linearRampToValueAtTime(0, now + 0.05);
+      osc.start(now);
+      osc.stop(now + 0.06);
+    }
+
+    // 開始背景節拍音樂
+    function startBGM() {
+      if (!isSoundEnabled) return;
+      const ctx = initAudioContext();
+
+      // 停止之前的 BGM
+      stopBGM();
+
+      bgmGain = ctx.createGain();
+      bgmGain.gain.setValueAtTime(0.03, ctx.currentTime);
+      bgmGain.connect(ctx.destination);
+
+      let beat = 0;
+      const bpm = 140;
+      const beatInterval = 60000 / bpm;
+
+      tickInterval = setInterval(() => {
+        if (!isSoundEnabled || !audioContext) {
+          stopBGM();
+          return;
+        }
+
+        const now = ctx.currentTime;
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.connect(gain);
+        gain.connect(bgmGain);
+
+        // 節拍模式：強弱弱弱
+        if (beat % 4 === 0) {
+          osc.type = 'square';
+          osc.frequency.setValueAtTime(150, now);
+          gain.gain.setValueAtTime(0.8, now);
+        } else {
+          osc.type = 'triangle';
+          osc.frequency.setValueAtTime(100, now);
+          gain.gain.setValueAtTime(0.3, now);
+        }
+
+        gain.gain.linearRampToValueAtTime(0, now + 0.1);
+        osc.start(now);
+        osc.stop(now + 0.12);
+
+        beat++;
+      }, beatInterval);
+    }
+
+    // 停止背景音樂
+    function stopBGM() {
+      if (tickInterval) {
+        clearInterval(tickInterval);
+        tickInterval = null;
+      }
+      if (bgmGain) {
+        bgmGain.disconnect();
+        bgmGain = null;
+      }
+    }
+
+    // 播放勝利音樂
+    function playVictoryMusic() {
+      if (!isSoundEnabled) return;
+      const ctx = initAudioContext();
+      const now = ctx.currentTime;
+
+      // 勝利旋律
+      const melody = [
+        { freq: 523.25, time: 0, duration: 0.15 },     // C5
+        { freq: 587.33, time: 0.15, duration: 0.15 },  // D5
+        { freq: 659.25, time: 0.3, duration: 0.15 },   // E5
+        { freq: 783.99, time: 0.45, duration: 0.15 },  // G5
+        { freq: 880, time: 0.6, duration: 0.3 },       // A5
+        { freq: 783.99, time: 0.95, duration: 0.15 },  // G5
+        { freq: 880, time: 1.1, duration: 0.5 },       // A5
+      ];
+
+      melody.forEach(note => {
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(note.freq, now + note.time);
+        gain.gain.setValueAtTime(0, now + note.time);
+        gain.gain.linearRampToValueAtTime(0.15, now + note.time + 0.02);
+        gain.gain.setValueAtTime(0.15, now + note.time + note.duration - 0.05);
+        gain.gain.linearRampToValueAtTime(0, now + note.time + note.duration);
+        osc.start(now + note.time);
+        osc.stop(now + note.time + note.duration + 0.1);
+      });
+    }
+
+    // 切換音效
+    function toggleSound() {
+      isSoundEnabled = !isSoundEnabled;
+      const toggleBtn = document.getElementById('duel-sound-toggle');
+      const onIcon = document.getElementById('sound-on-icon');
+      const offIcon = document.getElementById('sound-off-icon');
+
+      if (isSoundEnabled) {
+        toggleBtn.classList.remove('muted');
+        onIcon.style.display = 'block';
+        offIcon.style.display = 'none';
+        // 如果遊戲正在進行中，重新開始 BGM
+        if (duelTimer) {
+          startBGM();
+        }
+      } else {
+        toggleBtn.classList.add('muted');
+        onIcon.style.display = 'none';
+        offIcon.style.display = 'block';
+        stopBGM();
+      }
+    }
+
     function initDuel() {
       document.getElementById('duel-start-btn').addEventListener('click', startDuel);
-      document.getElementById('restart-duel').addEventListener('click', restartDuel);
+
+      // 頒獎畫面按鈕
+      document.getElementById('award-restart').addEventListener('click', () => {
+        document.getElementById('duel-award-screen').classList.remove('visible');
+        startDuel();
+      });
+      document.getElementById('award-close').addEventListener('click', () => {
+        document.getElementById('duel-award-screen').classList.remove('visible');
+        document.getElementById('duel-start-screen').classList.remove('hidden');
+      });
+
+      // 音效控制
+      document.getElementById('duel-sound-toggle').addEventListener('click', toggleSound);
 
       // 綁定選項按鈕
       document.querySelectorAll('.duel-option').forEach(btn => {
@@ -3141,10 +3835,13 @@
       currentDuelQuestion = 0;
       duelScore = 0;
       duelCorrectCount = 0;
+      duelCombo = 0;
+      duelMaxCombo = 0;
 
-      // 隱藏開始畫面
+      // 隱藏開始畫面和連擊顯示
       document.getElementById('duel-start-screen').classList.add('hidden');
       document.getElementById('duel-complete').classList.remove('visible');
+      document.getElementById('duel-combo').classList.remove('visible');
 
       // 生成題目（隨機選擇 10 個詞彙）
       const shuffled = [...vocabulary].sort(() => Math.random() - 0.5);
@@ -3152,6 +3849,9 @@
 
       // 更新總題數
       document.getElementById('duel-total').textContent = DUEL_TOTAL_QUESTIONS;
+
+      // 開始背景音樂
+      startBGM();
 
       // 開始第一題
       showDuelQuestion();
@@ -3200,9 +3900,20 @@
       duelTimeLeft = DUEL_TIME_LIMIT;
       updateDuelTimerDisplay();
 
+      let lastTickTime = DUEL_TIME_LIMIT;
+
       duelTimer = setInterval(() => {
         duelTimeLeft -= 0.1;
         updateDuelTimerDisplay();
+
+        // 倒數緊張音效（最後 1.5 秒開始）
+        if (duelTimeLeft <= 1.5 && duelTimeLeft > 0) {
+          const tickInterval = duelTimeLeft <= 0.5 ? 0.2 : 0.3;
+          if (lastTickTime - duelTimeLeft >= tickInterval) {
+            playTickSound(duelTimeLeft);
+            lastTickTime = duelTimeLeft;
+          }
+        }
 
         if (duelTimeLeft <= 0) {
           clearInterval(duelTimer);
@@ -3231,15 +3942,45 @@
         feedback.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>';
         feedback.className = 'duel-feedback visible correct';
 
-        // 計分：剩餘時間越多分數越高
+        // 連擊增加
+        duelCombo++;
+        if (duelCombo > duelMaxCombo) {
+          duelMaxCombo = duelCombo;
+        }
+
+        // 更新連擊顯示
+        const comboEl = document.getElementById('duel-combo');
+        document.getElementById('combo-count').textContent = duelCombo;
+        if (duelCombo >= 2) {
+          comboEl.classList.add('visible');
+          if (duelCombo >= 3) {
+            comboEl.classList.add('fire');
+            setTimeout(() => comboEl.classList.remove('fire'), 500);
+          }
+          // 播放連擊音效
+          playComboSound(duelCombo);
+        }
+
+        // 播放正確音效
+        playCorrectSound();
+
+        // 計分：剩餘時間越多分數越高 + 連擊加成
         const timeBonus = Math.floor(duelTimeLeft * 10);
-        duelScore += 10 + timeBonus;
+        const comboBonus = Math.min(duelCombo - 1, 5) * 5; // 最多 25 分連擊加成
+        duelScore += 10 + timeBonus + comboBonus;
         duelCorrectCount++;
       } else {
         btn.classList.add('wrong');
         const feedback = document.getElementById('duel-feedback');
         feedback.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>';
         feedback.className = 'duel-feedback visible wrong';
+
+        // 重置連擊
+        duelCombo = 0;
+        document.getElementById('duel-combo').classList.remove('visible');
+
+        // 播放錯誤音效
+        playWrongSound();
 
         // 顯示正確答案
         document.querySelectorAll('.duel-option').forEach(b => {
@@ -3263,6 +4004,13 @@
         if (btn.dataset.correct === 'true') btn.classList.add('reveal');
       });
 
+      // 重置連擊
+      duelCombo = 0;
+      document.getElementById('duel-combo').classList.remove('visible');
+
+      // 播放超時音效
+      playTimeoutSound();
+
       const feedback = document.getElementById('duel-feedback');
       feedback.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>';
       feedback.className = 'duel-feedback visible timeout';
@@ -3274,18 +4022,104 @@
     }
 
     function endDuel() {
+      // 停止背景音樂
+      stopBGM();
+
       // 記錄遊戲完成和分數
       recordGamePlayed('duel', duelScore);
 
-      document.getElementById('duel-result').textContent =
-        `你答對了 ${duelCorrectCount} / ${DUEL_TOTAL_QUESTIONS} 題！`;
-      document.getElementById('duel-final-score').textContent =
-        `最終得分：${duelScore} 分`;
-      document.getElementById('duel-complete').classList.add('visible');
+      // 顯示 Kahoot 風格頒獎畫面
+      showAwardScreen();
+    }
+
+    function showAwardScreen() {
+      const accuracy = Math.round((duelCorrectCount / DUEL_TOTAL_QUESTIONS) * 100);
+      const screen = document.getElementById('duel-award-screen');
+
+      // 根據表現決定排名圖標和標題
+      let rankEmoji, title, message, starCount;
+
+      if (accuracy >= 90) {
+        rankEmoji = '🏆';
+        title = '金門話小達人！';
+        message = '太厲害了！你已經精通金門話了！';
+        starCount = 5;
+      } else if (accuracy >= 70) {
+        rankEmoji = '🥈';
+        title = '表現優秀！';
+        message = '很棒！繼續練習，你會更上一層樓！';
+        starCount = 4;
+      } else if (accuracy >= 50) {
+        rankEmoji = '🥉';
+        title = '不錯的開始！';
+        message = '再接再厲，熟能生巧！';
+        starCount = 3;
+      } else if (accuracy >= 30) {
+        rankEmoji = '💪';
+        title = '繼續加油！';
+        message = '多練習幾次，你一定可以的！';
+        starCount = 2;
+      } else {
+        rankEmoji = '🌱';
+        title = '初學者之路';
+        message = '每個專家都是從初學者開始的，加油！';
+        starCount = 1;
+      }
+
+      // 更新頒獎畫面內容
+      document.getElementById('award-rank').textContent = rankEmoji;
+      document.getElementById('award-title').textContent = title;
+      document.getElementById('award-score').textContent = duelScore + ' 分';
+      document.getElementById('award-correct').textContent = duelCorrectCount + '/' + DUEL_TOTAL_QUESTIONS;
+      document.getElementById('award-combo').textContent = duelMaxCombo;
+      document.getElementById('award-accuracy').textContent = accuracy + '%';
+      document.getElementById('award-message').textContent = message;
+
+      // 生成星星
+      const starsContainer = document.getElementById('award-stars');
+      starsContainer.innerHTML = '';
+      for (let i = 0; i < 5; i++) {
+        const star = document.createElement('span');
+        star.className = 'award-star' + (i >= starCount ? ' empty' : '');
+        star.textContent = '⭐';
+        starsContainer.appendChild(star);
+      }
+
+      // 生成彩帶效果
+      createConfetti();
+
+      // 顯示頒獎畫面
+      screen.classList.add('visible');
+
+      // 播放勝利音樂
+      playVictoryMusic();
+    }
+
+    function createConfetti() {
+      const container = document.getElementById('award-confetti');
+      container.innerHTML = '';
+
+      const colors = ['#FFD700', '#FF6B6B', '#4ECDC4', '#45B7D1', '#96CEB4', '#FFEAA7', '#DDA0DD'];
+      const shapes = ['square', 'circle'];
+
+      for (let i = 0; i < 50; i++) {
+        const confetti = document.createElement('div');
+        confetti.className = 'confetti-piece';
+        confetti.style.left = Math.random() * 100 + '%';
+        confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+        confetti.style.animationDelay = Math.random() * 3 + 's';
+        confetti.style.animationDuration = (2 + Math.random() * 2) + 's';
+
+        if (shapes[Math.floor(Math.random() * shapes.length)] === 'circle') {
+          confetti.style.borderRadius = '50%';
+        }
+
+        container.appendChild(confetti);
+      }
     }
 
     function restartDuel() {
-      document.getElementById('duel-complete').classList.remove('visible');
+      document.getElementById('duel-award-screen').classList.remove('visible');
       document.getElementById('duel-start-screen').classList.remove('hidden');
     }
 

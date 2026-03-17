@@ -1,9 +1,150 @@
 /**
  * 金門話學習平台 - API 模組
  * 處理與 AWS 後端的所有 API 通訊
+ * 支援 LTI 1.3 整合模式
  */
 
 const API_BASE = 'https://ys63zw9mhl.execute-api.ap-southeast-2.amazonaws.com/prod';
+
+// ========================================
+// LTI 整合支援
+// ========================================
+
+/**
+ * 檢查是否處於 LTI 啟動模式
+ */
+export function isLtiMode() {
+  // 檢查 URL 參數
+  const urlParams = new URLSearchParams(window.location.search);
+  if (urlParams.has('lti_session')) {
+    return true;
+  }
+
+  // 檢查 localStorage 中的 LTI session
+  const ltiSession = localStorage.getItem('lti_session');
+  if (ltiSession) {
+    try {
+      const session = JSON.parse(ltiSession);
+      // 檢查 session 是否過期（預設 8 小時）
+      if (session.exp && Date.now() < session.exp) {
+        return true;
+      }
+    } catch (e) {
+      console.warn('Invalid LTI session data');
+    }
+  }
+
+  return false;
+}
+
+/**
+ * 取得 LTI session 資訊
+ */
+export function getLtiSession() {
+  const ltiSession = localStorage.getItem('lti_session');
+  if (!ltiSession) return null;
+
+  try {
+    return JSON.parse(ltiSession);
+  } catch (e) {
+    return null;
+  }
+}
+
+/**
+ * 取得 LTI 代理端點 URL
+ */
+function getLtiProxyUrl() {
+  const session = getLtiSession();
+  if (!session || !session.platformUrl) {
+    // 預設使用 BeyondBridge 本地開發 URL
+    return 'http://localhost:3002';
+  }
+  return session.platformUrl;
+}
+
+/**
+ * 同步進度到 LTI Platform（BeyondBridge）
+ * 透過代理端點，自動處理成績格式轉換
+ */
+async function syncProgressToLtiPlatform(progressData) {
+  const session = getLtiSession();
+  if (!session) {
+    console.warn('[LTI] No session found, falling back to local storage');
+    return;
+  }
+
+  const proxyUrl = getLtiProxyUrl();
+  const toolId = session.toolId || 'kinmen-tool';
+
+  try {
+    // 計算總進度百分比
+    const totalProgress = calculateTotalProgress(progressData);
+
+    const response = await fetch(`${proxyUrl}/api/lti/tools/${toolId}/progress`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': session.accessToken ? `Bearer ${session.accessToken}` : ''
+      },
+      body: JSON.stringify({
+        userId: session.userId,
+        courseId: session.courseId,
+        resourceLinkId: session.resourceLinkId,
+        unit: progressData.currentUnit || 'general',
+        progress: totalProgress,
+        score: progressData.score || null,
+        activityProgress: progressData.completed ? 'Completed' : 'InProgress',
+        details: {
+          vocabulary: progressData.vocabulary,
+          dialogue: progressData.dialogue,
+          practice: progressData.practice,
+          statistics: progressData.statistics
+        },
+        timestamp: new Date().toISOString()
+      })
+    });
+
+    if (!response.ok) {
+      console.warn('[LTI] Progress sync failed:', await response.text());
+    } else {
+      console.log('[LTI] Progress synced successfully');
+    }
+  } catch (error) {
+    console.warn('[LTI] Progress sync error:', error);
+  }
+}
+
+/**
+ * 計算總進度百分比
+ */
+function calculateTotalProgress(progressData) {
+  let total = 0;
+  let count = 0;
+
+  // 詞彙進度
+  if (progressData.vocabulary) {
+    const vocabProgress = progressData.vocabulary.learned?.length || 0;
+    total += Math.min(100, (vocabProgress / 27) * 100); // 27 個詞彙
+    count++;
+  }
+
+  // 對話進度
+  if (progressData.dialogue) {
+    const dialogueProgress = progressData.dialogue.completed?.length || 0;
+    total += Math.min(100, (dialogueProgress / 7) * 100); // 7 個對話
+    count++;
+  }
+
+  // 練習進度
+  if (progressData.practice) {
+    const practiceProgress = progressData.practice.completed?.length || 0;
+    total += Math.min(100, (practiceProgress / 5) * 100); // 5 個練習
+    count++;
+  }
+
+  return count > 0 ? Math.round(total / count) : 0;
+}
 
 /**
  * 取得當前登入的使用者
@@ -37,8 +178,21 @@ export function saveLocalProgress(progress) {
 /**
  * 同步進度到伺服器（如果已登入）
  * 包含班級 ID 關聯，讓教師後台能追蹤學生
+ * 支援 LTI 模式：自動路由到 BeyondBridge 代理端點
  */
 export async function syncProgressToServer(progressData) {
+  // LTI 模式：使用 Platform 代理端點
+  if (isLtiMode()) {
+    const localProgress = getLocalProgress();
+    await syncProgressToLtiPlatform({
+      ...progressData,
+      statistics: localProgress.statistics || null,
+      achievements: localProgress.achievements || null
+    });
+    return;
+  }
+
+  // 原有模式：直接同步到 AWS Lambda
   const user = getCurrentUser();
   if (!user) {
     // 未登入，只存本地
@@ -127,8 +281,52 @@ export async function savePracticeProgress(practiceData) {
 /**
  * 初始化進度（頁面載入時呼叫）
  * 如果已登入，從伺服器取得最新進度並更新本地
+ * 支援 LTI 模式
  */
 export async function initProgress() {
+  // LTI 模式：使用 LTI session 中的使用者資訊
+  if (isLtiMode()) {
+    const session = getLtiSession();
+    if (session) {
+      console.log('[LTI] Initializing progress for user:', session.userId);
+
+      // 嘗試從 Platform 取得先前的進度（使用 aggregated 模式取得聚合進度）
+      try {
+        const proxyUrl = getLtiProxyUrl();
+        const toolId = session.toolId || 'kinmen-tool';
+        const response = await fetch(
+          `${proxyUrl}/api/lti/tools/${toolId}/progress/${session.userId}?courseId=${session.courseId}&aggregated=true`,
+          {
+            headers: {
+              'Authorization': session.accessToken ? `Bearer ${session.accessToken}` : ''
+            }
+          }
+        );
+
+        if (response.ok) {
+          const data = await response.json();
+          if (data.progress) {
+            // 合併 Platform 進度到本地
+            const localProgress = getLocalProgress();
+            const mergedProgress = {
+              vocabulary: data.progress.vocabulary || localProgress.vocabulary || {},
+              dialogue: data.progress.dialogue || localProgress.dialogue || {},
+              practice: data.progress.practice || localProgress.practice || {},
+              statistics: data.progress.statistics || localProgress.statistics || null,
+              achievements: data.progress.achievements || localProgress.achievements || null
+            };
+            saveLocalProgress(mergedProgress);
+            return mergedProgress;
+          }
+        }
+      } catch (error) {
+        console.warn('[LTI] Failed to fetch progress from Platform:', error);
+      }
+    }
+    return getLocalProgress();
+  }
+
+  // 原有模式
   const user = getCurrentUser();
   if (!user) {
     return getLocalProgress();
@@ -431,4 +629,5 @@ function showAchievementToast(achievement) {
   }, 3000);
 }
 
+// 額外 exports (isLtiMode 和 getLtiSession 已在上方以 export function 導出)
 export { API_BASE, ACHIEVEMENT_ICONS };
