@@ -1975,22 +1975,27 @@
     }
 
     // 模式切換
-    modeBtns.forEach(btn => {
-      btn.addEventListener('click', () => {
-        const mode = btn.dataset.mode;
-        modeBtns.forEach(b => b.classList.toggle('active', b === btn));
-        learningAreas.forEach(area => {
-          area.classList.toggle('active', area.id === `${mode}-area`);
-        });
-
-        // 開始配對計時
-        if (mode === 'matching' && !matchTimer) {
-          startMatchTimer();
-        } else if (mode !== 'matching') {
-          stopMatchTimer();
-        }
+    function switchMode(mode) {
+      modeBtns.forEach(b => b.classList.toggle('active', b.dataset.mode === mode));
+      learningAreas.forEach(area => {
+        area.classList.toggle('active', area.id === `${mode}-area`);
       });
+      if (mode === 'matching' && !matchTimer) {
+        startMatchTimer();
+      } else if (mode !== 'matching') {
+        stopMatchTimer();
+      }
+    }
+
+    modeBtns.forEach(btn => {
+      btn.addEventListener('click', () => switchMode(btn.dataset.mode));
     });
+
+    // URL 參數自動切換模式
+    const urlMode = new URLSearchParams(window.location.search).get('mode');
+    if (urlMode && ['flashcard', 'listening', 'matching'].includes(urlMode)) {
+      switchMode(urlMode);
+    }
 
     // 更新整體進度
     function updateOverallProgress() {

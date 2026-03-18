@@ -2655,13 +2655,20 @@
       const cards = document.querySelectorAll('.game-card');
       const areas = document.querySelectorAll('.game-area');
 
+      function switchGame(game) {
+        cards.forEach(c => c.classList.toggle('active', c.dataset.game === game));
+        areas.forEach(area => area.classList.toggle('active', area.id === `${game}-area`));
+      }
+
       cards.forEach(card => {
-        card.addEventListener('click', () => {
-          const game = card.dataset.game;
-          cards.forEach(c => c.classList.toggle('active', c === card));
-          areas.forEach(area => area.classList.toggle('active', area.id === `${game}-area`));
-        });
+        card.addEventListener('click', () => switchGame(card.dataset.game));
       });
+
+      // URL 參數自動切換遊戲
+      const urlGame = new URLSearchParams(window.location.search).get('game');
+      if (urlGame && document.querySelector(`.game-card[data-game="${urlGame}"]`)) {
+        switchGame(urlGame);
+      }
     }
 
     // ========================================
