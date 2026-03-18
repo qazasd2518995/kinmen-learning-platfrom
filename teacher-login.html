@@ -510,6 +510,134 @@
         font-size: 1.125rem;
       }
     }
+
+    /* 平板 */
+    @media (min-width: 768px) and (max-width: 1199px) {
+      .auth-container {
+        max-width: 420px;
+      }
+
+      .auth-card {
+        padding: 44px 36px;
+      }
+    }
+
+    /* 超小螢幕 */
+    @media (max-width: 320px) {
+      body {
+        padding: 8px;
+      }
+
+      .auth-card {
+        padding: 20px 16px;
+        border-radius: var(--radius-md);
+      }
+
+      .auth-logo-icon {
+        width: 48px;
+        height: 48px;
+      }
+
+      .auth-logo-icon svg {
+        width: 26px;
+        height: 26px;
+      }
+
+      .auth-logo h1 {
+        font-size: 1rem;
+      }
+
+      .auth-logo-subtitle {
+        font-size: 0.8125rem;
+      }
+
+      .auth-logo {
+        margin-bottom: 24px;
+      }
+
+      .form-input {
+        padding: 12px 14px;
+        font-size: 0.9375rem;
+      }
+
+      .submit-btn {
+        padding: 14px 20px;
+        font-size: 0.9375rem;
+      }
+
+      .auth-hint {
+        padding: 12px;
+        font-size: 0.75rem;
+      }
+
+      .back-link {
+        font-size: 0.875rem;
+      }
+    }
+
+    /* 橫向模式（低高度） */
+    @media (max-height: 500px) and (orientation: landscape) {
+      body {
+        padding: 8px 24px;
+        align-items: flex-start;
+        overflow-y: auto;
+      }
+
+      .auth-card {
+        padding: 24px 32px;
+      }
+
+      .auth-logo {
+        flex-direction: row;
+        gap: 12px;
+        margin-bottom: 20px;
+        text-align: left;
+      }
+
+      .auth-logo-icon {
+        width: 48px;
+        height: 48px;
+        flex-shrink: 0;
+      }
+
+      .auth-logo-icon svg {
+        width: 26px;
+        height: 26px;
+      }
+
+      .auth-logo h1 {
+        font-size: 1.125rem;
+      }
+
+      .auth-logo-subtitle {
+        font-size: 0.8125rem;
+      }
+
+      .form-group {
+        margin-bottom: 14px;
+      }
+
+      .form-input {
+        padding: 10px 14px;
+      }
+
+      .submit-btn {
+        padding: 12px 20px;
+      }
+
+      .auth-hint {
+        margin-top: 16px;
+        padding: 12px;
+      }
+
+      .back-link {
+        margin-top: 16px;
+      }
+
+      .roof-deco {
+        height: 4px;
+      }
+    }
   </style>
 </head>
 <body>
