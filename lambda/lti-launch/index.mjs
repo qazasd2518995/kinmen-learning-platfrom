@@ -113,6 +113,28 @@ export async function handler(event) {
 
     console.log('LTI Session saved to DynamoDB:', ltiSession.sessionId);
 
+    // 自動註冊/更新用戶到課程（用於教師後台查詢）
+    const courseId = ltiSession.context?.id;
+    if (courseId && ltiSession.platformUserId) {
+      const now = new Date().toISOString();
+      await docClient.send(new PutCommand({
+        TableName: TABLE_NAME,
+        Item: {
+          kinmen: `LTI_USER#${ltiSession.platformUserId}`,
+          platformUserId: ltiSession.platformUserId,
+          displayName: ltiSession.name || ltiSession.platformUserId,
+          email: ltiSession.email || null,
+          role: ltiSession.userRole,
+          courseId,
+          courseName: ltiSession.context?.title || ltiSession.context?.label || null,
+          lastActiveAt: now,
+          createdAt: now,
+          updatedAt: now
+        }
+      }));
+      console.log('LTI User registered:', ltiSession.platformUserId, 'course:', courseId);
+    }
+
     // 根據 message type 決定重導向目標
     if (messageType === 'LtiDeepLinkingRequest') {
       const deepLinkUrl = `${TOOL_FRONTEND_URL}/lti-content-picker.html?session=${ltiSession.sessionId}`;
