@@ -1830,3 +1830,116 @@ a {
     flex-direction: column;
   }
 }
+
+/* ========================================
+   班級管理操作按鈕
+   ======================================== */
+.class-list-actions {
+  display: flex;
+  gap: 8px;
+  margin-left: auto;
+  margin-right: 12px;
+  flex-shrink: 0;
+}
+
+.icon-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-sm);
+  background: var(--bg-secondary);
+  color: var(--text-secondary);
+  transition: all var(--duration-fast);
+}
+
+.icon-btn svg {
+  width: 16px;
+  height: 16px;
+}
+
+.icon-btn:hover {
+  background: var(--teacher-primary);
+  color: white;
+}
+
+.icon-btn.danger:hover {
+  background: var(--kinmen-red);
+  color: white;
+}
+
+/* ========================================
+   表格操作按鈕組
+   ======================================== */
+.table-actions {
+  display: flex;
+  gap: 6px;
+}
+
+.table-action-btn.danger {
+  color: var(--kinmen-red);
+}
+
+.table-action-btn.danger:hover {
+  background: var(--kinmen-red);
+  color: white;
+}
+
+/* ========================================
+   確認對話框
+   ======================================== */
+.confirm-content {
+  max-width: 420px;
+}
+
+.confirm-message {
+  padding: 0 24px 16px;
+  color: var(--text-secondary);
+  font-size: 0.9375rem;
+  line-height: 1.6;
+  white-space: pre-line;
+}
+
+.btn-danger {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 20px;
+  background: var(--kinmen-red);
+  color: white;
+  border: none;
+  border-radius: var(--radius-md);
+  font-size: 0.9375rem;
+  font-weight: 500;
+  transition: all var(--duration-fast);
+}
+
+.btn-danger:hover {
+  background: #A83D28;
+}
+
+.btn-danger:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.btn-danger .spinner {
+  display: none;
+  width: 18px;
+  height: 18px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top-color: white;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+.btn-danger.loading .spinner {
+  display: block;
+}
+
+.btn-danger.loading .btn-text {
+  display: none;
+}

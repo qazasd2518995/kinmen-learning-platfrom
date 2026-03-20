@@ -325,6 +325,25 @@
       height: 18px;
     }
 
+    .nav-btn.teacher {
+      border: 2px solid var(--kinmen-ocean);
+      color: var(--kinmen-ocean);
+      font-size: 0.875rem;
+      padding: 8px 16px;
+    }
+
+    .nav-btn.teacher:hover {
+      background: var(--kinmen-ocean);
+      color: white;
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-lift-sm), 0 0 20px rgba(91, 143, 168, 0.3);
+    }
+
+    .nav-btn.teacher:active {
+      transform: translateY(0) scale(0.98);
+      box-shadow: var(--shadow-sm);
+    }
+
     /* ========================================
        主內容區
        ======================================== */
@@ -1577,6 +1596,7 @@
     .page-loader.hidden {
       opacity: 0;
       visibility: hidden;
+      pointer-events: none;
     }
 
     .loader-icon {
@@ -1609,6 +1629,15 @@
       <span class="logo-text">金聲玉語</span>
     </div>
     <nav class="nav-actions">
+      <a href="teacher-login.html" class="nav-btn teacher">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+          <circle cx="9" cy="7" r="4"/>
+          <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+          <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+        </svg>
+        <span>教師入口</span>
+      </a>
       <!-- 未登入狀態 -->
       <div class="auth-buttons" id="auth-buttons">
         <a href="login.html" class="nav-btn outline">

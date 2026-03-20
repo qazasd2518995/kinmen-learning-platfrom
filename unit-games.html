@@ -6,7 +6,7 @@
   <title>遊戲與活動 - 金聲玉語</title>
   <link rel="icon" type="image/png" href="favicon.png">
   <link rel="apple-touch-icon" href="apple-touch-icon.png">
-  <meta name="description" content="金門話學習遊戲：連連看、分類、迷宮、賓果、閃電決鬥">
+  <meta name="description" content="金門話學習遊戲：連連看、分類、買菜跑跑、賓果、閃電決鬥">
 
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -346,7 +346,8 @@
     .matching-item.selected {
       border-color: var(--kinmen-gold);
       background: var(--kinmen-gold-light);
-      box-shadow: var(--shadow-md), var(--glow-gold);
+      box-shadow: none;
+      transform: none;
     }
 
     .matching-item.matched {
@@ -575,208 +576,285 @@
     }
 
     /* ========================================
-       迷宮遊戲
+       買菜跑跑遊戲
        ======================================== */
-    .maze-container {
+    .runner-container {
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 24px;
+      gap: 16px;
     }
 
-    .maze-question {
+    .runner-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      max-width: 420px;
+      gap: 12px;
+    }
+
+    .runner-target {
+      flex: 1;
       font-family: var(--font-display);
-      font-size: 1.25rem;
+      font-size: 1.2rem;
       color: var(--text-accent);
       text-align: center;
-      padding: 12px 24px;
+      padding: 10px 16px;
       background: var(--kinmen-gold-light);
       border-radius: var(--radius-md);
       border: 2px solid var(--kinmen-gold);
     }
 
-    .maze-question #maze-target {
+    .runner-target .target-name {
       color: var(--kinmen-red);
       font-weight: 700;
+      font-size: 1.3rem;
     }
 
-    .maze-game-layout {
-      display: flex;
-      gap: 24px;
-      align-items: flex-start;
+    .runner-target .target-pinyin {
+      font-size: 0.9rem;
+      color: var(--text-secondary);
     }
 
-    /* 左側蔬果選單 */
-    .maze-sidebar {
-      background: var(--bg-card);
-      border-radius: var(--radius-lg);
-      padding: 16px;
-      box-shadow: var(--shadow-md);
-      min-width: 100px;
-    }
-
-    .maze-sidebar-title {
+    .runner-timer {
       font-family: var(--font-display);
-      font-size: 1rem;
-      color: var(--text-accent);
-      text-align: center;
-      margin-bottom: 16px;
-      padding-bottom: 12px;
-      border-bottom: 2px dashed var(--kinmen-gold-light);
-    }
-
-    .maze-fruit-list {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--kinmen-gold-dark);
+      background: var(--kinmen-gold-light);
+      border: 2px solid var(--kinmen-gold);
+      border-radius: 50%;
+      width: 52px;
+      height: 52px;
       display: flex;
-      flex-direction: column;
-      gap: 16px;
-    }
-
-    .maze-fruit-item {
-      display: flex;
-      flex-direction: column;
       align-items: center;
-      gap: 6px;
-      padding: 12px;
+      justify-content: center;
+      flex-shrink: 0;
+      transition: color 0.3s, border-color 0.3s;
+    }
+
+    .runner-timer.urgent {
+      color: var(--kinmen-red);
+      border-color: var(--kinmen-red);
+      animation: timerPulse 0.5s ease-in-out infinite;
+    }
+
+    @keyframes timerPulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+    }
+
+    .runner-stats {
+      display: flex;
+      gap: 16px;
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+      font-weight: 500;
+    }
+
+    .runner-stats span {
       background: var(--bg-secondary);
-      border-radius: var(--radius-md);
-      transition: all var(--duration-normal) var(--ease-out);
-      border: 2px solid transparent;
+      padding: 4px 12px;
+      border-radius: 100px;
     }
 
-    .maze-fruit-item:hover {
-      background: var(--kinmen-gold-light);
-      border-color: var(--kinmen-gold);
-      transform: scale(1.05);
-    }
-
-    .maze-fruit-item.active {
-      background: var(--kinmen-gold-light);
-      border-color: var(--kinmen-gold);
-      box-shadow: var(--shadow-md), var(--glow-gold);
-    }
-
-    .maze-fruit-item svg {
-      width: 50px;
-      height: 60px;
-    }
-
-    .maze-fruit-item span {
-      font-size: 0.875rem;
-      font-weight: 600;
-      color: var(--text-primary);
-    }
-
-    /* 迷宮主體 */
-    .maze-wrapper {
-      position: relative;
-      display: inline-block;
-      width: 400px;
-      height: 400px;
-    }
-
-    .maze-svg {
-      width: 100%;
-      height: 100%;
+    /* 格子地圖 */
+    .runner-grid {
+      display: grid;
+      gap: 4px;
+      background: var(--bg-card);
+      padding: 8px;
       border-radius: var(--radius-lg);
       box-shadow: var(--shadow-lg);
-      background: var(--bg-card);
-    }
-
-    .maze-canvas {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      border-radius: var(--radius-lg);
       touch-action: none;
-      cursor: crosshair;
+      user-select: none;
+      -webkit-user-select: none;
     }
 
-    .maze-target-fruit {
-      cursor: pointer;
+    .runner-grid.grid-6 {
+      grid-template-columns: repeat(6, 60px);
+      grid-template-rows: repeat(6, 60px);
     }
 
-    .maze-target-fruit.highlight ellipse,
-    .maze-target-fruit.highlight path {
-      animation: fruitPulse 1s ease-in-out infinite;
-      transform-origin: center;
-      transform-box: fill-box;
+    .runner-cell {
+      width: 60px;
+      height: 60px;
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.75rem;
+      font-weight: 600;
+      position: relative;
+      transition: background 0.15s;
     }
 
-    @keyframes fruitPulse {
-      0%, 100% { transform: scale(1); }
-      50% { transform: scale(1.2); }
+    .runner-cell.floor {
+      background: #FFF9E6;
     }
 
-    /* 找到目標的動畫 */
-    .maze-target-fruit.found .fruit-bg {
-      fill: #4CAF50 !important;
-      animation: foundPulse 0.5s ease-in-out 3;
+    .runner-cell.floor:nth-child(odd) {
+      background: #FFF3D6;
     }
 
-    .maze-target-fruit.found ellipse,
-    .maze-target-fruit.found path {
-      animation: foundBounce 0.5s ease-in-out;
+    .runner-cell.fruit {
+      background: #FFF9E6;
     }
 
-    @keyframes foundPulse {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0.6; }
+    .runner-cell.fruit img {
+      width: 48px;
+      height: 48px;
+      object-fit: contain;
+      pointer-events: none;
     }
 
-    @keyframes foundBounce {
-      0% { transform: scale(1); }
-      50% { transform: scale(1.3); }
+    .runner-cell.player {
+      z-index: 10;
+    }
+
+    .runner-player {
+      font-size: 2rem;
+      line-height: 1;
+      animation: playerBob 1s ease-in-out infinite;
+    }
+
+    @keyframes playerBob {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-3px); }
+    }
+
+    .runner-cell.found-correct {
+      background: rgba(77, 175, 80, 0.25) !important;
+      animation: cellCorrect 0.4s ease-out;
+    }
+
+    .runner-cell.found-wrong {
+      animation: cellWrong 0.4s ease-out;
+    }
+
+    @keyframes cellCorrect {
+      0% { transform: scale(0.9); }
+      50% { transform: scale(1.1); }
       100% { transform: scale(1); }
     }
 
-    /* 成功訊息 */
-    .maze-success-msg {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
-      color: white;
-      padding: 16px 32px;
-      border-radius: var(--radius-lg);
-      font-size: 1.25rem;
-      font-weight: 700;
-      box-shadow: var(--shadow-lg);
+    @keyframes cellWrong {
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-4px); }
+      75% { transform: translateX(4px); }
+    }
+
+    /* 遊戲反饋訊息 */
+    .runner-feedback {
+      font-size: 1rem;
+      font-weight: 600;
+      min-height: 28px;
+      text-align: center;
+      transition: opacity 0.3s;
+    }
+
+    .runner-feedback.correct {
+      color: #4CAF50;
+    }
+
+    .runner-feedback.wrong {
+      color: var(--kinmen-red);
+    }
+
+    /* 虛擬方向鍵 */
+    .runner-dpad {
+      display: none;
+      grid-template-areas:
+        ". up ."
+        "left . right"
+        ". down .";
+      grid-template-columns: repeat(3, 56px);
+      grid-template-rows: repeat(3, 56px);
+      gap: 4px;
+      margin-top: 8px;
+    }
+
+    .dpad-btn {
+      width: 56px;
+      height: 56px;
+      border-radius: var(--radius-md);
+      background: var(--bg-secondary);
+      border: 2px solid var(--kinmen-gold-light);
       display: flex;
-      flex-direction: column;
       align-items: center;
-      gap: 8px;
-      z-index: 100;
-      animation: successPopIn 0.3s ease-out;
+      justify-content: center;
+      color: var(--text-accent);
+      font-size: 1.2rem;
+      transition: all 0.1s;
+      -webkit-tap-highlight-color: transparent;
     }
 
-    .maze-success-msg .fruit-name {
-      font-size: 1.5rem;
-      color: #FFF9E6;
+    .dpad-btn:active {
+      background: var(--kinmen-gold);
+      color: white;
+      transform: scale(0.92);
     }
 
-    @keyframes successPopIn {
-      0% { transform: translate(-50%, -50%) scale(0.5); opacity: 0; }
-      100% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+    .dpad-btn svg {
+      width: 24px;
+      height: 24px;
     }
 
-    /* 起點標記動畫 */
-    .maze-start-marker {
-      animation: startPulse 2s ease-in-out infinite;
+    .dpad-up { grid-area: up; }
+    .dpad-down { grid-area: down; }
+    .dpad-left { grid-area: left; }
+    .dpad-right { grid-area: right; }
+
+    /* 手機版顯示虛擬按鍵 */
+    @media (max-width: 768px) {
+      .runner-dpad {
+        display: grid;
+      }
+      .runner-grid.grid-6 {
+        grid-template-columns: repeat(6, 50px);
+        grid-template-rows: repeat(6, 50px);
+      }
+      .runner-cell {
+        width: 50px;
+        height: 50px;
+      }
+      .runner-cell.fruit img {
+        width: 40px;
+        height: 40px;
+      }
+      .runner-player {
+        font-size: 1.6rem;
+      }
     }
 
-    @keyframes startPulse {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0.7; }
+    @media (max-width: 380px) {
+      .runner-grid.grid-6 {
+        grid-template-columns: repeat(6, 44px);
+        grid-template-rows: repeat(6, 44px);
+      }
+      .runner-cell {
+        width: 44px;
+        height: 44px;
+      }
+      .runner-cell.fruit img {
+        width: 36px;
+        height: 36px;
+      }
+      .runner-target {
+        font-size: 1rem;
+      }
+      .dpad-btn {
+        width: 48px;
+        height: 48px;
+      }
+      .runner-dpad {
+        grid-template-columns: repeat(3, 48px);
+        grid-template-rows: repeat(3, 48px);
+      }
     }
 
-    .maze-controls {
-      display: flex;
-      gap: 16px;
-    }
-
+    /* 共用按鈕（賓果、決鬥等使用） */
     .maze-btn {
       padding: 12px 28px;
       background: linear-gradient(135deg, var(--kinmen-gold) 0%, var(--kinmen-gold-dark) 100%);
@@ -785,26 +863,11 @@
       font-weight: 600;
       transition: all var(--duration-normal) var(--ease-out);
       box-shadow: var(--shadow-md);
-      position: relative;
-      overflow: hidden;
-    }
-
-    .maze-btn::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(135deg, rgba(255,255,255,0.2) 0%, transparent 50%);
-      opacity: 0;
-      transition: opacity var(--duration-fast);
     }
 
     .maze-btn:hover {
       transform: translateY(-2px);
       box-shadow: var(--shadow-lg), var(--glow-gold);
-    }
-
-    .maze-btn:hover::before {
-      opacity: 1;
     }
 
     .maze-btn:active {
@@ -822,7 +885,6 @@
       background: var(--bg-secondary);
       border-color: var(--kinmen-gold-light);
       color: var(--text-primary);
-      box-shadow: var(--shadow-md);
     }
 
     /* ========================================
@@ -1026,6 +1088,22 @@
       max-width: 90%;
       max-height: 90%;
       object-fit: contain;
+    }
+
+    .duel-text {
+      font-family: var(--font-display);
+      font-size: 2.2rem;
+      font-weight: 700;
+      color: var(--text-accent);
+      text-align: center;
+      line-height: 1.3;
+    }
+
+    .duel-text .duel-text-sub {
+      font-size: 1rem;
+      font-weight: 400;
+      color: var(--text-secondary);
+      margin-top: 4px;
     }
 
     .duel-feedback {
@@ -1682,55 +1760,7 @@
         padding: 10px;
       }
 
-      /* 迷宮遊戲適配 */
-      .maze-container {
-        flex: 1;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        overflow: hidden;
-      }
-
-      .maze-question {
-        font-size: 1.35rem;
-      }
-
-      .maze-game-layout {
-        gap: 20px;
-      }
-
-      .maze-sidebar {
-        min-width: 90px;
-        padding: 12px;
-      }
-
-      .maze-sidebar-title {
-        font-size: 0.9rem;
-      }
-
-      .maze-fruit-item {
-        padding: 10px;
-      }
-
-      .maze-fruit-item svg {
-        width: 45px;
-        height: 55px;
-      }
-
-      .maze-fruit-item span {
-        font-size: 0.8rem;
-      }
-
-      .maze-svg {
-        width: min(450px, 55vh);
-        height: min(450px, 55vh);
-      }
-
-      .maze-wrapper {
-        max-width: min(450px, 55vh);
-        max-height: min(450px, 55vh);
-      }
+      /* 買菜跑跑適配 */
 
       /* 賓果遊戲適配 */
       .bingo-container {
@@ -1828,15 +1858,9 @@
         min-width: 200px;
       }
 
-      .maze-svg {
-        width: min(500px, 60vh);
-        height: min(500px, 60vh);
-      }
+      /* 買菜跑跑已在主 CSS 處理 */
 
-      .maze-wrapper {
-        max-width: min(500px, 60vh);
-        max-height: min(500px, 60vh);
-      }
+      /* 買菜跑跑已在主 CSS 中處理響應式 */
 
       .bingo-grid {
         max-width: min(550px, 65vh);
@@ -1967,77 +1991,9 @@
         max-width: 300px;
       }
 
-      /* 迷宮遊戲手機版 */
-      .maze-game-layout {
-        flex-direction: column;
-        align-items: center;
-        gap: 16px;
-      }
+      /* 買菜跑跑手機版已在主 CSS 處理 */
 
-      .maze-sidebar {
-        flex-direction: row;
-        min-width: auto;
-        width: 100%;
-        max-width: 350px;
-      }
-
-      .maze-sidebar-title {
-        display: none;
-      }
-
-      .maze-fruit-list {
-        flex-direction: row;
-        justify-content: center;
-        width: 100%;
-      }
-
-      .maze-fruit-item {
-        padding: 8px 12px;
-      }
-
-      .maze-fruit-item svg {
-        width: 35px;
-        height: 45px;
-      }
-
-      .maze-fruit-item span {
-        font-size: 0.75rem;
-      }
-
-      .maze-wrapper {
-        width: min(350px, 85vw);
-        height: min(350px, 85vw);
-      }
-
-      .maze-svg {
-        width: 100%;
-        height: 100%;
-      }
-
-      .maze-question {
-        font-size: 1rem;
-        padding: 10px 16px;
-      }
-
-      .maze-controls {
-        gap: 10px;
-      }
-
-      .maze-btn {
-        padding: 12px 24px;
-        font-size: 1rem;
-        min-height: 48px;  /* 確保觸控目標夠大 */
-      }
-
-      /* 成功訊息手機版 */
-      .maze-success-msg {
-        font-size: 1.1rem;
-        padding: 14px 24px;
-      }
-
-      .maze-success-msg .fruit-name {
-        font-size: 1.3rem;
-      }
+      /* 買菜跑跑手機版已在主 CSS 處理 */
     }
 
     @media (max-width: 480px) {
@@ -2062,15 +2018,7 @@
         min-height: var(--touch-target-min);
       }
 
-      .maze-svg {
-        width: 280px;
-        height: 280px;
-      }
-
-      .maze-fruit-item svg {
-        width: 30px;
-        height: 40px;
-      }
+      /* 買菜跑跑已在主 CSS 處理 */
     }
 
     /* 超小螢幕 (320px) */
@@ -2142,10 +2090,7 @@
         padding: 8px;
       }
 
-      .maze-wrapper {
-        width: 260px;
-        height: 260px;
-      }
+      /* 買菜跑跑已在主 CSS 處理 */
     }
 
     /* 橫向模式 */
@@ -2206,15 +2151,7 @@
         margin-bottom: 8px;
       }
 
-      .maze-wrapper {
-        width: 250px;
-        height: 250px;
-      }
-
-      .maze-question {
-        font-size: 0.9rem;
-        padding: 6px 12px;
-      }
+      /* 買菜跑跑已在主 CSS 處理 */
 
       .sorting-items {
         padding: 8px;
@@ -2285,8 +2222,8 @@
           </svg>
         </div>
         <div class="game-card-content">
-          <h3 class="game-card-title">迷宮</h3>
-          <p class="game-card-desc">幫阿公買菜</p>
+          <h3 class="game-card-title">買菜跑跑</h3>
+          <p class="game-card-desc">幫阿公找蔬果</p>
         </div>
       </div>
 
@@ -2395,87 +2332,47 @@
       </div>
     </div>
 
-    <!-- 迷宮遊戲 -->
+    <!-- 買菜跑跑遊戲 -->
     <div id="maze-area" class="game-area">
       <div class="game-header">
-        <h2 class="game-title">迷宮遊戲</h2>
-        <p class="game-instruction">阿公講愛買... 用滑鼠畫出路線，幫阿公買到正確的蔬果！</p>
+        <h2 class="game-title">買菜跑跑</h2>
+        <p class="game-instruction">操控阿公在巴剎裡走動，找到正確的蔬果！<br><small>桌面用方向鍵，手機用下方按鈕或滑動</small></p>
       </div>
 
-      <div class="maze-container">
-        <div class="maze-question" id="maze-question">請幫阿公找到 <span id="maze-target">臭柿仔</span>！</div>
-
-        <div class="maze-game-layout">
-          <!-- 左側蔬果選單 -->
-          <div class="maze-sidebar">
-            <div class="maze-sidebar-title">阿公講愛買...</div>
-            <div class="maze-fruit-list">
-              <div class="maze-fruit-item" data-fruit="玉米">
-                <svg viewBox="0 0 80 100">
-                  <!-- 玉米 -->
-                  <ellipse cx="40" cy="55" rx="22" ry="35" fill="#F4D03F"/>
-                  <ellipse cx="40" cy="55" rx="18" ry="30" fill="#F7DC6F"/>
-                  <!-- 玉米粒紋理 -->
-                  <g fill="#E9B824" opacity="0.6">
-                    <circle cx="32" cy="40" r="3"/><circle cx="40" cy="38" r="3"/><circle cx="48" cy="40" r="3"/>
-                    <circle cx="30" cy="50" r="3"/><circle cx="38" cy="48" r="3"/><circle cx="46" cy="50" r="3"/><circle cx="52" cy="52" r="3"/>
-                    <circle cx="32" cy="60" r="3"/><circle cx="40" cy="58" r="3"/><circle cx="48" cy="60" r="3"/>
-                    <circle cx="34" cy="70" r="3"/><circle cx="42" cy="68" r="3"/><circle cx="46" cy="72" r="3"/>
-                  </g>
-                  <!-- 葉子 -->
-                  <path d="M25 25 Q20 10 30 5 Q35 15 40 20 Q45 15 50 5 Q60 10 55 25 Q45 22 40 25 Q35 22 25 25Z" fill="#2ECC71"/>
-                  <path d="M30 20 Q25 5 35 0 Q38 12 40 18" fill="#27AE60"/>
-                  <path d="M50 20 Q55 5 45 0 Q42 12 40 18" fill="#27AE60"/>
-                </svg>
-                <span>玉米</span>
-              </div>
-              <div class="maze-fruit-item" data-fruit="水梨">
-                <svg viewBox="0 0 80 90">
-                  <!-- 水梨 -->
-                  <ellipse cx="40" cy="55" rx="24" ry="28" fill="#C9B037"/>
-                  <ellipse cx="40" cy="55" rx="20" ry="24" fill="#E8D66B"/>
-                  <!-- 高光 -->
-                  <ellipse cx="32" cy="45" rx="6" ry="8" fill="#F5E79E" opacity="0.6"/>
-                  <!-- 蒂頭 -->
-                  <ellipse cx="40" cy="28" rx="3" ry="2" fill="#5D4E37"/>
-                  <rect x="38" y="18" width="4" height="12" fill="#8B6914" rx="1"/>
-                  <path d="M42 20 Q50 15 48 25" fill="#2ECC71"/>
-                </svg>
-                <span>水梨</span>
-              </div>
-              <div class="maze-fruit-item" data-fruit="臭柿仔">
-                <svg viewBox="0 0 80 85">
-                  <!-- 臭柿仔 (番茄) -->
-                  <ellipse cx="40" cy="50" rx="30" ry="28" fill="#E74C3C"/>
-                  <ellipse cx="40" cy="48" rx="26" ry="24" fill="#EC7063"/>
-                  <!-- 高光 -->
-                  <ellipse cx="30" cy="40" rx="8" ry="6" fill="#F1948A" opacity="0.6"/>
-                  <!-- 蒂頭 -->
-                  <path d="M28 26 Q32 22 36 24 Q38 20 40 18 Q42 20 44 24 Q48 22 52 26 Q48 30 44 28 Q42 32 40 30 Q38 32 36 28 Q32 30 28 26Z" fill="#27AE60"/>
-                  <rect x="38" y="12" width="4" height="8" fill="#2ECC71" rx="1"/>
-                </svg>
-                <span>臭柿仔</span>
-              </div>
-            </div>
+      <div class="runner-container">
+        <div class="runner-header">
+          <div class="runner-target" id="runner-target">
+            請找到 <span class="target-name" id="runner-target-name">蘋果</span>
+            <div class="target-pinyin" id="runner-target-pinyin">phîng-kó</div>
           </div>
-
-          <!-- 迷宮主體 -->
-          <div class="maze-wrapper">
-            <svg class="maze-svg" id="maze-svg" viewBox="0 0 400 400">
-              <!-- 背景 -->
-              <rect x="0" y="0" width="400" height="400" fill="#FDF6F0"/>
-              <!-- 迷宮牆壁將由 JavaScript 繪製 -->
-              <g id="maze-walls"></g>
-              <!-- 蔬果和裝飾 -->
-              <g id="maze-items"></g>
-            </svg>
-            <canvas class="maze-canvas" id="maze-canvas"></canvas>
-          </div>
+          <div class="runner-timer" id="runner-timer">15</div>
         </div>
 
-        <div class="maze-controls">
-          <button class="maze-btn secondary" id="maze-clear">清除路線</button>
-          <button class="maze-btn" id="maze-next">下一題</button>
+        <div class="runner-stats" id="runner-stats">
+          <span>第 <strong id="runner-round">1</strong>/5 輪</span>
+          <span>得分：<strong id="runner-score">0</strong></span>
+        </div>
+
+        <div class="runner-grid grid-6" id="runner-grid">
+          <!-- 由 JS 動態生成 6x6 格子 -->
+        </div>
+
+        <div class="runner-feedback" id="runner-feedback"></div>
+
+        <!-- 手機虛擬方向鍵 -->
+        <div class="runner-dpad" id="runner-dpad">
+          <button class="dpad-btn dpad-up" data-dir="up">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="18 15 12 9 6 15"/></svg>
+          </button>
+          <button class="dpad-btn dpad-left" data-dir="left">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="15 18 9 12 15 6"/></svg>
+          </button>
+          <button class="dpad-btn dpad-right" data-dir="right">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="9 18 15 12 9 6"/></svg>
+          </button>
+          <button class="dpad-btn dpad-down" data-dir="down">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
         </div>
       </div>
 
@@ -2485,8 +2382,8 @@
             <polyline points="20 6 9 17 4 12"/>
           </svg>
         </div>
-        <h3 class="complete-title">迷宮完成！</h3>
-        <p class="complete-message">阿公成功買到所有蔬果了！</p>
+        <h3 class="complete-title">買菜完成！</h3>
+        <p class="complete-message" id="runner-result">阿公成功買到蔬果了！</p>
         <button class="restart-btn" id="restart-maze">再玩一次</button>
       </div>
     </div>
@@ -2527,7 +2424,7 @@
     <div id="duel-area" class="game-area">
       <div class="game-header">
         <h2 class="game-title">閃電決鬥</h2>
-        <p class="game-instruction">看到蔬果圖片，在時間內選出正確的金門話名稱！</p>
+        <p class="game-instruction">看圖片、漢字或拼音，在時間內選出正確答案！</p>
       </div>
 
       <div class="duel-container">
@@ -2563,9 +2460,10 @@
           <span class="duel-timer-text" id="duel-timer-text">3.0</span>
         </div>
 
-        <!-- 題目圖片 -->
+        <!-- 題目區（圖片或文字） -->
         <div class="duel-question">
           <img id="duel-image" class="duel-image" src="" alt="蔬果圖片">
+          <div class="duel-text" id="duel-text" style="display:none;"></div>
           <div class="duel-feedback" id="duel-feedback"></div>
         </div>
 
@@ -2966,459 +2864,254 @@
     }
 
     // ========================================
-    // 迷宮遊戲
+    // 買菜跑跑遊戲
     // ========================================
-    let mazeCanvas, mazeCtx;
-    let isDrawing = false;
-    let mazeTargets = ['臭柿仔', '玉米', '水梨'];
-    let currentMazeIndex = 0;
-
-    // 迷宮生成器 - 使用深度優先搜索算法
-    // DFS 生成的是「完美迷宮」，任意兩點之間一定有唯一路徑
-    function generateMaze(cols, rows) {
-      // 初始化網格，每個格子有四面牆
-      const grid = [];
-      for (let y = 0; y < rows; y++) {
-        grid[y] = [];
-        for (let x = 0; x < cols; x++) {
-          grid[y][x] = {
-            x, y,
-            top: true,
-            right: true,
-            bottom: true,
-            left: true,
-            visited: false
-          };
-        }
-      }
-
-      // 深度優先搜索生成迷宮
-      const stack = [];
-      const startCell = grid[rows - 1][0]; // 從左下角開始
-      startCell.visited = true;
-      stack.push(startCell);
-
-      while (stack.length > 0) {
-        const current = stack[stack.length - 1];
-        const neighbors = getUnvisitedNeighbors(current, grid, cols, rows);
-
-        if (neighbors.length > 0) {
-          const next = neighbors[Math.floor(Math.random() * neighbors.length)];
-          removeWallBetween(current, next);
-          next.visited = true;
-          stack.push(next);
-        } else {
-          stack.pop();
-        }
-      }
-
-      // 開放入口
-      grid[rows - 1][0].left = false;
-
-      return grid;
-    }
-
-    function getUnvisitedNeighbors(cell, grid, cols, rows) {
-      const neighbors = [];
-      const { x, y } = cell;
-
-      if (y > 0 && !grid[y - 1][x].visited) neighbors.push(grid[y - 1][x]);
-      if (y < rows - 1 && !grid[y + 1][x].visited) neighbors.push(grid[y + 1][x]);
-      if (x > 0 && !grid[y][x - 1].visited) neighbors.push(grid[y][x - 1]);
-      if (x < cols - 1 && !grid[y][x + 1].visited) neighbors.push(grid[y][x + 1]);
-
-      return neighbors;
-    }
-
-    function removeWallBetween(a, b) {
-      const dx = b.x - a.x;
-      const dy = b.y - a.y;
-
-      if (dx === 1) { a.right = false; b.left = false; }
-      if (dx === -1) { a.left = false; b.right = false; }
-      if (dy === 1) { a.bottom = false; b.top = false; }
-      if (dy === -1) { a.top = false; b.bottom = false; }
-    }
-
-    function renderMaze(grid, cellSize, padding) {
-      const wallsGroup = document.getElementById('maze-walls');
-      const itemsGroup = document.getElementById('maze-items');
-      wallsGroup.innerHTML = '';
-      itemsGroup.innerHTML = '';
-
-      const rows = grid.length;
-      const cols = grid[0].length;
-      const svgNS = 'http://www.w3.org/2000/svg';
-
-      // 繪製淺色背景格子（讓路徑更清晰）
-      for (let y = 0; y < rows; y++) {
-        for (let x = 0; x < cols; x++) {
-          const rect = document.createElementNS(svgNS, 'rect');
-          rect.setAttribute('x', String(padding + x * cellSize + 3));
-          rect.setAttribute('y', String(padding + y * cellSize + 3));
-          rect.setAttribute('width', String(cellSize - 6));
-          rect.setAttribute('height', String(cellSize - 6));
-          rect.setAttribute('fill', '#FFF9E6');
-          rect.setAttribute('rx', '6');
-          wallsGroup.appendChild(rect);
-        }
-      }
-
-      // 繪製牆壁（使用較粗的線條和更明顯的顏色）
-      let wallsPath = '';
-
-      for (let y = 0; y < rows; y++) {
-        for (let x = 0; x < cols; x++) {
-          const cell = grid[y][x];
-          const px = padding + x * cellSize;
-          const py = padding + y * cellSize;
-
-          if (cell.top) {
-            wallsPath += `M${px},${py} L${px + cellSize},${py} `;
-          }
-          if (cell.left) {
-            wallsPath += `M${px},${py} L${px},${py + cellSize} `;
-          }
-        }
-      }
-
-      // 繪製右邊和底邊外牆
-      for (let y = 0; y < rows; y++) {
-        const cell = grid[y][cols - 1];
-        if (cell.right) {
-          const px = padding + cols * cellSize;
-          const py = padding + y * cellSize;
-          wallsPath += `M${px},${py} L${px},${py + cellSize} `;
-        }
-      }
-      for (let x = 0; x < cols; x++) {
-        const cell = grid[rows - 1][x];
-        if (cell.bottom) {
-          const px = padding + x * cellSize;
-          const py = padding + rows * cellSize;
-          wallsPath += `M${px},${py} L${px + cellSize},${py} `;
-        }
-      }
-
-      const pathEl = document.createElementNS(svgNS, 'path');
-      pathEl.setAttribute('d', wallsPath);
-      pathEl.setAttribute('stroke', '#5D4037');
-      pathEl.setAttribute('stroke-width', '5');
-      pathEl.setAttribute('stroke-linecap', 'round');
-      pathEl.setAttribute('fill', 'none');
-      wallsGroup.appendChild(pathEl);
-
-      // 繪製起點標記 - 更明顯的入口箭頭
-      const startY = padding + (rows - 1) * cellSize + cellSize / 2;
-
-      // 起點背景圓圈
-      const startCircle = document.createElementNS(svgNS, 'circle');
-      startCircle.setAttribute('cx', String(padding - 12));
-      startCircle.setAttribute('cy', String(startY));
-      startCircle.setAttribute('r', '22');
-      startCircle.setAttribute('fill', '#4CAF50');
-      startCircle.setAttribute('class', 'maze-start-marker');
-      itemsGroup.appendChild(startCircle);
-
-      // 起點箭頭
-      const startArrow = document.createElementNS(svgNS, 'path');
-      startArrow.setAttribute('d', `M${padding - 22},${startY} L${padding - 4},${startY} M${padding - 12},${startY - 8} L${padding - 4},${startY} L${padding - 12},${startY + 8}`);
-      startArrow.setAttribute('stroke', 'white');
-      startArrow.setAttribute('stroke-width', '4');
-      startArrow.setAttribute('stroke-linecap', 'round');
-      startArrow.setAttribute('stroke-linejoin', 'round');
-      startArrow.setAttribute('fill', 'none');
-      itemsGroup.appendChild(startArrow);
-
-      // 起點文字
-      const startText = document.createElementNS(svgNS, 'text');
-      startText.setAttribute('x', String(padding - 12));
-      startText.setAttribute('y', String(startY + 38));
-      startText.setAttribute('font-size', '13');
-      startText.setAttribute('fill', '#4CAF50');
-      startText.setAttribute('font-weight', 'bold');
-      startText.setAttribute('text-anchor', 'middle');
-      startText.textContent = '入口';
-      itemsGroup.appendChild(startText);
-
-      // 蔬果位置 - 避開入口格子
-      const availablePositions = [];
-      for (let r = 0; r < rows; r++) {
-        for (let c = 0; c < cols; c++) {
-          // 排除入口格子
-          if (!(c === 0 && r === rows - 1)) {
-            availablePositions.push({ col: c, row: r });
-          }
-        }
-      }
-
-      // 隨機打亂位置
-      for (let i = availablePositions.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [availablePositions[i], availablePositions[j]] = [availablePositions[j], availablePositions[i]];
-      }
-
-      // 為每個水果分配不同位置，並保存位置供檢測用
-      window.mazeFruitPositions = {};
-      const fruitPositions = [
-        { name: '玉米', ...availablePositions[0] },
-        { name: '臭柿仔', ...availablePositions[1] },
-        { name: '水梨', ...availablePositions[2] }
-      ];
-
-      fruitPositions.forEach(fruit => {
-        // 計算格子中心座標
-        const fx = padding + fruit.col * cellSize + cellSize / 2;
-        const fy = padding + fruit.row * cellSize + cellSize / 2;
-
-        // 保存位置供到達檢測用
-        window.mazeFruitPositions[fruit.name] = { x: fx, y: fy, radius: 30 };
-
-        const g = document.createElementNS(svgNS, 'g');
-        g.setAttribute('class', 'maze-target-fruit');
-        g.setAttribute('data-fruit', fruit.name);
-        g.setAttribute('transform', 'translate(' + fx + ', ' + fy + ')');
-
-        // 為目標水果添加底色圓圈（讓目標更明顯）
-        const bgCircle = document.createElementNS(svgNS, 'circle');
-        bgCircle.setAttribute('cx', '0');
-        bgCircle.setAttribute('cy', '0');
-        bgCircle.setAttribute('r', '30');
-        bgCircle.setAttribute('fill', 'rgba(255, 255, 255, 0.95)');
-        bgCircle.setAttribute('stroke', '#ddd');
-        bgCircle.setAttribute('stroke-width', '2');
-        bgCircle.setAttribute('class', 'fruit-bg');
-        g.appendChild(bgCircle);
-
-        if (fruit.name === '玉米') {
-          const e1 = document.createElementNS(svgNS, 'ellipse');
-          e1.setAttribute('cx', '0'); e1.setAttribute('cy', '3');
-          e1.setAttribute('rx', '14'); e1.setAttribute('ry', '20');
-          e1.setAttribute('fill', '#F4D03F');
-          g.appendChild(e1);
-
-          const e2 = document.createElementNS(svgNS, 'ellipse');
-          e2.setAttribute('cx', '0'); e2.setAttribute('cy', '3');
-          e2.setAttribute('rx', '10'); e2.setAttribute('ry', '15');
-          e2.setAttribute('fill', '#F7DC6F');
-          g.appendChild(e2);
-
-          const leaf = document.createElementNS(svgNS, 'path');
-          leaf.setAttribute('d', 'M-8 -14 Q0 -24 8 -14 Q0 -12 -8 -14Z');
-          leaf.setAttribute('fill', '#2ECC71');
-          g.appendChild(leaf);
-        } else if (fruit.name === '臭柿仔') {
-          // 臭柿仔 (番茄) - 稍大
-          const e1 = document.createElementNS(svgNS, 'ellipse');
-          e1.setAttribute('cx', '0'); e1.setAttribute('cy', '0');
-          e1.setAttribute('rx', '20'); e1.setAttribute('ry', '18');
-          e1.setAttribute('fill', '#E74C3C');
-          g.appendChild(e1);
-
-          const leaf = document.createElementNS(svgNS, 'path');
-          leaf.setAttribute('d', 'M-10 -15 Q0 -22 10 -15 Q0 -13 -10 -15Z');
-          leaf.setAttribute('fill', '#27AE60');
-          g.appendChild(leaf);
-        } else if (fruit.name === '水梨') {
-          // 水梨 - 稍大
-          const e1 = document.createElementNS(svgNS, 'ellipse');
-          e1.setAttribute('cx', '0'); e1.setAttribute('cy', '3');
-          e1.setAttribute('rx', '16'); e1.setAttribute('ry', '20');
-          e1.setAttribute('fill', '#C9B037');
-          g.appendChild(e1);
-
-          const e2 = document.createElementNS(svgNS, 'ellipse');
-          e2.setAttribute('cx', '0'); e2.setAttribute('cy', '3');
-          e2.setAttribute('rx', '12'); e2.setAttribute('ry', '15');
-          e2.setAttribute('fill', '#E8D66B');
-          g.appendChild(e2);
-
-          const stem = document.createElementNS(svgNS, 'rect');
-          stem.setAttribute('x', '-3'); stem.setAttribute('y', '-18');
-          stem.setAttribute('width', '6'); stem.setAttribute('height', '10');
-          stem.setAttribute('fill', '#8B6914');
-          stem.setAttribute('rx', '2');
-          g.appendChild(stem);
-        }
-
-        itemsGroup.appendChild(g);
-      });
-    }
+    const RUNNER_GRID_SIZE = 6;
+    const RUNNER_ROUNDS = 5;
+    const RUNNER_TIME_LIMIT = 15;
+    let runnerGrid = [];       // 6x6 grid: null or vocab item
+    let runnerPlayerPos = { r: 5, c: 0 };  // 阿公位置
+    let runnerTarget = null;   // 當前目標蔬果
+    let runnerRound = 0;
+    let runnerScore = 0;
+    let runnerTimeLeft = RUNNER_TIME_LIMIT;
+    let runnerTimerInterval = null;
+    let runnerActive = false;
+    let runnerFruits = [];     // 當前地圖上的蔬果
+    let runnerTouchStart = null;
 
     function initMaze() {
-      mazeCanvas = document.getElementById('maze-canvas');
-      mazeCtx = mazeCanvas.getContext('2d');
-
-      const mazeSvg = document.getElementById('maze-svg');
-
-      // 生成並渲染迷宮 - 使用較簡單的 5x5 迷宮
-      const cols = 5;
-      const rows = 5;
-      const cellSize = 70;
-      const padding = 25;
-
-      const maze = generateMaze(cols, rows);
-      renderMaze(maze, cellSize, padding);
-
-      // 設定 canvas 尺寸
-      function resizeMazeCanvas() {
-        const rect = mazeSvg.getBoundingClientRect();
-        // 設定實際繪圖尺寸為固定值，CSS 負責縮放顯示
-        mazeCanvas.width = 400;
-        mazeCanvas.height = 400;
-        // 保存顯示尺寸供座標轉換用
-        mazeCanvas.dataset.displayWidth = rect.width;
-        mazeCanvas.dataset.displayHeight = rect.height;
-      }
-
-      resizeMazeCanvas();
-      window.addEventListener('resize', resizeMazeCanvas);
-
-      // 滑鼠事件
-      mazeCanvas.addEventListener('mousedown', startDrawing);
-      mazeCanvas.addEventListener('mousemove', draw);
-      mazeCanvas.addEventListener('mouseup', stopDrawing);
-      mazeCanvas.addEventListener('mouseleave', stopDrawing);
-
-      // 觸控事件 - 使用 passive: false 確保可以 preventDefault
-      mazeCanvas.addEventListener('touchstart', (e) => {
-        e.preventDefault();
-        const touch = e.touches[0];
-        startDrawing(touch);
-      }, { passive: false });
-
-      mazeCanvas.addEventListener('touchmove', (e) => {
-        e.preventDefault();
-        const touch = e.touches[0];
-        draw(touch);
-      }, { passive: false });
-
-      mazeCanvas.addEventListener('touchend', stopDrawing, { passive: false });
-      mazeCanvas.addEventListener('touchcancel', stopDrawing, { passive: false });
-
-      document.getElementById('maze-clear').addEventListener('click', clearMaze);
-      document.getElementById('maze-next').addEventListener('click', nextMaze);
-      document.getElementById('restart-maze').addEventListener('click', restartMaze);
-
-      updateMazeTarget();
-    }
-
-    // 取得正確的繪圖座標（處理 CSS 縮放）
-    function getCanvasCoords(e) {
-      const rect = mazeCanvas.getBoundingClientRect();
-      const scaleX = mazeCanvas.width / rect.width;
-      const scaleY = mazeCanvas.height / rect.height;
-      return {
-        x: (e.clientX - rect.left) * scaleX,
-        y: (e.clientY - rect.top) * scaleY
-      };
-    }
-
-    function startDrawing(e) {
-      isDrawing = true;
-      mazeCtx.beginPath();
-      mazeCtx.strokeStyle = '#C84B31';
-      mazeCtx.lineWidth = 6;  // 加粗線條，方便手機觸控
-      mazeCtx.lineCap = 'round';
-      mazeCtx.lineJoin = 'round';
-      const coords = getCanvasCoords(e);
-      mazeCtx.moveTo(coords.x, coords.y);
-    }
-
-    function draw(e) {
-      if (!isDrawing) return;
-      const coords = getCanvasCoords(e);
-      mazeCtx.lineTo(coords.x, coords.y);
-      mazeCtx.stroke();
-
-      // 檢測是否到達目標水果
-      checkTargetReached(coords);
-    }
-
-    // 檢測是否到達目標水果
-    function checkTargetReached(coords) {
-      const target = mazeTargets[currentMazeIndex];
-      const pos = window.mazeFruitPositions && window.mazeFruitPositions[target];
-      if (!pos) return;
-
-      const distance = Math.sqrt(Math.pow(coords.x - pos.x, 2) + Math.pow(coords.y - pos.y, 2));
-      if (distance <= pos.radius && !window.mazeTargetReached) {
-        window.mazeTargetReached = true;
-        showMazeSuccess();
-      }
-    }
-
-    // 顯示成功提示
-    function showMazeSuccess() {
-      const target = mazeTargets[currentMazeIndex];
-
-      // 播放成功動畫 - 讓目標水果閃爍
-      const targetFruit = document.querySelector(`.maze-target-fruit[data-fruit="${target}"]`);
-      if (targetFruit) {
-        targetFruit.classList.add('found');
-      }
-
-      // 顯示成功訊息
-      const successMsg = document.createElement('div');
-      successMsg.className = 'maze-success-msg';
-      successMsg.innerHTML = `<span>找到了！</span><span class="fruit-name">${target}</span>`;
-      document.querySelector('.maze-wrapper').appendChild(successMsg);
-
-      // 自動移除成功訊息並準備下一題
-      setTimeout(() => {
-        successMsg.remove();
-        if (targetFruit) {
-          targetFruit.classList.remove('found');
+      // 鍵盤控制
+      document.addEventListener('keydown', (e) => {
+        if (!runnerActive) return;
+        const dirMap = { ArrowUp: 'up', ArrowDown: 'down', ArrowLeft: 'left', ArrowRight: 'right',
+                         w: 'up', s: 'down', a: 'left', d: 'right',
+                         W: 'up', S: 'down', A: 'left', D: 'right' };
+        if (dirMap[e.key]) {
+          e.preventDefault();
+          movePlayer(dirMap[e.key]);
         }
-        window.mazeTargetReached = false;
-      }, 1500);
+      });
+
+      // 虛擬方向鍵
+      document.querySelectorAll('.dpad-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          if (runnerActive) movePlayer(btn.dataset.dir);
+        });
+      });
+
+      // 滑動偵測
+      const grid = document.getElementById('runner-grid');
+      grid.addEventListener('touchstart', (e) => {
+        runnerTouchStart = { x: e.touches[0].clientX, y: e.touches[0].clientY };
+      }, { passive: true });
+
+      grid.addEventListener('touchend', (e) => {
+        if (!runnerTouchStart || !runnerActive) return;
+        const dx = e.changedTouches[0].clientX - runnerTouchStart.x;
+        const dy = e.changedTouches[0].clientY - runnerTouchStart.y;
+        const absDx = Math.abs(dx);
+        const absDy = Math.abs(dy);
+        if (Math.max(absDx, absDy) < 20) return; // 太短不算滑動
+        if (absDx > absDy) {
+          movePlayer(dx > 0 ? 'right' : 'left');
+        } else {
+          movePlayer(dy > 0 ? 'down' : 'up');
+        }
+        runnerTouchStart = null;
+      }, { passive: true });
+
+      document.getElementById('restart-maze').addEventListener('click', () => {
+        document.getElementById('maze-complete').classList.remove('visible');
+        startRunner();
+      });
+
+      startRunner();
     }
 
-    function stopDrawing() {
-      isDrawing = false;
+    function startRunner() {
+      runnerRound = 0;
+      runnerScore = 0;
+      runnerActive = false;
+      document.getElementById('runner-score').textContent = '0';
+      document.getElementById('maze-complete').classList.remove('visible');
+      nextRunnerRound();
     }
 
-    function clearMaze() {
-      mazeCtx.clearRect(0, 0, mazeCanvas.width, mazeCanvas.height);
-      window.mazeTargetReached = false;
+    function nextRunnerRound() {
+      runnerRound++;
+      if (runnerRound > RUNNER_ROUNDS) {
+        endRunner();
+        return;
+      }
+
+      // 重置玩家位置
+      runnerPlayerPos = { r: RUNNER_GRID_SIZE - 1, c: 0 };
+
+      // 選擇 6 個不重複的蔬果
+      const shuffled = [...vocabulary].sort(() => Math.random() - 0.5);
+      runnerFruits = shuffled.slice(0, 6);
+      runnerTarget = runnerFruits[Math.floor(Math.random() * runnerFruits.length)];
+
+      // 建立地圖
+      runnerGrid = [];
+      for (let r = 0; r < RUNNER_GRID_SIZE; r++) {
+        runnerGrid[r] = [];
+        for (let c = 0; c < RUNNER_GRID_SIZE; c++) {
+          runnerGrid[r][c] = null;
+        }
+      }
+
+      // 隨機放置蔬果（避開玩家起點）
+      const positions = [];
+      for (let r = 0; r < RUNNER_GRID_SIZE; r++) {
+        for (let c = 0; c < RUNNER_GRID_SIZE; c++) {
+          if (!(r === RUNNER_GRID_SIZE - 1 && c === 0)) positions.push({ r, c });
+        }
+      }
+      positions.sort(() => Math.random() - 0.5);
+      runnerFruits.forEach((fruit, i) => {
+        const pos = positions[i];
+        runnerGrid[pos.r][pos.c] = fruit;
+      });
+
+      // 更新 UI
+      document.getElementById('runner-round').textContent = runnerRound;
+      document.getElementById('runner-target-name').textContent = runnerTarget.chinese;
+      document.getElementById('runner-target-pinyin').textContent = runnerTarget.pinyin;
+      document.getElementById('runner-feedback').textContent = '';
+      document.getElementById('runner-feedback').className = 'runner-feedback';
+
+      renderRunnerGrid();
+      startRunnerTimer();
+      runnerActive = true;
     }
 
-    function nextMaze() {
-      currentMazeIndex++;
-      if (currentMazeIndex >= mazeTargets.length) {
-        // 記錄遊戲完成
-        recordGamePlayed('maze', 100);
-        document.getElementById('maze-complete').classList.add('visible');
-      } else {
-        clearMaze();
-        const maze = generateMaze(5, 5);
-        renderMaze(maze, 70, 25);
-        updateMazeTarget();
+    function renderRunnerGrid() {
+      const container = document.getElementById('runner-grid');
+      container.innerHTML = '';
+
+      for (let r = 0; r < RUNNER_GRID_SIZE; r++) {
+        for (let c = 0; c < RUNNER_GRID_SIZE; c++) {
+          const cell = document.createElement('div');
+          cell.className = 'runner-cell';
+          cell.dataset.r = r;
+          cell.dataset.c = c;
+
+          const isPlayer = (r === runnerPlayerPos.r && c === runnerPlayerPos.c);
+          const fruit = runnerGrid[r][c];
+
+          if (isPlayer) {
+            cell.classList.add('player', 'floor');
+            cell.innerHTML = '<span class="runner-player">🧓</span>';
+          } else if (fruit) {
+            cell.classList.add('fruit');
+            cell.innerHTML = `<img src="${fruit.image}" alt="${fruit.chinese}">`;
+          } else {
+            cell.classList.add('floor');
+          }
+
+          container.appendChild(cell);
+        }
       }
     }
 
-    function restartMaze() {
-      currentMazeIndex = 0;
-      document.getElementById('maze-complete').classList.remove('visible');
-      clearMaze();
-      const maze = generateMaze(5, 5);
-      renderMaze(maze, 70, 25);
-      updateMazeTarget();
+    function movePlayer(dir) {
+      if (!runnerActive) return;
+
+      let { r, c } = runnerPlayerPos;
+      if (dir === 'up' && r > 0) r--;
+      else if (dir === 'down' && r < RUNNER_GRID_SIZE - 1) r++;
+      else if (dir === 'left' && c > 0) c--;
+      else if (dir === 'right' && c < RUNNER_GRID_SIZE - 1) c++;
+      else return; // 撞牆
+
+      runnerPlayerPos = { r, c };
+
+      // 檢查是否踩到蔬果
+      const fruit = runnerGrid[r][c];
+      if (fruit) {
+        runnerGrid[r][c] = null; // 移除該蔬果
+        if (fruit.id === runnerTarget.id) {
+          // 正確！
+          const timeBonus = Math.round(runnerTimeLeft * 2);
+          const points = 10 + timeBonus;
+          runnerScore += points;
+          document.getElementById('runner-score').textContent = runnerScore;
+
+          const fb = document.getElementById('runner-feedback');
+          fb.textContent = `✓ 找到 ${runnerTarget.chinese} 了！+${points}分`;
+          fb.className = 'runner-feedback correct';
+
+          runnerActive = false;
+          clearInterval(runnerTimerInterval);
+
+          // 標記正確格子
+          renderRunnerGrid();
+          const cell = document.querySelector(`.runner-cell[data-r="${r}"][data-c="${c}"]`);
+          if (cell) cell.classList.add('found-correct');
+
+          setTimeout(nextRunnerRound, 1200);
+          return;
+        } else {
+          // 錯誤
+          const fb = document.getElementById('runner-feedback');
+          fb.textContent = `✗ 這是${fruit.chinese}，不是${runnerTarget.chinese}！`;
+          fb.className = 'runner-feedback wrong';
+
+          renderRunnerGrid();
+          const cell = document.querySelector(`.runner-cell[data-r="${r}"][data-c="${c}"]`);
+          if (cell) cell.classList.add('found-wrong');
+
+          setTimeout(() => {
+            if (runnerActive) {
+              fb.textContent = '';
+              fb.className = 'runner-feedback';
+            }
+          }, 1000);
+          return;
+        }
+      }
+
+      renderRunnerGrid();
     }
 
-    function updateMazeTarget() {
-      const target = mazeTargets[currentMazeIndex];
-      document.getElementById('maze-target').textContent = target;
+    function startRunnerTimer() {
+      runnerTimeLeft = RUNNER_TIME_LIMIT;
+      const timerEl = document.getElementById('runner-timer');
+      timerEl.textContent = runnerTimeLeft;
+      timerEl.classList.remove('urgent');
 
-      // 更新左側蔬果高亮
-      document.querySelectorAll('.maze-fruit-item').forEach(item => {
-        item.classList.toggle('active', item.dataset.fruit === target);
-      });
+      clearInterval(runnerTimerInterval);
+      runnerTimerInterval = setInterval(() => {
+        runnerTimeLeft--;
+        timerEl.textContent = runnerTimeLeft;
 
-      // 更新迷宮內目標高亮
-      document.querySelectorAll('.maze-target-fruit').forEach(fruit => {
-        fruit.classList.toggle('highlight', fruit.dataset.fruit === target);
-      });
+        if (runnerTimeLeft <= 5) {
+          timerEl.classList.add('urgent');
+        }
+
+        if (runnerTimeLeft <= 0) {
+          clearInterval(runnerTimerInterval);
+          runnerActive = false;
+
+          const fb = document.getElementById('runner-feedback');
+          fb.textContent = `⏰ 時間到！答案是 ${runnerTarget.chinese}`;
+          fb.className = 'runner-feedback wrong';
+
+          setTimeout(nextRunnerRound, 1500);
+        }
+      }, 1000);
+    }
+
+    function endRunner() {
+      clearInterval(runnerTimerInterval);
+      runnerActive = false;
+      const maxScore = RUNNER_ROUNDS * (10 + RUNNER_TIME_LIMIT * 2);
+      const percentage = Math.round((runnerScore / maxScore) * 100);
+      recordGamePlayed('maze', runnerScore);
+      document.getElementById('runner-result').textContent = `得分：${runnerScore} 分（滿分 ${maxScore}）`;
+      document.getElementById('maze-complete').classList.add('visible');
     }
 
     // ========================================
@@ -3700,21 +3393,24 @@
       osc.stop(now + 0.06);
     }
 
-    // 開始背景節拍音樂
+    // 開始背景節拍音樂（更有節奏感的旋律循環）
     function startBGM() {
       if (!isSoundEnabled) return;
       const ctx = initAudioContext();
 
-      // 停止之前的 BGM
       stopBGM();
 
       bgmGain = ctx.createGain();
-      bgmGain.gain.setValueAtTime(0.03, ctx.currentTime);
+      bgmGain.gain.setValueAtTime(0.04, ctx.currentTime);
       bgmGain.connect(ctx.destination);
 
       let beat = 0;
-      const bpm = 140;
+      const bpm = 138;
       const beatInterval = 60000 / bpm;
+
+      // 8 拍旋律循環（C大調五聲音階）
+      const melody = [262, 330, 392, 330, 440, 392, 330, 262]; // C4 E4 G4 E4 A4 G4 E4 C4
+      const bassline = [131, 131, 165, 165, 175, 175, 131, 131]; // C3 C3 E3 E3 F3 F3 C3 C3
 
       tickInterval = setInterval(() => {
         if (!isSoundEnabled || !audioContext) {
@@ -3723,25 +3419,31 @@
         }
 
         const now = ctx.currentTime;
-        const osc = ctx.createOscillator();
-        const gain = ctx.createGain();
-        osc.connect(gain);
-        gain.connect(bgmGain);
+        const idx = beat % 8;
 
-        // 節拍模式：強弱弱弱
-        if (beat % 4 === 0) {
-          osc.type = 'square';
-          osc.frequency.setValueAtTime(150, now);
-          gain.gain.setValueAtTime(0.8, now);
-        } else {
-          osc.type = 'triangle';
-          osc.frequency.setValueAtTime(100, now);
-          gain.gain.setValueAtTime(0.3, now);
-        }
+        // 旋律音
+        const melOsc = ctx.createOscillator();
+        const melGain = ctx.createGain();
+        melOsc.connect(melGain);
+        melGain.connect(bgmGain);
+        melOsc.type = 'sine';
+        melOsc.frequency.setValueAtTime(melody[idx], now);
+        melGain.gain.setValueAtTime(0.5, now);
+        melGain.gain.linearRampToValueAtTime(0, now + 0.15);
+        melOsc.start(now);
+        melOsc.stop(now + 0.18);
 
-        gain.gain.linearRampToValueAtTime(0, now + 0.1);
-        osc.start(now);
-        osc.stop(now + 0.12);
+        // 低音節拍
+        const bassOsc = ctx.createOscillator();
+        const bassGainN = ctx.createGain();
+        bassOsc.connect(bassGainN);
+        bassGainN.connect(bgmGain);
+        bassOsc.type = 'triangle';
+        bassOsc.frequency.setValueAtTime(bassline[idx], now);
+        bassGainN.gain.setValueAtTime(beat % 4 === 0 ? 0.7 : 0.3, now);
+        bassGainN.gain.linearRampToValueAtTime(0, now + 0.1);
+        bassOsc.start(now);
+        bassOsc.stop(now + 0.12);
 
         beat++;
       }, beatInterval);
@@ -3854,6 +3556,12 @@
       const shuffled = [...vocabulary].sort(() => Math.random() - 0.5);
       duelQuestions = shuffled.slice(0, DUEL_TOTAL_QUESTIONS);
 
+      // 隨機打亂題型順序
+      for (let i = DUEL_QUESTION_TYPES.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [DUEL_QUESTION_TYPES[i], DUEL_QUESTION_TYPES[j]] = [DUEL_QUESTION_TYPES[j], DUEL_QUESTION_TYPES[i]];
+      }
+
       // 更新總題數
       document.getElementById('duel-total').textContent = DUEL_TOTAL_QUESTIONS;
 
@@ -3864,6 +3572,10 @@
       showDuelQuestion();
     }
 
+    // 題型定義：
+    // 0: 圖片→選拼音  1: 圖片→選漢字  2: 漢字→選拼音  3: 拼音→選漢字
+    const DUEL_QUESTION_TYPES = [0, 0, 1, 1, 2, 2, 3, 3, 0, 1]; // 10 題的題型分布
+
     function showDuelQuestion() {
       if (currentDuelQuestion >= duelQuestions.length) {
         endDuel();
@@ -3871,26 +3583,60 @@
       }
 
       const question = duelQuestions[currentDuelQuestion];
+      const qType = DUEL_QUESTION_TYPES[currentDuelQuestion % DUEL_QUESTION_TYPES.length];
 
       // 更新進度
       document.getElementById('duel-current').textContent = currentDuelQuestion + 1;
       document.getElementById('duel-score').textContent = duelScore;
 
-      // 顯示圖片
-      document.getElementById('duel-image').src = question.image;
+      const imgEl = document.getElementById('duel-image');
+      const textEl = document.getElementById('duel-text');
 
-      // 生成選項（1 正確 + 3 錯誤）
+      // 生成錯誤選項
       const wrongOptions = vocabulary
         .filter(v => v.id !== question.id)
         .sort(() => Math.random() - 0.5)
         .slice(0, 3);
-
       const options = [question, ...wrongOptions].sort(() => Math.random() - 0.5);
 
-      // 更新按鈕
+      // 根據題型設定題目和選項
+      if (qType === 0) {
+        // 圖片→選拼音
+        imgEl.src = question.image;
+        imgEl.style.display = '';
+        textEl.style.display = 'none';
+        options.forEach((opt, i) => {
+          document.querySelectorAll('.duel-option')[i].textContent = opt.pinyin;
+        });
+      } else if (qType === 1) {
+        // 圖片→選漢字
+        imgEl.src = question.image;
+        imgEl.style.display = '';
+        textEl.style.display = 'none';
+        options.forEach((opt, i) => {
+          document.querySelectorAll('.duel-option')[i].textContent = opt.chinese;
+        });
+      } else if (qType === 2) {
+        // 漢字→選拼音
+        imgEl.style.display = 'none';
+        textEl.style.display = '';
+        textEl.innerHTML = `${question.chinese}<div class="duel-text-sub">選出正確的拼音</div>`;
+        options.forEach((opt, i) => {
+          document.querySelectorAll('.duel-option')[i].textContent = opt.pinyin;
+        });
+      } else {
+        // 拼音→選漢字
+        imgEl.style.display = 'none';
+        textEl.style.display = '';
+        textEl.innerHTML = `${question.pinyin}<div class="duel-text-sub">選出正確的漢字</div>`;
+        options.forEach((opt, i) => {
+          document.querySelectorAll('.duel-option')[i].textContent = opt.chinese;
+        });
+      }
+
+      // 更新正確標記
       const buttons = document.querySelectorAll('.duel-option');
       buttons.forEach((btn, index) => {
-        btn.textContent = options[index].pinyin;
         btn.dataset.correct = options[index].id === question.id ? 'true' : 'false';
         btn.classList.remove('correct', 'wrong', 'reveal');
         btn.disabled = false;

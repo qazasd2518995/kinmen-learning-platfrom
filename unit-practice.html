@@ -1468,13 +1468,15 @@
       shoppingList = shuffled.slice(0, SHOPPING_ITEMS);
       foundItems = new Set();
 
-      // 隱藏完成畫面
+      // 隱藏完成畫面並重置進度條
       document.getElementById('shopping-complete').classList.remove('visible');
+      document.getElementById('progress-bar-fill').style.width = '0%';
+      document.getElementById('progress-text').textContent = `0 / ${SHOPPING_ITEMS}`;
 
       // 渲染購物清單
       renderShoppingList();
 
-      // 渲染詞彙選項
+      // 渲染詞彙選項（全部重新生成，清除所有 .found 狀態）
       renderVocabGrid();
 
       updateShoppingProgress();
@@ -1681,8 +1683,12 @@
 
     function showCalcResult() {
       document.getElementById('calc-content').style.display = 'none';
-      document.getElementById('calc-score').textContent = calcScore;
-      document.getElementById('calc-total').textContent = CALC_TOTAL;
+      const scoreEl = document.getElementById('calc-score');
+      const totalEl = document.getElementById('calc-total');
+      scoreEl.textContent = String(calcScore);
+      totalEl.textContent = String(CALC_TOTAL);
+      // 強制同步渲染後再顯示完成畫面
+      scoreEl.offsetHeight;
       document.getElementById('calc-complete').classList.add('visible');
 
       saveProgress('calculation');

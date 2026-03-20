@@ -7,6 +7,7 @@
 
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import { DynamoDBDocumentClient, GetCommand } from '@aws-sdk/lib-dynamodb';
+import crypto from 'crypto';
 
 const client = new DynamoDBClient({ region: 'ap-southeast-2' });
 const docClient = DynamoDBDocumentClient.from(client);
@@ -20,7 +21,7 @@ const corsHeaders = {
   'Access-Control-Allow-Methods': 'GET, OPTIONS'
 };
 
-// 驗證 JWT token
+// 驗證 JWT token（含簽名驗證）
 function verifyToken(authHeader) {
   if (!authHeader || !authHeader.startsWith('Bearer ')) {
     return null;
@@ -33,9 +34,18 @@ function verifyToken(authHeader) {
   }
 
   try {
+    const secret = process.env.JWT_SECRET || 'kinmen-teacher-secret-key';
+    const expectedSignature = crypto
+      .createHmac('sha256', secret)
+      .update(`${parts[0]}.${parts[1]}`)
+      .digest('base64url');
+
+    if (parts[2] !== expectedSignature) {
+      return null;
+    }
+
     const payload = JSON.parse(Buffer.from(parts[1], 'base64url').toString());
 
-    // 檢查是否過期
     if (payload.exp && payload.exp < Math.floor(Date.now() / 1000)) {
       return null;
     }

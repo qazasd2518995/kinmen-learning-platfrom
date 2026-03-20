@@ -499,6 +499,57 @@
     </div>
   </div>
 
+  <!-- 確認對話框 Modal -->
+  <div class="modal-overlay" id="confirm-modal">
+    <div class="modal-content confirm-content">
+      <div class="modal-header">
+        <h3 id="confirm-modal-title">確認操作</h3>
+        <button class="modal-close" id="confirm-modal-close">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="18" y1="6" x2="6" y2="18"/>
+            <line x1="6" y1="6" x2="18" y2="18"/>
+          </svg>
+        </button>
+      </div>
+      <p class="confirm-message" id="confirm-modal-message">確定要執行此操作嗎？</p>
+      <div class="modal-actions">
+        <button type="button" class="btn-secondary" id="confirm-modal-cancel">取消</button>
+        <button type="button" class="btn-danger" id="confirm-modal-confirm">
+          <span class="btn-text" id="confirm-modal-btn-text">確定</span>
+          <div class="spinner"></div>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 編輯班級名稱 Modal -->
+  <div class="modal-overlay" id="edit-class-modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>編輯班級名稱</h3>
+        <button class="modal-close" id="edit-class-modal-close">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="18" y1="6" x2="6" y2="18"/>
+            <line x1="6" y1="6" x2="18" y2="18"/>
+          </svg>
+        </button>
+      </div>
+      <form id="edit-class-form">
+        <div class="form-group">
+          <label class="form-label" for="edit-class-name-input">班級名稱</label>
+          <input type="text" id="edit-class-name-input" class="form-input" placeholder="輸入新的班級名稱" required maxlength="50">
+        </div>
+        <div class="modal-actions">
+          <button type="button" class="btn-secondary" id="edit-class-modal-cancel">取消</button>
+          <button type="submit" class="btn-primary" id="edit-class-modal-submit">
+            <span class="btn-text">儲存</span>
+            <div class="spinner"></div>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
   <script type="module">
     import { TeacherAPI } from './js/teacher-api.js';
 
@@ -729,6 +780,22 @@
             </div>
             ` : ''}
           </div>
+          <div class="class-list-actions">
+            <button class="icon-btn edit-class-btn" data-class-id="${cls.classId}" data-class-name="${cls.className}" title="編輯班級名稱">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+                <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+              </svg>
+            </button>
+            <button class="icon-btn danger delete-class-btn" data-class-id="${cls.classId}" data-class-name="${cls.className}" data-student-count="${cls.studentCount || 0}" title="刪除班級">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="3 6 5 6 21 6"/>
+                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+                <line x1="10" y1="11" x2="10" y2="17"/>
+                <line x1="14" y1="11" x2="14" y2="17"/>
+              </svg>
+            </button>
+          </div>
           <div class="class-list-arrow">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <polyline points="9 18 15 12 9 6"/>
@@ -740,8 +807,7 @@
       // 綁定點擊事件
       classesList.querySelectorAll('.class-list-item').forEach(item => {
         item.addEventListener('click', (e) => {
-          // 排除複製按鈕的點擊
-          if (e.target.closest('.copy-btn-small')) return;
+          if (e.target.closest('.copy-btn-small') || e.target.closest('.icon-btn')) return;
           loadClassStudents(item.dataset.classId);
         });
       });
@@ -750,8 +816,34 @@
       classesList.querySelectorAll('.copy-btn-small').forEach(btn => {
         btn.addEventListener('click', (e) => {
           e.stopPropagation();
-          const code = btn.dataset.code;
-          copyInviteCode(code, btn);
+          copyInviteCode(btn.dataset.code, btn);
+        });
+      });
+
+      // 綁定編輯按鈕
+      classesList.querySelectorAll('.edit-class-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          openEditClassModal(btn.dataset.classId, btn.dataset.className);
+        });
+      });
+
+      // 綁定刪除按鈕
+      classesList.querySelectorAll('.delete-class-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          const count = parseInt(btn.dataset.studentCount);
+          const warning = count > 0 ? `\n此班級有 ${count} 位學生，刪除後學生將失去班級關聯。` : '';
+          showConfirm(
+            '刪除班級',
+            `確定要刪除「${btn.dataset.className}」嗎？${warning}\n此操作無法復原。`,
+            '刪除',
+            async () => {
+              await TeacherAPI.deleteClass(btn.dataset.classId);
+              showToast('班級已刪除', 'success');
+              await loadAllData();
+            }
+          );
         });
       });
     }
@@ -779,9 +871,14 @@
           <td>${formatTime(student.totalStudyTime || 0)}</td>
           <td>${formatDate(student.lastActive)}</td>
           <td>
-            <button class="table-action-btn view-detail" data-username="${student.username}">
-              詳情
-            </button>
+            <div class="table-actions">
+              <button class="table-action-btn view-detail" data-username="${student.username}">
+                詳情
+              </button>
+              <button class="table-action-btn danger remove-student" data-username="${student.username}" data-name="${student.displayName || student.username}">
+                移除
+              </button>
+            </div>
           </td>
         </tr>
       `).join('');
@@ -791,6 +888,24 @@
         btn.addEventListener('click', (e) => {
           e.stopPropagation();
           loadStudentDetail(btn.dataset.username);
+        });
+      });
+
+      // 綁定移除學生按鈕
+      tbody.querySelectorAll('.remove-student').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          showConfirm(
+            '移除學生',
+            `確定要將「${btn.dataset.name}」從此班級移除嗎？\n移除後學生的學習紀錄不會被刪除，但會失去班級關聯。`,
+            '移除',
+            async () => {
+              await TeacherAPI.removeStudent(currentClassId, btn.dataset.username);
+              showToast('學生已移除', 'success');
+              await loadClassStudents(currentClassId);
+              await loadAllData();
+            }
+          );
         });
       });
 
@@ -1160,6 +1275,88 @@
     }
 
     // ========================================
+    // 確認對話框
+    // ========================================
+    const confirmModal = document.getElementById('confirm-modal');
+    let confirmCallback = null;
+
+    function showConfirm(title, message, btnText, callback) {
+      document.getElementById('confirm-modal-title').textContent = title;
+      document.getElementById('confirm-modal-message').textContent = message;
+      document.getElementById('confirm-modal-btn-text').textContent = btnText;
+      confirmCallback = callback;
+      confirmModal.classList.add('active');
+    }
+
+    function closeConfirmModal() {
+      confirmModal.classList.remove('active');
+      confirmCallback = null;
+      const btn = document.getElementById('confirm-modal-confirm');
+      btn.classList.remove('loading');
+      btn.disabled = false;
+    }
+
+    async function handleConfirm() {
+      if (!confirmCallback) return;
+      const btn = document.getElementById('confirm-modal-confirm');
+      btn.classList.add('loading');
+      btn.disabled = true;
+      try {
+        await confirmCallback();
+        closeConfirmModal();
+      } catch (error) {
+        console.error('操作失敗:', error);
+        showToast(error.message || '操作失敗', 'error');
+        btn.classList.remove('loading');
+        btn.disabled = false;
+      }
+    }
+
+    // ========================================
+    // 編輯班級 Modal
+    // ========================================
+    const editClassModal = document.getElementById('edit-class-modal');
+    const editClassForm = document.getElementById('edit-class-form');
+    const editClassNameInput = document.getElementById('edit-class-name-input');
+    let editingClassId = null;
+
+    function openEditClassModal(classId, className) {
+      editingClassId = classId;
+      editClassNameInput.value = className;
+      editClassModal.classList.add('active');
+      editClassNameInput.focus();
+    }
+
+    function closeEditClassModal() {
+      editClassModal.classList.remove('active');
+      editingClassId = null;
+    }
+
+    async function handleEditClass(e) {
+      e.preventDefault();
+      if (!editingClassId) return;
+      const className = editClassNameInput.value.trim();
+      if (!className) return;
+
+      const submitBtn = document.getElementById('edit-class-modal-submit');
+      submitBtn.classList.add('loading');
+      submitBtn.disabled = true;
+
+      try {
+        await TeacherAPI.updateClass(editingClassId, className);
+        closeEditClassModal();
+        showToast('班級名稱已更新', 'success');
+        await loadAllData();
+      } catch (error) {
+        console.error('更新班級失敗:', error);
+        showToast(error.message || '更新失敗', 'error');
+      } finally {
+        submitBtn.classList.remove('loading');
+        submitBtn.disabled = false;
+      }
+    }
+
+    // ========================================
     // 事件綁定
     // ========================================
     function bindEvents() {
@@ -1205,12 +1402,28 @@
         copyInviteCode(code, this);
       });
 
+      // 確認對話框
+      document.getElementById('confirm-modal-close').addEventListener('click', closeConfirmModal);
+      document.getElementById('confirm-modal-cancel').addEventListener('click', closeConfirmModal);
+      document.getElementById('confirm-modal-confirm').addEventListener('click', handleConfirm);
+
+      // 編輯班級 Modal
+      document.getElementById('edit-class-modal-close').addEventListener('click', closeEditClassModal);
+      document.getElementById('edit-class-modal-cancel').addEventListener('click', closeEditClassModal);
+      editClassForm.addEventListener('submit', handleEditClass);
+
       // 點擊 Modal 外部關閉
       createClassModal.addEventListener('click', (e) => {
         if (e.target === createClassModal) closeCreateClassModal();
       });
       inviteCodeModal.addEventListener('click', (e) => {
         if (e.target === inviteCodeModal) closeInviteCodeModal();
+      });
+      confirmModal.addEventListener('click', (e) => {
+        if (e.target === confirmModal) closeConfirmModal();
+      });
+      editClassModal.addEventListener('click', (e) => {
+        if (e.target === editClassModal) closeEditClassModal();
       });
 
       // 學生搜尋

@@ -1304,8 +1304,8 @@
         </div>
         <div class="tab-content">
           <div class="tab-number">問題一</div>
-          <div class="tab-title">詞彙回顧</div>
-          <div class="tab-desc">還記得多少金門話？</div>
+          <div class="tab-title">詞彙翻牌</div>
+          <div class="tab-desc">點卡片回顧金門話</div>
         </div>
       </div>
 
@@ -1343,35 +1343,14 @@
     <div class="content-area active" data-content="1">
       <div class="content-header">
         <h2 class="content-title">還記得幾個水果的金門話呢？</h2>
-        <p class="content-subtitle">點擊下方的詞彙卡片，看看你還記得多少！各組討論後列五個。</p>
+        <p class="content-subtitle">點擊下方的詞彙卡片翻面，看看你還記得多少！</p>
       </div>
 
       <div class="content-body">
         <div class="vocab-grid" id="vocab-grid"></div>
 
-        <div class="think-box">
-          <div class="think-label">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M12 20h9"/>
-              <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/>
-            </svg>
-            寫下你記得的五個水果金門話
-          </div>
-          <textarea class="think-textarea" id="textarea-q1" placeholder="例如：王梨 (ông-lâi)、柑 (kam)...&#10;每行寫一個水果，系統會自動計算數量"></textarea>
-          <div class="think-actions">
-            <div class="input-counter" id="counter-q1">已輸入：<strong>0</strong> 個水果</div>
-            <div style="display: flex; align-items: center; gap: 12px;">
-              <span class="input-feedback" id="feedback-q1"></span>
-              <button class="save-btn" data-question="1">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/>
-                  <polyline points="17 21 17 13 7 13 7 21"/>
-                  <polyline points="7 3 7 8 15 8"/>
-                </svg>
-                保存
-              </button>
-            </div>
-          </div>
+        <div class="vocab-review-stats" id="vocab-review-stats" style="text-align: center; padding: 16px; color: var(--text-secondary); font-size: 0.9375rem;">
+          點擊卡片翻面回顧，已翻開：<strong id="flipped-count">0</strong> / <span id="total-vocab-count">0</span> 張
         </div>
 
         <div class="nav-buttons">
@@ -1567,9 +1546,15 @@
       }
     }
 
+    let flippedCount = 0;
+
     function renderVocabGrid(fruits) {
       const container = document.getElementById('vocab-grid');
       container.innerHTML = '';
+      flippedCount = 0;
+
+      document.getElementById('total-vocab-count').textContent = fruits.length;
+      document.getElementById('flipped-count').textContent = '0';
 
       fruits.forEach(fruit => {
         const el = document.createElement('div');
@@ -1580,7 +1565,14 @@
         `;
 
         el.addEventListener('click', () => {
+          const wasRevealed = el.classList.contains('revealed');
           el.classList.toggle('revealed');
+          if (!wasRevealed) {
+            flippedCount++;
+          } else {
+            flippedCount = Math.max(0, flippedCount - 1);
+          }
+          document.getElementById('flipped-count').textContent = flippedCount;
         });
 
         container.appendChild(el);
@@ -1644,16 +1636,6 @@
 
     // 設置文字輸入反饋系統
     function setupTextareaFeedback() {
-      // 問題一：計算水果數量
-      const textarea1 = document.getElementById('textarea-q1');
-      const counter1 = document.getElementById('counter-q1');
-
-      if (textarea1 && counter1) {
-        textarea1.addEventListener('input', () => {
-          updateFruitCounter(textarea1, counter1);
-        });
-      }
-
       // 設置保存按鈕
       document.querySelectorAll('.save-btn').forEach(btn => {
         btn.addEventListener('click', () => {
@@ -1756,22 +1738,13 @@
 
     // 載入已保存的數據
     function loadSavedData() {
-      for (let i = 1; i <= 3; i++) {
+      for (let i = 2; i <= 3; i++) {
         const savedValue = localStorage.getItem(`kinmen-review-q${i}`);
         const textarea = document.getElementById(`textarea-q${i}`);
 
         if (savedValue && textarea) {
           textarea.value = savedValue;
 
-          // 如果是問題一，更新計數器
-          if (i === 1) {
-            const counter = document.getElementById('counter-q1');
-            if (counter) {
-              updateFruitCounter(textarea, counter);
-            }
-          }
-
-          // 顯示已有保存數據的提示
           const feedback = document.getElementById(`feedback-q${i}`);
           if (feedback) {
             showFeedback(feedback, '已載入上次的回答', 'info');
