@@ -10,23 +10,36 @@ const API_BASE = 'https://ys63zw9mhl.execute-api.ap-southeast-2.amazonaws.com/pr
 // LTI 整合支援
 // ========================================
 
+// 自動從 URL hash 讀取 LTI session 資料並存入 localStorage
+(function initLtiFromHash() {
+  const hash = window.location.hash;
+  if (hash && hash.includes('lti_data=')) {
+    try {
+      const encoded = hash.split('lti_data=')[1];
+      const sessionData = JSON.parse(decodeURIComponent(encoded));
+      if (sessionData && sessionData.sessionId) {
+        localStorage.setItem('lti_session', JSON.stringify(sessionData));
+        localStorage.setItem('lti_active', 'true');
+        // 清除 hash（不觸發頁面重載）
+        history.replaceState(null, '', window.location.pathname + window.location.search);
+        console.log('[LTI] Session initialized from URL:', sessionData.name, sessionData.userRole);
+      }
+    } catch (e) {
+      console.warn('[LTI] Failed to parse session from URL hash:', e);
+    }
+  }
+})();
+
 /**
  * 檢查是否處於 LTI 啟動模式
  */
 export function isLtiMode() {
-  // 檢查 URL 參數
-  const urlParams = new URLSearchParams(window.location.search);
-  if (urlParams.has('lti_session')) {
-    return true;
-  }
-
   // 檢查 localStorage 中的 LTI session
   const ltiSession = localStorage.getItem('lti_session');
   if (ltiSession) {
     try {
       const session = JSON.parse(ltiSession);
-      // 檢查 session 是否過期（預設 8 小時）
-      if (session.exp && Date.now() < session.exp) {
+      if (session.expiresAt && new Date(session.expiresAt) > new Date()) {
         return true;
       }
     } catch (e) {

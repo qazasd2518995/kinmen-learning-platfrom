@@ -6,6 +6,25 @@
 
 const API_BASE = 'https://ys63zw9mhl.execute-api.ap-southeast-2.amazonaws.com/prod';
 
+// 自動從 URL hash 讀取 LTI session 資料並存入 localStorage
+(function initLtiFromHash() {
+  const hash = window.location.hash;
+  if (hash && hash.includes('lti_data=')) {
+    try {
+      const encoded = hash.split('lti_data=')[1];
+      const sessionData = JSON.parse(decodeURIComponent(encoded));
+      if (sessionData && sessionData.sessionId) {
+        localStorage.setItem('lti_session', JSON.stringify(sessionData));
+        localStorage.setItem('lti_active', 'true');
+        history.replaceState(null, '', window.location.pathname + window.location.search);
+        console.log('[LTI] Teacher session initialized:', sessionData.name, sessionData.userRole);
+      }
+    } catch (e) {
+      console.warn('[LTI] Failed to parse session from URL hash:', e);
+    }
+  }
+})();
+
 /**
  * 取得 LTI session（如果有）
  */

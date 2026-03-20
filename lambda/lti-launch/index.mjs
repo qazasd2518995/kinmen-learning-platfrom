@@ -16,7 +16,8 @@ import {
   LTI_CLAIMS,
   TOOL_CONFIG,
   createResponse,
-  createHtmlResponse
+  createHtmlResponse,
+  createRedirectResponse
 } from '../shared/lti-utils.mjs';
 
 const client = new DynamoDBClient({ region: 'ap-southeast-2' });
@@ -172,10 +173,12 @@ export async function handler(event) {
 }
 
 /**
- * 建立啟動重導向頁面
+ * 建立啟動重導向
+ * 直接 redirect 到前端，session 資料透過 URL hash 傳遞
+ * 前端在自己的域名下寫入 localStorage
  */
 function createLaunchRedirect(targetUrl, session) {
-  const sessionData = JSON.stringify({
+  const sessionData = {
     sessionId: session.sessionId,
     platformUserId: session.platformUserId,
     name: session.name,
@@ -190,58 +193,11 @@ function createLaunchRedirect(targetUrl, session) {
     platformUrl: 'https://beyondbridge.onrender.com',
     toolId: 'kinmen-language-tool',
     courseId: session.context?.id || null
-  });
+  };
 
-  const html = `
-<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="UTF-8">
-  <title>金門語教材 - LTI 啟動中...</title>
-  <style>
-    body {
-      font-family: 'Noto Sans TC', sans-serif;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 100vh;
-      margin: 0;
-      background: linear-gradient(135deg, #D4A84B 0%, #8B6914 100%);
-      color: white;
-    }
-    .loading { text-align: center; }
-    .spinner {
-      width: 50px; height: 50px;
-      border: 5px solid rgba(255,255,255,0.3);
-      border-top-color: white;
-      border-radius: 50%;
-      animation: spin 1s linear infinite;
-      margin: 0 auto 20px;
-    }
-    @keyframes spin { to { transform: rotate(360deg); } }
-    h2 { margin-bottom: 10px; }
-    p { opacity: 0.8; }
-  </style>
-</head>
-<body>
-  <div class="loading">
-    <div class="spinner"></div>
-    <h2>正在啟動金門語教材...</h2>
-    <p>${session.name ? '歡迎，' + session.name + '！' : '請稍候，即將進入學習平台'}</p>
-  </div>
-  <script>
-    localStorage.setItem('lti_session', '${sessionData.replace(/'/g, "\\'")}');
-    localStorage.setItem('lti_active', 'true');
-    setTimeout(function() {
-      window.location.href = '${targetUrl}';
-    }, 800);
-  </script>
-  <noscript>
-    <meta http-equiv="refresh" content="0;url=${targetUrl}">
-    <p>如果沒有自動跳轉，請 <a href="${targetUrl}" style="color:white">點擊這裡</a></p>
-  </noscript>
-</body>
-</html>`;
+  // 把 session 資料編碼到 URL hash 中
+  const encodedSession = encodeURIComponent(JSON.stringify(sessionData));
+  const finalUrl = `${targetUrl}${targetUrl.includes('?') ? '&' : '?'}lti_session=${session.sessionId}#lti_data=${encodedSession}`;
 
-  return createHtmlResponse(html);
+  return createRedirectResponse(finalUrl);
 }
