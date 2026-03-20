@@ -2054,19 +2054,40 @@
       }, 500);
     });
 
-    // 檢查登入狀態
+    // 檢查登入狀態（支援 LTI 模式）
     async function checkAuth() {
-      const userData = getCurrentUser();
       const authButtons = document.getElementById('auth-buttons');
       const userStatus = document.getElementById('user-status');
+      const teacherBtn = document.querySelector('.nav-btn.teacher');
 
+      // 檢查 LTI 模式
+      let ltiSession = null;
+      try {
+        ltiSession = JSON.parse(localStorage.getItem('lti_session'));
+      } catch {}
+
+      if (ltiSession && ltiSession.expiresAt && new Date(ltiSession.expiresAt) > new Date()) {
+        // LTI 模式：隱藏登入按鈕和教師入口
+        authButtons.style.display = 'none';
+        if (teacherBtn) teacherBtn.style.display = 'none';
+
+        userStatus.classList.add('logged-in');
+        const name = ltiSession.name || ltiSession.platformUserId || '學生';
+        document.getElementById('user-avatar').textContent = name[0];
+        document.getElementById('user-name').textContent = name;
+
+        await loadProgress();
+        return;
+      }
+
+      // 獨立模式
+      const userData = getCurrentUser();
       if (userData) {
         authButtons.style.display = 'none';
         userStatus.classList.add('logged-in');
         document.getElementById('user-avatar').textContent = userData.displayName ? userData.displayName[0] : 'U';
         document.getElementById('user-name').textContent = userData.displayName || userData.username;
 
-        // 載入進度（從伺服器同步）
         await loadProgress();
       }
     }

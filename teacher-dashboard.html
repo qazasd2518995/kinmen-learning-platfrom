@@ -578,11 +578,27 @@
     // 初始化
     // ========================================
     async function init() {
-      // 檢查登入狀態
+      // 檢查登入狀態（支援 LTI 模式）
       currentTeacher = TeacherAPI.getCurrentTeacher();
       if (!currentTeacher) {
-        window.location.href = 'teacher-login.html';
-        return;
+        // 檢查 URL 是否有 lti_session 參數（剛從 LTI launch 過來）
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.has('lti_session')) {
+          // 等待 localStorage 同步
+          await new Promise(r => setTimeout(r, 500));
+          currentTeacher = TeacherAPI.getCurrentTeacher();
+        }
+        if (!currentTeacher) {
+          window.location.href = 'teacher-login.html';
+          return;
+        }
+      }
+
+      // LTI 模式下隱藏不需要的功能
+      if (TeacherAPI.isLtiMode()) {
+        // 隱藏建立班級按鈕（LTI 模式下班級由 BeyondBridge 管理）
+        const createClassBtn = document.getElementById('create-class-btn');
+        if (createClassBtn) createClassBtn.style.display = 'none';
       }
 
       // 先綁定事件（確保 UI 可以操作）
@@ -780,7 +796,7 @@
             </div>
             ` : ''}
           </div>
-          <div class="class-list-actions">
+          <div class="class-list-actions" ${TeacherAPI.isLtiMode() ? 'style="display:none"' : ''}>
             <button class="icon-btn edit-class-btn" data-class-id="${cls.classId}" data-class-name="${cls.className}" title="編輯班級名稱">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
@@ -875,9 +891,9 @@
               <button class="table-action-btn view-detail" data-username="${student.username}">
                 詳情
               </button>
-              <button class="table-action-btn danger remove-student" data-username="${student.username}" data-name="${student.displayName || student.username}">
+              ${TeacherAPI.isLtiMode() ? '' : `<button class="table-action-btn danger remove-student" data-username="${student.username}" data-name="${student.displayName || student.username}">
                 移除
-              </button>
+              </button>`}
             </div>
           </td>
         </tr>
@@ -1374,7 +1390,10 @@
       // 登出
       document.getElementById('logout-btn').addEventListener('click', () => {
         TeacherAPI.logout();
-        window.location.href = 'teacher-login.html';
+        if (!TeacherAPI.isLtiMode()) {
+          window.location.href = 'teacher-login.html';
+        }
+        // LTI 模式下 logout() 會自動導回 BeyondBridge
       });
 
       // 重新整理
