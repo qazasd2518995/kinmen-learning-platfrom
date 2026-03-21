@@ -3572,9 +3572,9 @@
       showDuelQuestion();
     }
 
-    // 題型定義：
-    // 0: 圖片→選拼音  1: 圖片→選漢字  2: 漢字→選拼音  3: 拼音→選漢字
-    const DUEL_QUESTION_TYPES = [0, 0, 1, 1, 2, 2, 3, 3, 0, 1]; // 10 題的題型分布
+    // 題型定義（都跟金門話拼音相關）：
+    // 0: 圖片→選拼音  2: 漢字→選拼音  3: 拼音→選漢字
+    const DUEL_QUESTION_TYPES = [0, 0, 0, 2, 2, 2, 3, 3, 3, 0]; // 10 題的題型分布
 
     function showDuelQuestion() {
       if (currentDuelQuestion >= duelQuestions.length) {
@@ -3607,14 +3607,6 @@
         textEl.style.display = 'none';
         options.forEach((opt, i) => {
           document.querySelectorAll('.duel-option')[i].textContent = opt.pinyin;
-        });
-      } else if (qType === 1) {
-        // 圖片→選漢字
-        imgEl.src = question.image;
-        imgEl.style.display = '';
-        textEl.style.display = 'none';
-        options.forEach((opt, i) => {
-          document.querySelectorAll('.duel-option')[i].textContent = opt.chinese;
         });
       } else if (qType === 2) {
         // 漢字→選拼音
