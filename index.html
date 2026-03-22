@@ -263,7 +263,7 @@
       border-radius: var(--radius-md);
       font-weight: 600;
       font-size: 0.9375rem;
-      transition: all var(--duration-normal) var(--ease-out);
+      transition: background var(--duration-normal) var(--ease-out), color var(--duration-normal) var(--ease-out), transform var(--duration-normal) var(--ease-out), box-shadow var(--duration-normal) var(--ease-out);
       overflow: hidden;
       min-height: var(--touch-target-min);
       min-width: var(--touch-target-min);
@@ -400,6 +400,7 @@
       line-height: 1.2;
       color: var(--text-primary);
       margin-bottom: 16px;
+      text-wrap: balance;
     }
 
     .hero-title .highlight {
@@ -442,7 +443,7 @@
       border-radius: var(--radius-lg);
       border: 2px solid var(--kinmen-gold-dark);
       box-shadow: var(--shadow-lg), var(--glow-gold);
-      transition: all var(--duration-slow) var(--ease-out);
+      transition: transform var(--duration-slow) var(--ease-out), box-shadow var(--duration-slow) var(--ease-out), background var(--duration-slow) var(--ease-out);
       overflow: hidden;
     }
 
@@ -533,6 +534,7 @@
       font-size: 1.75rem;
       font-weight: 700;
       color: var(--text-primary);
+      text-wrap: balance;
     }
 
     .units-grid {
@@ -548,7 +550,7 @@
       padding: 32px;
       box-shadow: var(--shadow-md);
       border: 2px solid rgba(139, 105, 20, 0.1);
-      transition: all var(--duration-slow) var(--ease-out);
+      transition: transform var(--duration-slow) var(--ease-out), box-shadow var(--duration-slow) var(--ease-out), border-color var(--duration-slow) var(--ease-out);
       overflow: hidden;
       cursor: pointer;
       animation: cardReveal 0.6s var(--ease-out) backwards;
@@ -747,7 +749,7 @@
       background: var(--bg-secondary);
       border-radius: 50%;
       color: var(--text-secondary);
-      transition: all 0.3s var(--ease-out);
+      transition: transform 0.3s var(--ease-out), opacity 0.3s var(--ease-out);
     }
 
     .unit-card:hover .unit-arrow {
@@ -801,6 +803,7 @@
       font-weight: 700;
       color: var(--text-primary);
       margin-bottom: 12px;
+      text-wrap: balance;
     }
 
     .features-subtitle {
@@ -819,7 +822,7 @@
       padding: 28px 24px;
       border-radius: var(--radius-lg);
       border: 2px solid transparent;
-      transition: all var(--duration-normal) var(--ease-out);
+      transition: transform var(--duration-normal) var(--ease-out), background var(--duration-normal) var(--ease-out), border-color var(--duration-normal) var(--ease-out), box-shadow var(--duration-normal) var(--ease-out);
     }
 
     .feature-item:hover {
@@ -839,7 +842,7 @@
       border-radius: var(--radius-lg);
       color: var(--feature-color, var(--text-accent));
       margin: 0 auto 20px;
-      transition: all var(--duration-normal) var(--ease-out);
+      transition: transform var(--duration-normal) var(--ease-out), background var(--duration-normal) var(--ease-out);
     }
 
     .feature-item:hover .feature-icon {
@@ -902,6 +905,7 @@
       color: var(--text-accent);
       text-align: center;
       margin-bottom: 32px;
+      text-wrap: balance;
     }
 
     .stats-grid {
@@ -918,7 +922,7 @@
       padding: 24px;
       text-align: center;
       box-shadow: var(--shadow-sm);
-      transition: all var(--duration-normal) var(--ease-out);
+      transition: transform var(--duration-normal) var(--ease-out), box-shadow var(--duration-normal) var(--ease-out);
     }
 
     .stat-card:hover {
@@ -1043,7 +1047,7 @@
       border-radius: var(--radius-md);
       font-size: 0.875rem;
       color: var(--text-secondary);
-      transition: all var(--duration-fast) var(--ease-out);
+      transition: transform var(--duration-fast) var(--ease-out), box-shadow var(--duration-fast) var(--ease-out);
     }
 
     .achievement-badge.unlocked {
@@ -1609,12 +1613,26 @@
       0%, 100% { transform: scale(1); opacity: 1; }
       50% { transform: scale(1.1); opacity: 0.7; }
     }
+
+    :focus-visible {
+      outline: 3px solid var(--kinmen-ocean);
+      outline-offset: 2px;
+      border-radius: var(--radius-sm);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
   </style>
 </head>
 <body>
   <!-- 頁面載入動畫 -->
   <div class="page-loader" id="page-loader">
-    <img src="assets/kinmen/wind-lion.svg" alt="" class="loader-icon">
+    <img src="assets/kinmen/wind-lion.svg" alt="" class="loader-icon" width="48" height="48">
   </div>
 
   <!-- 背景裝飾 -->
@@ -1625,12 +1643,12 @@
   <!-- 頂部導航 -->
   <header class="nav-header">
     <div class="logo">
-      <img src="assets/kinmen/wind-lion.svg" alt="風獅爺" class="logo-icon">
+      <img src="assets/kinmen/wind-lion.svg" alt="風獅爺" class="logo-icon" width="48" height="48">
       <span class="logo-text">金聲玉語</span>
     </div>
     <nav class="nav-actions">
-      <a href="teacher-login.html" class="nav-btn teacher">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <a href="teacher-login.html" class="nav-btn teacher" aria-label="教師入口">
+        <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
           <circle cx="9" cy="7" r="4"/>
           <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
@@ -1640,16 +1658,16 @@
       </a>
       <!-- 未登入狀態 -->
       <div class="auth-buttons" id="auth-buttons">
-        <a href="login.html" class="nav-btn outline">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <a href="login.html" class="nav-btn outline" aria-label="登入">
+          <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/>
             <polyline points="10 17 15 12 10 7"/>
             <line x1="15" y1="12" x2="3" y2="12"/>
           </svg>
           <span>登入</span>
         </a>
-        <a href="login.html?mode=register" class="nav-btn primary">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <a href="login.html?mode=register" class="nav-btn primary" aria-label="註冊">
+          <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
             <circle cx="8.5" cy="7" r="4"/>
             <line x1="20" y1="8" x2="20" y2="14"/>
@@ -1671,7 +1689,7 @@
     <!-- Hero 區塊 -->
     <section class="hero">
       <div class="hero-badge">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
         </svg>
         金門語學習
@@ -1685,7 +1703,7 @@
       </p>
       <a href="unit-vocabulary.html" class="hero-cta">
         開始學習
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <line x1="5" y1="12" x2="19" y2="12"/>
           <polyline points="12 5 19 12 12 19"/>
         </svg>
@@ -1696,7 +1714,7 @@
     <section class="units-section">
       <div class="section-header">
         <div class="section-icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
             <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
           </svg>
@@ -1709,7 +1727,7 @@
         <a href="unit-vocabulary.html" class="unit-card vocabulary">
           <div class="unit-header">
             <div class="unit-icon">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M17.5 8c.6 0 1 .4 1 1v12c0 .6-.4 1-1 1h-11c-.6 0-1-.4-1-1V9c0-.6.4-1 1-1"/>
                 <path d="M8 8V5c0-.6.4-1 1-1h6c.6 0 1 .4 1 1v3"/>
                 <path d="M12 11v6"/>
@@ -1722,7 +1740,7 @@
           <p class="unit-desc">學習 26 個常見蔬果的金門話說法，透過閃卡、聽力測驗和配對遊戲來加深記憶。</p>
           <div class="unit-stats">
             <span class="stat-item">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
                 <line x1="16" y1="2" x2="16" y2="6"/>
                 <line x1="8" y1="2" x2="8" y2="6"/>
@@ -1735,7 +1753,7 @@
             </div>
           </div>
           <div class="unit-arrow">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <polyline points="9 18 15 12 9 6"/>
             </svg>
           </div>
@@ -1745,7 +1763,7 @@
         <a href="unit-dialogue.html" class="unit-card dialogue">
           <div class="unit-header">
             <div class="unit-icon">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
               </svg>
             </div>
@@ -1755,7 +1773,7 @@
           <p class="unit-desc">學習市場買賣的實用對話，包含報價、詢問、殺價等情境，讓你能實際運用在生活中。</p>
           <div class="unit-stats">
             <span class="stat-item">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
               </svg>
               7 情境
@@ -1765,7 +1783,7 @@
             </div>
           </div>
           <div class="unit-arrow">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <polyline points="9 18 15 12 9 6"/>
             </svg>
           </div>
@@ -1775,7 +1793,7 @@
         <a href="unit-practice.html" class="unit-card practice">
           <div class="unit-header">
             <div class="unit-icon">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <circle cx="12" cy="12" r="10"/>
                 <polyline points="12 6 12 12 16 14"/>
               </svg>
@@ -1786,7 +1804,7 @@
           <p class="unit-desc">結合詞彙與對話，模擬真實市場情境。完成購物清單、計算價格，全面檢驗學習成果。</p>
           <div class="unit-stats">
             <span class="stat-item">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <polyline points="9 11 12 14 22 4"/>
                 <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/>
               </svg>
@@ -1797,7 +1815,7 @@
             </div>
           </div>
           <div class="unit-arrow">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <polyline points="9 18 15 12 9 6"/>
             </svg>
           </div>
@@ -1807,7 +1825,7 @@
         <a href="unit-games.html" class="unit-card games">
           <div class="unit-header">
             <div class="unit-icon">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <rect x="2" y="6" width="20" height="12" rx="2"/>
                 <line x1="6" y1="12" x2="6" y2="12"/>
                 <line x1="10" y1="12" x2="10" y2="12"/>
@@ -1823,7 +1841,7 @@
           <p class="unit-desc">透過連連看、分類遊戲、迷宮和賓果，在遊戲中複習所學詞彙，寓教於樂。</p>
           <div class="unit-stats">
             <span class="stat-item">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
               </svg>
               4 遊戲
@@ -1833,7 +1851,7 @@
             </div>
           </div>
           <div class="unit-arrow">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <polyline points="9 18 15 12 9 6"/>
             </svg>
           </div>
@@ -1843,7 +1861,7 @@
         <a href="unit-market.html" class="unit-card market">
           <div class="unit-header">
             <div class="unit-icon">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
                 <polyline points="9 22 9 12 15 12 15 22"/>
               </svg>
@@ -1854,7 +1872,7 @@
           <p class="unit-desc">角色扮演購物情境，與攤販對話、詢價、殺價，完成購物任務，實際應用所學。</p>
           <div class="unit-stats">
             <span class="stat-item">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <circle cx="9" cy="21" r="1"/>
                 <circle cx="20" cy="21" r="1"/>
                 <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
@@ -1866,7 +1884,7 @@
             </div>
           </div>
           <div class="unit-arrow">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <polyline points="9 18 15 12 9 6"/>
             </svg>
           </div>
@@ -1876,7 +1894,7 @@
         <a href="unit-review.html" class="unit-card review">
           <div class="unit-header">
             <div class="unit-icon">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/>
                 <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>
               </svg>
@@ -1887,7 +1905,7 @@
           <p class="unit-desc">回顧學習成果，思考金門話的文化意義與傳承價值，深化語言學習的意義。</p>
           <div class="unit-stats">
             <span class="stat-item">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <circle cx="12" cy="12" r="10"/>
                 <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/>
                 <line x1="12" y1="17" x2="12.01" y2="17"/>
@@ -1899,7 +1917,7 @@
             </div>
           </div>
           <div class="unit-arrow">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <polyline points="9 18 15 12 9 6"/>
             </svg>
           </div>
@@ -1917,7 +1935,7 @@
       <div class="features-grid">
         <a href="unit-vocabulary.html" class="feature-item gold">
           <div class="feature-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <rect x="2" y="3" width="20" height="14" rx="2" ry="2"/>
               <line x1="8" y1="21" x2="16" y2="21"/>
               <line x1="12" y1="17" x2="12" y2="21"/>
@@ -1929,7 +1947,7 @@
 
         <a href="unit-vocabulary.html?mode=listening" class="feature-item ocean">
           <div class="feature-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
               <path d="M15.54 8.46a5 5 0 0 1 0 7.07"/>
               <path d="M19.07 4.93a10 10 0 0 1 0 14.14"/>
@@ -1941,7 +1959,7 @@
 
         <a href="unit-games.html?game=matching" class="feature-item purple">
           <div class="feature-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <line x1="4" y1="9" x2="20" y2="9"/>
               <line x1="4" y1="15" x2="20" y2="15"/>
               <line x1="10" y1="3" x2="8" y2="21"/>
@@ -1954,7 +1972,7 @@
 
         <a href="#stats-section" class="feature-item green">
           <div class="feature-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <path d="M12 20h9"/>
               <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/>
             </svg>
@@ -1972,7 +1990,7 @@
         <!-- 詞彙進度 -->
         <div class="stat-card vocab-stat">
           <div class="stat-ring">
-            <svg viewBox="0 0 100 100">
+            <svg aria-hidden="true" viewBox="0 0 100 100">
               <circle class="stat-ring-bg" cx="50" cy="50" r="40"/>
               <circle class="stat-ring-fill" id="vocab-ring" cx="50" cy="50" r="40"/>
             </svg>
@@ -1987,7 +2005,7 @@
         <!-- 連續天數 -->
         <div class="stat-card streak-stat">
           <div class="stat-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"/>
             </svg>
           </div>
@@ -1998,7 +2016,7 @@
         <!-- 遊戲次數 -->
         <div class="stat-card games-stat">
           <div class="stat-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <line x1="6" y1="12" x2="10" y2="12"/>
               <line x1="8" y1="10" x2="8" y2="14"/>
               <line x1="15" y1="13" x2="15.01" y2="13"/>
@@ -2013,7 +2031,7 @@
         <!-- 最高分 -->
         <div class="stat-card score-stat">
           <div class="stat-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
             </svg>
           </div>

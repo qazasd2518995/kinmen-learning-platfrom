@@ -83,7 +83,7 @@
     a { text-decoration: none; color: inherit; }
 
     /* 全域觸控優化 */
-    button, [role="button"], .interactive, a, .game-card, .sorting-item, .bingo-cell, .matching-item {
+    button, [role="button"], .interactive, a, .game-card, .sorting-item, .bingo-cell, .matching-item, .duel-option, .award-btn, .maze-btn, .restart-btn {
       touch-action: manipulation;
     }
 
@@ -132,7 +132,7 @@
       display: flex; align-items: center; gap: 8px;
       padding: 8px 16px; border-radius: var(--radius-md);
       color: var(--text-secondary); font-weight: 500;
-      transition: all 0.25s var(--ease-out);
+      transition: transform 0.25s var(--ease-out), background 0.25s var(--ease-out), color 0.25s var(--ease-out);
     }
     .back-btn:hover { background: var(--bg-secondary); color: var(--text-primary); }
     .back-btn svg { width: 20px; height: 20px; }
@@ -164,7 +164,7 @@
       text-align: center;
       box-shadow: var(--shadow-sm);
       border: 2px solid transparent;
-      transition: all var(--duration-normal) var(--ease-out);
+      transition: transform var(--duration-normal) var(--ease-out), box-shadow var(--duration-normal) var(--ease-out), border-color var(--duration-normal) var(--ease-out);
       cursor: pointer;
       position: relative;
       overflow: hidden;
@@ -211,7 +211,7 @@
       background: var(--bg-secondary);
       border-radius: var(--radius-md);
       font-size: 2rem;
-      transition: all var(--duration-normal) var(--ease-out);
+      transition: transform var(--duration-normal) var(--ease-out), background var(--duration-normal) var(--ease-out);
     }
 
     .game-card:hover .game-card-icon {
@@ -326,7 +326,7 @@
       font-size: 1.25rem;
       font-weight: 600;
       cursor: pointer;
-      transition: all var(--duration-normal) var(--ease-out);
+      transition: transform var(--duration-normal) var(--ease-out), box-shadow var(--duration-normal) var(--ease-out), background var(--duration-normal) var(--ease-out), border-color var(--duration-normal) var(--ease-out);
       border: 3px solid transparent;
       min-width: 150px;
       text-align: center;
@@ -460,7 +460,7 @@
       font-weight: 600;
       cursor: grab;
       box-shadow: var(--shadow-sm);
-      transition: all var(--duration-normal) var(--ease-out);
+      transition: transform var(--duration-normal) var(--ease-out), box-shadow var(--duration-normal) var(--ease-out), background var(--duration-normal) var(--ease-out), border-color var(--duration-normal) var(--ease-out);
       user-select: none;
       border: 2px solid transparent;
     }
@@ -506,7 +506,7 @@
       padding: 16px;
       min-height: 150px;
       border: 3px dashed rgba(139, 105, 20, 0.3);
-      transition: all var(--duration-normal) var(--ease-out);
+      transition: transform var(--duration-normal) var(--ease-out), box-shadow var(--duration-normal) var(--ease-out), border-color var(--duration-normal) var(--ease-out), background var(--duration-normal) var(--ease-out);
     }
 
     .sorting-category.dragover {
@@ -786,7 +786,7 @@
       justify-content: center;
       color: var(--text-accent);
       font-size: 1.2rem;
-      transition: all 0.1s;
+      transition: transform 0.1s, background 0.1s, color 0.1s;
       -webkit-tap-highlight-color: transparent;
     }
 
@@ -861,7 +861,7 @@
       color: white;
       border-radius: var(--radius-md);
       font-weight: 600;
-      transition: all var(--duration-normal) var(--ease-out);
+      transition: transform var(--duration-normal) var(--ease-out), box-shadow var(--duration-normal) var(--ease-out), background var(--duration-normal) var(--ease-out), color var(--duration-normal) var(--ease-out);
       box-shadow: var(--shadow-md);
     }
 
@@ -926,7 +926,7 @@
       font-size: 1.5rem;
       font-weight: 700;
       cursor: pointer;
-      transition: all var(--duration-normal) var(--ease-out);
+      transition: transform var(--duration-normal) var(--ease-out), box-shadow var(--duration-normal) var(--ease-out), border-color var(--duration-normal) var(--ease-out), background var(--duration-normal) var(--ease-out);
       position: relative;
     }
 
@@ -1139,7 +1139,7 @@
       border: 2px solid var(--bg-secondary);
       border-radius: var(--radius-md);
       cursor: pointer;
-      transition: all var(--duration-fast) var(--ease-out);
+      transition: transform var(--duration-fast) var(--ease-out), box-shadow var(--duration-fast) var(--ease-out), border-color var(--duration-fast) var(--ease-out), background var(--duration-fast) var(--ease-out);
       min-height: var(--touch-target-comfortable);
     }
 
@@ -1265,7 +1265,7 @@
       box-shadow: var(--shadow-md);
       opacity: 0;
       transform: scale(0.8);
-      transition: all 0.3s var(--ease-out);
+      transition: opacity 0.3s var(--ease-out), transform 0.3s var(--ease-out);
       z-index: 5;
     }
 
@@ -1297,6 +1297,7 @@
       justify-content: center;
       padding: 20px;
       animation: awardFadeIn 0.5s ease-out;
+      overscroll-behavior: contain;
     }
 
     .duel-award-screen.visible {
@@ -1458,7 +1459,7 @@
       font-size: 1.1rem;
       font-weight: 600;
       cursor: pointer;
-      transition: all 0.3s ease;
+      transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease, color 0.3s ease;
       border: none;
     }
 
@@ -1492,7 +1493,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      transition: all 0.3s ease;
+      transition: transform 0.3s ease, border-color 0.3s ease, background 0.3s ease;
       z-index: 5;
     }
 
@@ -1581,7 +1582,7 @@
       color: white;
       border-radius: var(--radius-md);
       font-weight: 600;
-      transition: all var(--duration-normal) var(--ease-out);
+      transition: transform var(--duration-normal) var(--ease-out), box-shadow var(--duration-normal) var(--ease-out), background var(--duration-normal) var(--ease-out), color var(--duration-normal) var(--ease-out);
       box-shadow: var(--shadow-md);
       position: relative;
       overflow: hidden;
@@ -2162,6 +2163,20 @@
         gap: 8px;
       }
     }
+
+    :focus-visible {
+      outline: 3px solid var(--kinmen-ocean);
+      outline-offset: 2px;
+      border-radius: var(--radius-sm);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
   </style>
 </head>
 <body>
@@ -2172,7 +2187,7 @@
   <header class="nav-header">
     <div class="nav-left">
       <a href="index.html" class="back-btn">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <line x1="19" y1="12" x2="5" y2="12"/>
           <polyline points="12 19 5 12 12 5"/>
         </svg>
@@ -2187,7 +2202,7 @@
     <div class="game-selector">
       <div class="game-card active" data-game="matching">
         <div class="game-card-icon">
-          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <svg aria-hidden="true" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
             <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
           </svg>
@@ -2200,7 +2215,7 @@
 
       <div class="game-card" data-game="sorting">
         <div class="game-card-icon">
-          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <svg aria-hidden="true" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <rect x="3" y="3" width="7" height="7"/>
             <rect x="14" y="3" width="7" height="7"/>
             <rect x="14" y="14" width="7" height="7"/>
@@ -2215,7 +2230,7 @@
 
       <div class="game-card" data-game="maze">
         <div class="game-card-icon">
-          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <svg aria-hidden="true" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M3 3h18v18H3z"/>
             <path d="M3 9h12v6H9v6"/>
             <path d="M15 3v12h6"/>
@@ -2229,7 +2244,7 @@
 
       <div class="game-card" data-game="bingo">
         <div class="game-card-icon">
-          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <svg aria-hidden="true" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <rect x="3" y="3" width="18" height="18" rx="2"/>
             <line x1="9" y1="3" x2="9" y2="21"/>
             <line x1="15" y1="3" x2="15" y2="21"/>
@@ -2245,7 +2260,7 @@
 
       <div class="game-card" data-game="duel">
         <div class="game-card-icon">
-          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <svg aria-hidden="true" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <circle cx="12" cy="12" r="10"/>
             <polyline points="12 6 12 12 16 14"/>
           </svg>
@@ -2265,7 +2280,7 @@
       </div>
 
       <div class="matching-container" id="matching-container">
-        <svg class="matching-svg" id="matching-svg"></svg>
+        <svg aria-hidden="true" class="matching-svg" id="matching-svg"></svg>
         <div class="matching-column" id="matching-left"></div>
         <div class="matching-column" id="matching-right"></div>
       </div>
@@ -2274,7 +2289,7 @@
 
       <div class="game-complete" id="matching-complete">
         <div class="complete-icon">
-          <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+          <svg aria-hidden="true" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
             <polyline points="20 6 9 17 4 12"/>
           </svg>
         </div>
@@ -2322,7 +2337,7 @@
 
       <div class="game-complete" id="sorting-complete">
         <div class="complete-icon">
-          <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+          <svg aria-hidden="true" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
             <polyline points="20 6 9 17 4 12"/>
           </svg>
         </div>
@@ -2361,24 +2376,24 @@
 
         <!-- 手機虛擬方向鍵 -->
         <div class="runner-dpad" id="runner-dpad">
-          <button class="dpad-btn dpad-up" data-dir="up">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="18 15 12 9 6 15"/></svg>
+          <button class="dpad-btn dpad-up" data-dir="up" aria-label="上">
+            <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="18 15 12 9 6 15"/></svg>
           </button>
-          <button class="dpad-btn dpad-left" data-dir="left">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="15 18 9 12 15 6"/></svg>
+          <button class="dpad-btn dpad-left" data-dir="left" aria-label="左">
+            <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="15 18 9 12 15 6"/></svg>
           </button>
-          <button class="dpad-btn dpad-right" data-dir="right">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="9 18 15 12 9 6"/></svg>
+          <button class="dpad-btn dpad-right" data-dir="right" aria-label="右">
+            <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="9 18 15 12 9 6"/></svg>
           </button>
-          <button class="dpad-btn dpad-down" data-dir="down">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="6 9 12 15 18 9"/></svg>
+          <button class="dpad-btn dpad-down" data-dir="down" aria-label="下">
+            <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="6 9 12 15 18 9"/></svg>
           </button>
         </div>
       </div>
 
       <div class="game-complete" id="maze-complete">
         <div class="complete-icon">
-          <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+          <svg aria-hidden="true" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
             <polyline points="20 6 9 17 4 12"/>
           </svg>
         </div>
@@ -2410,7 +2425,7 @@
 
       <div class="game-complete" id="bingo-complete">
         <div class="complete-icon">
-          <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+          <svg aria-hidden="true" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
             <polyline points="20 6 9 17 4 12"/>
           </svg>
         </div>
@@ -2429,12 +2444,12 @@
 
       <div class="duel-container">
         <!-- 音效控制 -->
-        <button class="duel-sound-toggle" id="duel-sound-toggle" title="開啟/關閉音效">
-          <svg id="sound-on-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <button class="duel-sound-toggle" id="duel-sound-toggle" title="開啟/關閉音效" aria-label="開啟/關閉音效">
+          <svg aria-hidden="true" id="sound-on-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
             <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/>
           </svg>
-          <svg id="sound-off-icon" style="display:none" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <svg aria-hidden="true" id="sound-off-icon" style="display:none" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
             <line x1="23" y1="9" x2="17" y2="15"/>
             <line x1="17" y1="9" x2="23" y2="15"/>
@@ -2462,7 +2477,7 @@
 
         <!-- 題目區（圖片或文字） -->
         <div class="duel-question">
-          <img id="duel-image" class="duel-image" src="" alt="蔬果圖片">
+          <img id="duel-image" class="duel-image" src="" alt="蔬果圖片" width="180" height="180">
           <div class="duel-text" id="duel-text" style="display:none;"></div>
           <div class="duel-feedback" id="duel-feedback"></div>
         </div>
@@ -2478,7 +2493,7 @@
         <!-- 開始按鈕 -->
         <div class="duel-start-screen" id="duel-start-screen">
           <div class="duel-start-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
             </svg>
           </div>

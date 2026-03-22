@@ -68,6 +68,12 @@
       --duration-slower: 600ms;
     }
 
+    :focus-visible {
+      outline: 3px solid var(--kinmen-ocean);
+      outline-offset: 2px;
+      border-radius: var(--radius-sm);
+    }
+
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
     html { font-size: 16px; }
     body {
@@ -130,7 +136,7 @@
       display: flex; align-items: center; gap: 8px;
       padding: 8px 16px; border-radius: var(--radius-md);
       color: var(--text-secondary); font-weight: 500;
-      transition: all 0.25s var(--ease-out);
+      transition: background 0.25s var(--ease-out), color 0.25s var(--ease-out);
     }
     .back-btn:hover { background: var(--bg-secondary); color: var(--text-primary); }
     .back-btn svg { width: 20px; height: 20px; }
@@ -162,7 +168,7 @@
       box-shadow: var(--shadow-md);
       text-align: center;
       cursor: pointer;
-      transition: all var(--duration-normal) var(--ease-out);
+      transition: transform var(--duration-normal) var(--ease-out), box-shadow var(--duration-normal) var(--ease-out), border-color var(--duration-normal) var(--ease-out), background var(--duration-normal) var(--ease-out);
       position: relative;
       overflow: hidden;
     }
@@ -201,7 +207,7 @@
       background: var(--bg-secondary);
       border-radius: var(--radius-md);
       margin: 0 auto 16px;
-      transition: all var(--duration-normal) var(--ease-out);
+      transition: transform var(--duration-normal) var(--ease-out), background var(--duration-normal) var(--ease-out), box-shadow var(--duration-normal) var(--ease-out);
     }
     .mode-icon svg {
       width: 32px;
@@ -301,7 +307,7 @@
       border-radius: var(--radius-md);
       font-weight: 600;
       border: 2px solid transparent;
-      transition: all var(--duration-normal) var(--ease-out);
+      transition: background var(--duration-normal) var(--ease-out), border-color var(--duration-normal) var(--ease-out), color var(--duration-normal) var(--ease-out);
       box-shadow: var(--shadow-sm);
     }
     .shopping-item.found {
@@ -322,7 +328,7 @@
     .shopping-item svg {
       width: 20px;
       height: 20px;
-      transition: all var(--duration-normal) var(--ease-out);
+      transition: color var(--duration-normal) var(--ease-out);
     }
     .shopping-item.found svg {
       color: var(--kinmen-green);
@@ -348,7 +354,7 @@
       background: var(--bg-secondary);
       border: 2px solid transparent;
       border-radius: var(--radius-md);
-      transition: all var(--duration-normal) var(--ease-out);
+      transition: transform var(--duration-normal) var(--ease-out), box-shadow var(--duration-normal) var(--ease-out), border-color var(--duration-normal) var(--ease-out), background var(--duration-normal) var(--ease-out);
       position: relative;
       overflow: hidden;
       min-width: 70px;
@@ -514,7 +520,7 @@
       justify-content: space-between;
       padding: 14px 0;
       border-bottom: 2px dashed rgba(91, 143, 168, 0.2);
-      transition: all var(--duration-normal) var(--ease-out);
+      transition: background var(--duration-normal) var(--ease-out), padding var(--duration-normal) var(--ease-out);
     }
     .question-item:last-child { border-bottom: none; }
     .question-item:hover {
@@ -540,7 +546,7 @@
       background: linear-gradient(135deg, var(--kinmen-ocean) 0%, #4A7A8F 100%);
       color: white;
       border-radius: 50%;
-      transition: all var(--duration-normal) var(--ease-out);
+      transition: transform var(--duration-normal) var(--ease-out), box-shadow var(--duration-normal) var(--ease-out);
       box-shadow: var(--shadow-sm);
     }
     .play-price-btn:hover {
@@ -596,7 +602,7 @@
       background: var(--bg-card);
       border: 3px solid var(--kinmen-ocean-light);
       border-radius: var(--radius-md);
-      transition: all var(--duration-normal) var(--ease-out);
+      transition: border-color var(--duration-normal) var(--ease-out), box-shadow var(--duration-normal) var(--ease-out);
       color: var(--kinmen-ocean);
     }
     .answer-input:focus {
@@ -623,7 +629,7 @@
       border-radius: var(--radius-md);
       font-weight: 600;
       font-size: 1rem;
-      transition: all var(--duration-normal) var(--ease-out);
+      transition: transform var(--duration-normal) var(--ease-out), box-shadow var(--duration-normal) var(--ease-out);
       box-shadow: var(--shadow-md);
       position: relative;
       overflow: hidden;
@@ -708,7 +714,7 @@
       color: white;
       border-radius: var(--radius-md);
       font-weight: 600;
-      transition: all var(--duration-normal) var(--ease-out);
+      transition: transform var(--duration-normal) var(--ease-out), box-shadow var(--duration-normal) var(--ease-out);
       box-shadow: var(--shadow-md);
     }
     .next-calc-btn.visible {
@@ -806,7 +812,7 @@
       padding: 14px 28px;
       border-radius: var(--radius-md);
       font-weight: 600;
-      transition: all var(--duration-normal) var(--ease-out);
+      transition: transform var(--duration-normal) var(--ease-out), box-shadow var(--duration-normal) var(--ease-out), background var(--duration-normal) var(--ease-out), border-color var(--duration-normal) var(--ease-out);
       position: relative;
       overflow: hidden;
     }
@@ -1267,6 +1273,13 @@
         margin-bottom: 16px;
       }
     }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
   </style>
 </head>
 <body>
@@ -1278,7 +1291,7 @@
   <header class="nav-header">
     <div class="nav-left">
       <a href="index.html" class="back-btn">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
           <line x1="19" y1="12" x2="5" y2="12"/>
           <polyline points="12 19 5 12 12 5"/>
         </svg>
@@ -1291,9 +1304,9 @@
   <main class="main-content">
     <!-- 練習模式選擇 -->
     <div class="practice-modes">
-      <div class="practice-mode-card active" data-mode="shopping">
+      <div class="practice-mode-card active" data-mode="shopping" role="button" tabindex="0">
         <div class="mode-icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/>
             <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
           </svg>
@@ -1301,9 +1314,9 @@
         <h3 class="mode-title">購物清單挑戰</h3>
         <p class="mode-desc">根據清單找出正確的蔬果</p>
       </div>
-      <div class="practice-mode-card" data-mode="calculation">
+      <div class="practice-mode-card" data-mode="calculation" role="button" tabindex="0">
         <div class="mode-icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
           </svg>
         </div>
@@ -1334,7 +1347,7 @@
 
       <div class="complete-screen" id="shopping-complete">
         <div class="complete-icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/>
           </svg>
         </div>
@@ -1360,7 +1373,7 @@
         <div class="answer-section">
           <p class="answer-label">總共多少錢？</p>
           <div class="answer-input-group">
-            <input type="number" class="answer-input" id="answer-input" placeholder="0">
+            <input type="number" class="answer-input" id="answer-input" placeholder="0" aria-label="輸入答案" name="answer" autocomplete="off">
             <span class="answer-unit">箍</span>
           </div>
           <button class="check-answer-btn" id="check-answer-btn">確認答案</button>
@@ -1369,7 +1382,7 @@
         <div class="calc-feedback" id="calc-feedback"></div>
         <button class="next-calc-btn" id="next-calc-btn">
           下一題
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <polyline points="9 18 15 12 9 6"/>
           </svg>
         </button>
@@ -1377,7 +1390,7 @@
 
       <div class="complete-screen" id="calc-complete">
         <div class="complete-icon trophy">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/>
             <path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/>
             <path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/>
