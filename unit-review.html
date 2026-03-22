@@ -1528,6 +1528,8 @@
   </main>
 
   <script type="module">
+    import { initProgress, syncProgressToServer } from './js/api.js';
+
     // 載入詞彙
     async function init() {
       try {
@@ -1538,6 +1540,7 @@
         const fruits = data.vocabulary.filter(v => v.category === 'fruit');
         renderVocabGrid(fruits);
 
+        await initProgress();
         setupTabNavigation();
         setupTextareaFeedback();
         loadSavedData();
@@ -1612,6 +1615,11 @@
             contents.forEach(c => c.classList.remove('active'));
             tabs.forEach(t => t.classList.remove('active'));
             completeSection.classList.add('active');
+
+            // 同步回顧反思完成進度到伺服器
+            syncProgressToServer({
+              practice: { review: { completed: true } }
+            });
           } else if (nextId) {
             switchTab(nextId);
           }

@@ -2366,6 +2366,8 @@
   </main>
 
   <script type="module">
+    import { initProgress, syncProgressToServer } from './js/api.js';
+
     let vocabulary = [];
     let dialogues = [];
     let shoppingList = [];
@@ -2386,6 +2388,9 @@
 
         vocabulary = vocabData.vocabulary;
         dialogues = dialogueData;
+
+        // 載入進度
+        await initProgress();
 
         setupEventListeners();
       } catch (error) {
@@ -2750,6 +2755,14 @@
       document.getElementById('stat-items').textContent = cart.length;
       document.getElementById('stat-total').textContent = grandTotal;
       document.getElementById('stat-dialogues').textContent = dialogueCount;
+
+      // 同步市場練習進度到伺服器
+      syncProgressToServer({
+        dialogue: {
+          completedScenarios: ['market'],
+          scenarios: { completed: 1, total: 1 }
+        }
+      });
     }
 
     // 重新開始
