@@ -178,6 +178,21 @@ export async function handler(event) {
  * 前端在自己的域名下寫入 localStorage
  */
 function createLaunchRedirect(targetUrl, session) {
+  let platformUrl = process.env.LTI_PLATFORM_APP_URL || 'https://beyondbridge.onrender.com';
+  if (session.agsEndpoint?.lineitems) {
+    try {
+      platformUrl = new URL(session.agsEndpoint.lineitems).origin;
+    } catch (error) {
+      console.warn('Invalid AGS lineitems URL when deriving platformUrl:', error);
+    }
+  } else if (session.launchPresentation?.return_url) {
+    try {
+      platformUrl = new URL(session.launchPresentation.return_url).origin;
+    } catch (error) {
+      console.warn('Invalid return_url when deriving platformUrl:', error);
+    }
+  }
+
   const sessionData = {
     sessionId: session.sessionId,
     platformUserId: session.platformUserId,
@@ -190,9 +205,10 @@ function createLaunchRedirect(targetUrl, session) {
     agsEndpoint: session.agsEndpoint,
     createdAt: session.createdAt,
     expiresAt: session.expiresAt,
-    platformUrl: 'https://beyondbridge.onrender.com',
+    platformUrl,
     toolId: 'kinmen-language-tool',
-    courseId: session.context?.id || null
+    courseId: session.context?.id || null,
+    resourceLinkId: session.resourceLink?.id || null
   };
 
   // 把 session 資料編碼到 URL hash 中

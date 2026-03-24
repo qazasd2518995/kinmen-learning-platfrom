@@ -69,11 +69,18 @@ export function getLtiSession() {
  */
 function getLtiProxyUrl() {
   const session = getLtiSession();
-  if (!session || !session.platformUrl) {
-    // 預設使用 BeyondBridge 本地開發 URL
-    return 'http://localhost:3002';
+  if (session?.platformUrl) {
+    return session.platformUrl.replace(/\/$/, '');
   }
-  return session.platformUrl;
+  if (session?.agsEndpoint?.lineitems) {
+    try {
+      const url = new URL(session.agsEndpoint.lineitems);
+      return url.origin;
+    } catch (error) {
+      console.warn('[LTI] Invalid AGS lineitems URL:', error);
+    }
+  }
+  return 'https://beyondbridge.onrender.com';
 }
 
 /**
@@ -88,22 +95,24 @@ async function syncProgressToLtiPlatform(progressData) {
   }
 
   const proxyUrl = getLtiProxyUrl();
-  const toolId = session.toolId || 'kinmen-tool';
+  const toolId = session.toolId || 'kinmen-language-tool';
+  const platformUserId = session.platformUserId || session.userId;
+  const resourceLinkId = session.resourceLink?.id || session.resourceLinkId;
 
   try {
     // 計算總進度百分比
     const totalProgress = calculateTotalProgress(progressData);
 
-    const response = await fetch(`${proxyUrl}/api/lti/tools/${toolId}/progress`, {
+    const response = await fetch(`${proxyUrl}/api/lti/13/tools/${toolId}/progress`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         'Authorization': session.accessToken ? `Bearer ${session.accessToken}` : ''
       },
       body: JSON.stringify({
-        userId: session.userId,
+        userId: platformUserId,
         courseId: session.courseId,
-        resourceLinkId: session.resourceLinkId,
+        resourceLinkId,
         unit: progressData.currentUnit || 'general',
         progress: totalProgress,
         score: progressData.score || null,
@@ -301,14 +310,15 @@ export async function initProgress() {
   if (isLtiMode()) {
     const session = getLtiSession();
     if (session) {
-      console.log('[LTI] Initializing progress for user:', session.userId);
+      const platformUserId = session.platformUserId || session.userId;
+      const toolId = session.toolId || 'kinmen-language-tool';
+      console.log('[LTI] Initializing progress for user:', platformUserId);
 
       // 嘗試從 Platform 取得先前的進度（使用 aggregated 模式取得聚合進度）
       try {
         const proxyUrl = getLtiProxyUrl();
-        const toolId = session.toolId || 'kinmen-tool';
         const response = await fetch(
-          `${proxyUrl}/api/lti/tools/${toolId}/progress/${session.userId}?courseId=${session.courseId}&aggregated=true`,
+          `${proxyUrl}/api/lti/13/tools/${toolId}/progress/${platformUserId}?courseId=${session.courseId}&aggregated=true`,
           {
             headers: {
               'Authorization': session.accessToken ? `Bearer ${session.accessToken}` : ''
