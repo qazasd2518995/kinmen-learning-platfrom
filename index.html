@@ -2077,6 +2077,7 @@
       const authButtons = document.getElementById('auth-buttons');
       const userStatus = document.getElementById('user-status');
       const teacherBtn = document.querySelector('.nav-btn.teacher');
+      const footerTeacherLink = document.querySelector('.footer-teacher-link a');
 
       // 檢查 LTI 模式
       let ltiSession = null;
@@ -2085,9 +2086,30 @@
       } catch {}
 
       if (ltiSession && ltiSession.expiresAt && new Date(ltiSession.expiresAt) > new Date()) {
-        // LTI 模式：隱藏登入按鈕和教師入口
         authButtons.style.display = 'none';
-        if (teacherBtn) teacherBtn.style.display = 'none';
+
+        const isTeacherLtiUser = ltiSession.userRole === 'teacher' || ltiSession.userRole === 'admin';
+        if (teacherBtn) {
+          if (isTeacherLtiUser) {
+            teacherBtn.style.display = 'flex';
+            teacherBtn.href = 'teacher-dashboard.html';
+            teacherBtn.setAttribute('aria-label', '教師後台');
+            const teacherBtnLabel = teacherBtn.querySelector('span');
+            if (teacherBtnLabel) teacherBtnLabel.textContent = '教師後台';
+          } else {
+            teacherBtn.style.display = 'none';
+          }
+        }
+
+        if (footerTeacherLink) {
+          if (isTeacherLtiUser) {
+            footerTeacherLink.href = 'teacher-dashboard.html';
+            footerTeacherLink.textContent = '教師後台';
+            footerTeacherLink.parentElement.style.display = '';
+          } else {
+            footerTeacherLink.parentElement.style.display = 'none';
+          }
+        }
 
         userStatus.classList.add('logged-in');
         const name = ltiSession.name || ltiSession.platformUserId || '學生';
