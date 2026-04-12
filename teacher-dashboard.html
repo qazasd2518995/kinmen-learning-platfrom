@@ -628,7 +628,14 @@
     // ========================================
     // 數據載入
     // ========================================
+    function isViewVisible(viewId) {
+      return !document.getElementById(viewId).classList.contains('hidden');
+    }
+
     async function loadAllData() {
+      const shouldRefreshClassDetail = currentClassId && isViewVisible('class-detail-view');
+      const shouldRefreshStudentDetail = currentClassId && currentStudentUsername && isViewVisible('student-detail-view');
+
       try {
         // 載入班級列表
         const classesResult = await TeacherAPI.getClasses();
@@ -638,13 +645,22 @@
           renderClassesList();
           updateAnalyticsFilter();
         }
+
+        if (shouldRefreshClassDetail || shouldRefreshStudentDetail) {
+          await loadClassStudents(currentClassId, { keepCurrentView: true });
+        }
+
+        if (shouldRefreshStudentDetail) {
+          await loadStudentDetail(currentStudentUsername, { keepCurrentView: true });
+        }
       } catch (error) {
         console.error('載入數據失敗:', error);
         showToast('載入數據失敗，請重新整理', 'error');
       }
     }
 
-    async function loadClassStudents(classId) {
+    async function loadClassStudents(classId, options = {}) {
+      const { keepCurrentView = false } = options;
       try {
         showLoader();
         const result = await TeacherAPI.getClassStudents(classId);
@@ -653,7 +669,9 @@
           currentClassId = classId;
           document.getElementById('class-detail-title').textContent = result.className;
           renderStudentsTable();
-          showClassDetail();
+          if (!keepCurrentView) {
+            showClassDetail();
+          }
         }
       } catch (error) {
         console.error('載入學生數據失敗:', error);
@@ -663,14 +681,17 @@
       }
     }
 
-    async function loadStudentDetail(username) {
+    async function loadStudentDetail(username, options = {}) {
+      const { keepCurrentView = false } = options;
       try {
         showLoader();
         const result = await TeacherAPI.getStudentDetail(username);
         if (result.success) {
           currentStudentUsername = username;
           renderStudentDetail(result);
-          showStudentDetail();
+          if (!keepCurrentView) {
+            showStudentDetail();
+          }
         }
       } catch (error) {
         console.error('載入學生詳情失敗:', error);
@@ -945,10 +966,11 @@
       document.getElementById('student-detail-name').textContent = student.displayName || student.username;
 
       // 詞彙進度
-      const vocabPercent = Math.round((vocabulary.mastered / vocabulary.total) * 100);
+      const vocabProgress = vocabulary.viewed || vocabulary.mastered || 0;
+      const vocabPercent = Math.round((vocabProgress / vocabulary.total) * 100);
       updateRing('student-vocab-ring', vocabPercent);
       document.getElementById('student-vocab-percent').textContent = vocabPercent + '%';
-      document.getElementById('student-vocab-detail').textContent = `${vocabulary.mastered}/${vocabulary.total}`;
+      document.getElementById('student-vocab-detail').textContent = `${vocabProgress}/${vocabulary.total}`;
 
       // 對話進度
       const dialoguePercent = Math.round((dialogue.completed / dialogue.total) * 100);
@@ -965,7 +987,7 @@
         <div class="vocab-category">
           <div class="category-header">
             <span class="category-name">${getCategoryName(category)}</span>
-            <span class="category-count">${data.mastered}/${data.total} 已掌握</span>
+            <span class="category-count">${data.viewed || data.mastered || 0}/${data.total} 已學習</span>
           </div>
           <div class="progress-bar">
             <div class="progress-fill" style="width: ${(data.viewed / data.total) * 100}%"></div>

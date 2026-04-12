@@ -409,6 +409,7 @@ export function getStatistics() {
   const stats = progress.statistics || {};
   return {
     totalStudyTime: 0,
+    vocabularyMastered: [],
     gamesPlayed: {
       matching: 0,
       sorting: 0,
@@ -441,7 +442,8 @@ export function getStatistics() {
       bingo: 0,
       duel: 0,
       ...(stats.bestScores || {})
-    }
+    },
+    vocabularyMastered: Array.isArray(stats.vocabularyMastered) ? stats.vocabularyMastered : []
   };
 }
 
