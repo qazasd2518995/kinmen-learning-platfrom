@@ -161,7 +161,20 @@ export const handler = async (event) => {
         totalStudyTime: 0,
         dailyStreak: 0,
         lastStudyDate: null,
-        gamesPlayed: {}
+        gamesPlayed: {
+          matching: 0,
+          sorting: 0,
+          maze: 0,
+          bingo: 0,
+          duel: 0
+        },
+        bestScores: {
+          matching: 0,
+          sorting: 0,
+          maze: 0,
+          bingo: 0,
+          duel: 0
+        }
       },
       achievements: {
         unlocked: [],

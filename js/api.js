@@ -87,6 +87,28 @@ function getLtiProxyUrl() {
  * 同步進度到 LTI Platform（BeyondBridge）
  * 透過代理端點，自動處理成績格式轉換
  */
+function getCurrentUnitKey() {
+  const pageName = window.location.pathname.split('/').pop() || '';
+  const match = pageName.match(/^unit-([^.]+)\.html$/);
+  if (match) {
+    return match[1];
+  }
+  if (pageName === 'index.html' || pageName === '') {
+    return 'home';
+  }
+  return 'general';
+}
+
+function countCompletedPractice(practice = {}) {
+  const explicitCompleted = Array.isArray(practice.completed) ? practice.completed.length : 0;
+  const objectCompleted = Object.values(practice || {}).reduce((total, entry) => {
+    if (entry === true) return total + 1;
+    if (entry && typeof entry === 'object' && entry.completed === true) return total + 1;
+    return total;
+  }, 0);
+  return Math.max(explicitCompleted, objectCompleted);
+}
+
 async function syncProgressToLtiPlatform(progressData) {
   const session = getLtiSession();
   if (!session) {
@@ -121,7 +143,8 @@ async function syncProgressToLtiPlatform(progressData) {
           vocabulary: progressData.vocabulary,
           dialogue: progressData.dialogue,
           practice: progressData.practice,
-          statistics: progressData.statistics
+          statistics: progressData.statistics,
+          achievements: progressData.achievements
         },
         timestamp: new Date().toISOString()
       })
@@ -141,31 +164,27 @@ async function syncProgressToLtiPlatform(progressData) {
  * 計算總進度百分比
  */
 function calculateTotalProgress(progressData) {
-  let total = 0;
-  let count = 0;
+  const vocabulary = progressData.vocabulary || {};
+  const dialogue = progressData.dialogue || {};
+  const practice = progressData.practice || {};
 
-  // 詞彙進度
-  if (progressData.vocabulary) {
-    const vocabProgress = progressData.vocabulary.learned?.length || 0;
-    total += Math.min(100, (vocabProgress / 27) * 100); // 27 個詞彙
-    count++;
-  }
+  const vocabProgress = Math.max(
+    vocabulary.learned?.length || 0,
+    vocabulary.viewedCards?.length || 0,
+    vocabulary.flashcards?.viewed || 0
+  );
+  const dialogueProgress = Math.max(
+    dialogue.completed?.length || 0,
+    dialogue.completedScenarios?.length || 0,
+    dialogue.scenarios?.completed || 0
+  );
+  const practiceProgress = countCompletedPractice(practice);
 
-  // 對話進度
-  if (progressData.dialogue) {
-    const dialogueProgress = progressData.dialogue.completed?.length || 0;
-    total += Math.min(100, (dialogueProgress / 7) * 100); // 7 個對話
-    count++;
-  }
+  const vocabPercent = Math.min(100, (vocabProgress / 27) * 100);
+  const dialoguePercent = Math.min(100, (dialogueProgress / 7) * 100);
+  const practicePercent = Math.min(100, (practiceProgress / 5) * 100);
 
-  // 練習進度
-  if (progressData.practice) {
-    const practiceProgress = progressData.practice.completed?.length || 0;
-    total += Math.min(100, (practiceProgress / 5) * 100); // 5 個練習
-    count++;
-  }
-
-  return count > 0 ? Math.round(total / count) : 0;
+  return Math.round((vocabPercent + dialoguePercent + practicePercent) / 3);
 }
 
 /**
@@ -203,14 +222,20 @@ export function saveLocalProgress(progress) {
  * 支援 LTI 模式：自動路由到 BeyondBridge 代理端點
  */
 export async function syncProgressToServer(progressData) {
+  const localProgress = getLocalProgress();
+  const mergedProgress = {
+    ...progressData,
+    vocabulary: progressData.vocabulary !== undefined ? progressData.vocabulary : localProgress.vocabulary,
+    dialogue: progressData.dialogue !== undefined ? progressData.dialogue : localProgress.dialogue,
+    practice: progressData.practice !== undefined ? progressData.practice : localProgress.practice,
+    statistics: progressData.statistics !== undefined ? progressData.statistics : localProgress.statistics,
+    achievements: progressData.achievements !== undefined ? progressData.achievements : localProgress.achievements,
+    currentUnit: progressData.currentUnit || getCurrentUnitKey()
+  };
+
   // LTI 模式：使用 Platform 代理端點
   if (isLtiMode()) {
-    const localProgress = getLocalProgress();
-    await syncProgressToLtiPlatform({
-      ...progressData,
-      statistics: localProgress.statistics || null,
-      achievements: localProgress.achievements || null
-    });
+    await syncProgressToLtiPlatform(mergedProgress);
     return;
   }
 
@@ -222,18 +247,13 @@ export async function syncProgressToServer(progressData) {
   }
 
   try {
-    // 取得本地進度中的統計和成就數據一併同步
-    const localProgress = getLocalProgress();
-
     const response = await fetch(`${API_BASE}/api/progress`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         username: user.username,
         classId: user.classId || null, // 班級關聯（如果有）
-        statistics: localProgress.statistics || null,
-        achievements: localProgress.achievements || null,
-        ...progressData
+        ...mergedProgress
       })
     });
 
@@ -363,7 +383,9 @@ export async function initProgress() {
       const mergedProgress = {
         vocabulary: serverProgress.vocabulary || localProgress.vocabulary || {},
         dialogue: serverProgress.dialogue || localProgress.dialogue || {},
-        practice: serverProgress.practice || localProgress.practice || {}
+        practice: serverProgress.practice || localProgress.practice || {},
+        statistics: serverProgress.statistics || localProgress.statistics || null,
+        achievements: serverProgress.achievements || localProgress.achievements || null
       };
       saveLocalProgress(mergedProgress);
       return mergedProgress;
@@ -384,9 +406,9 @@ export async function initProgress() {
  */
 export function getStatistics() {
   const progress = getLocalProgress();
-  return progress.statistics || {
+  const stats = progress.statistics || {};
+  return {
     totalStudyTime: 0,
-    vocabularyMastered: [],
     gamesPlayed: {
       matching: 0,
       sorting: 0,
@@ -397,10 +419,29 @@ export function getStatistics() {
     bestScores: {
       matching: 0,
       sorting: 0,
+      maze: 0,
+      bingo: 0,
       duel: 0
     },
     dailyStreak: 0,
-    lastStudyDate: null
+    lastStudyDate: null,
+    ...stats,
+    gamesPlayed: {
+      matching: 0,
+      sorting: 0,
+      maze: 0,
+      bingo: 0,
+      duel: 0,
+      ...(stats.gamesPlayed || {})
+    },
+    bestScores: {
+      matching: 0,
+      sorting: 0,
+      maze: 0,
+      bingo: 0,
+      duel: 0,
+      ...(stats.bestScores || {})
+    }
   };
 }
 
@@ -411,6 +452,28 @@ export function saveStatistics(stats) {
   const progress = getLocalProgress();
   progress.statistics = stats;
   saveLocalProgress(progress);
+}
+
+let backgroundSyncTimer = null;
+
+function scheduleBackgroundProgressSync(delay = 400) {
+  if (backgroundSyncTimer) {
+    clearTimeout(backgroundSyncTimer);
+  }
+
+  backgroundSyncTimer = setTimeout(() => {
+    backgroundSyncTimer = null;
+    const progress = getLocalProgress();
+    syncProgressToServer({
+      vocabulary: progress.vocabulary,
+      dialogue: progress.dialogue,
+      practice: progress.practice,
+      statistics: progress.statistics,
+      achievements: progress.achievements
+    }).catch((error) => {
+      console.warn('背景同步進度失敗:', error);
+    });
+  }, delay);
 }
 
 /**
@@ -436,6 +499,7 @@ export function recordGamePlayed(gameType, score = 0) {
 
   // 檢查成就
   checkAchievements();
+  scheduleBackgroundProgressSync();
 
   return stats;
 }
@@ -455,6 +519,7 @@ export function recordVocabularyLearned(vocabId) {
 
   // 檢查成就
   checkAchievements();
+  scheduleBackgroundProgressSync();
 
   return stats;
 }

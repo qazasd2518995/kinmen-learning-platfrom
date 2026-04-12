@@ -222,7 +222,9 @@ export const TeacherAPI = {
 
     if (teacher?.ltiSession) {
       try {
-        return await this.request(`/api/lti/student/${username}/detail`);
+        const courseId = teacher.courseId || getLtiSession()?.courseId;
+        const query = courseId ? `?courseId=${encodeURIComponent(courseId)}` : '';
+        return await this.request(`/api/lti/student/${username}/detail${query}`);
       } catch {
         return { success: false, error: '無法取得學生資料' };
       }

@@ -64,6 +64,8 @@ export const handler = async (event) => {
           vocabulary: result.Item.vocabulary,
           dialogue: result.Item.dialogue,
           practice: result.Item.practice,
+          statistics: result.Item.statistics,
+          achievements: result.Item.achievements,
           lastAccess: result.Item.updatedAt
         }
       })

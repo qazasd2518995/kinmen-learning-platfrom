@@ -30,7 +30,7 @@ export const handler = async (event) => {
 
   try {
     const body = JSON.parse(event.body || '{}');
-    const { username, vocabulary, dialogue, practice } = body;
+    const { username, vocabulary, dialogue, practice, statistics, achievements } = body;
 
     if (!username) {
       return {
@@ -77,6 +77,18 @@ export const handler = async (event) => {
       expressionAttributeValues[':practice'] = practice;
     }
 
+    if (statistics !== undefined) {
+      updateExpressions.push('#statistics = :statistics');
+      expressionAttributeNames['#statistics'] = 'statistics';
+      expressionAttributeValues[':statistics'] = statistics;
+    }
+
+    if (achievements !== undefined) {
+      updateExpressions.push('#achievements = :achievements');
+      expressionAttributeNames['#achievements'] = 'achievements';
+      expressionAttributeValues[':achievements'] = achievements;
+    }
+
     // 更新時間戳
     updateExpressions.push('#updatedAt = :updatedAt');
     expressionAttributeNames['#updatedAt'] = 'updatedAt';
@@ -110,6 +122,8 @@ export const handler = async (event) => {
           vocabulary: result.Attributes.vocabulary,
           dialogue: result.Attributes.dialogue,
           practice: result.Attributes.practice,
+          statistics: result.Attributes.statistics,
+          achievements: result.Attributes.achievements,
           lastAccess: result.Attributes.updatedAt
         }
       })

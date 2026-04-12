@@ -9,12 +9,21 @@
  * - GET /api/lti/student/{userId}/detail      - 學生詳細資料
  */
 
+import crypto from 'crypto';
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import { DynamoDBDocumentClient, GetCommand, ScanCommand, BatchGetCommand } from '@aws-sdk/lib-dynamodb';
+import { PLATFORM_CONFIG, TOOL_CONFIG } from '../shared/lti-utils.mjs';
+import { getToolKeys } from '../lti-jwks/index.mjs';
 
 const client = new DynamoDBClient({ region: 'ap-southeast-2' });
 const docClient = DynamoDBDocumentClient.from(client);
 const TABLE_NAME = 'kinmen';
+const TOOL_ID = process.env.LTI_TOOL_ID || 'kinmen-language-tool';
+const PLATFORM_BASE_URL = process.env.LTI_PLATFORM_APP_URL
+  || new URL(PLATFORM_CONFIG.tokenEndpoint).origin;
+const PLATFORM_READ_SCOPE = process.env.LTI_PLATFORM_READ_SCOPE
+  || 'https://purl.imsglobal.org/spec/lti-ags/scope/result.readonly';
+let cachedPlatformToken = null;
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -28,6 +37,100 @@ function response(statusCode, body) {
     headers: corsHeaders,
     body: JSON.stringify(body)
   };
+}
+
+function base64UrlEncode(input) {
+  return Buffer.from(JSON.stringify(input)).toString('base64url');
+}
+
+function createClientAssertion() {
+  const keys = getToolKeys();
+  const now = Math.floor(Date.now() / 1000);
+  const header = {
+    alg: 'RS256',
+    typ: 'JWT',
+    kid: keys.keyId
+  };
+  const payload = {
+    iss: TOOL_CONFIG.clientId,
+    sub: TOOL_CONFIG.clientId,
+    aud: PLATFORM_CONFIG.tokenEndpoint,
+    iat: now,
+    exp: now + 300,
+    jti: crypto.randomBytes(16).toString('hex')
+  };
+
+  const encodedHeader = base64UrlEncode(header);
+  const encodedPayload = base64UrlEncode(payload);
+  const signInput = `${encodedHeader}.${encodedPayload}`;
+  const signer = crypto.createSign('RSA-SHA256');
+  signer.update(signInput);
+  const signature = signer.sign(keys.privateKey, 'base64url');
+  return `${signInput}.${signature}`;
+}
+
+async function getPlatformAccessToken() {
+  if (cachedPlatformToken && cachedPlatformToken.expiresAt > Date.now() + 60_000) {
+    return cachedPlatformToken.value;
+  }
+
+  const clientAssertion = createClientAssertion();
+  const buildRequestBody = (scopeValue = null) => {
+    const body = new URLSearchParams({
+      grant_type: 'client_credentials',
+      client_id: TOOL_CONFIG.clientId,
+      client_assertion_type: 'urn:ietf:params:oauth:client-assertion-type:jwt-bearer',
+      client_assertion: clientAssertion
+    });
+
+    if (scopeValue) {
+      body.set('scope', scopeValue);
+    }
+
+    return body.toString();
+  };
+
+  const requestToken = async (scopeValue = null) => {
+    const tokenResponse = await fetch(PLATFORM_CONFIG.tokenEndpoint, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: buildRequestBody(scopeValue)
+    });
+
+    if (!tokenResponse.ok) {
+      throw new Error(`platform token failed: ${await tokenResponse.text()}`);
+    }
+
+    return tokenResponse.json();
+  };
+
+  let tokenData;
+  try {
+    tokenData = await requestToken(PLATFORM_READ_SCOPE);
+  } catch (error) {
+    tokenData = await requestToken();
+  }
+  cachedPlatformToken = {
+    value: tokenData.access_token,
+    expiresAt: Date.now() + ((tokenData.expires_in || 3600) * 1000)
+  };
+
+  return cachedPlatformToken.value;
+}
+
+async function fetchPlatformTeacherData(pathname) {
+  const token = await getPlatformAccessToken();
+  const responseData = await fetch(`${PLATFORM_BASE_URL}${pathname}`, {
+    headers: {
+      Authorization: `Bearer ${token}`
+    }
+  });
+
+  if (!responseData.ok) {
+    throw new Error(`platform teacher api failed: ${await responseData.text()}`);
+  }
+
+  return responseData.json();
 }
 
 // 取得課程內的所有 LTI 用戶（學生）
@@ -85,6 +188,13 @@ function calcVocabPercent(progress) {
 
 // GET /api/lti/course/{courseId}/stats
 async function getCourseStats(courseId) {
+  try {
+    const platformData = await fetchPlatformTeacherData(`/api/lti/13/tools/${TOOL_ID}/courses/${courseId}/stats`);
+    return response(200, platformData);
+  } catch (error) {
+    console.warn('[LTI Course Data] Platform stats fallback:', error.message);
+  }
+
   const users = await getCourseUsers(courseId);
   const userIds = users.map(u => u.platformUserId);
   const progressMap = await getBatchProgress(userIds);
@@ -140,6 +250,13 @@ async function getCourseStats(courseId) {
 
 // GET /api/lti/course/{courseId}/students
 async function getCourseStudents(courseId) {
+  try {
+    const platformData = await fetchPlatformTeacherData(`/api/lti/13/tools/${TOOL_ID}/courses/${courseId}/students`);
+    return response(200, platformData);
+  } catch (error) {
+    console.warn('[LTI Course Data] Platform students fallback:', error.message);
+  }
+
   const users = await getCourseUsers(courseId);
   const userIds = users.map(u => u.platformUserId);
   const progressMap = await getBatchProgress(userIds);
@@ -186,6 +303,13 @@ async function getCourseStudents(courseId) {
 
 // GET /api/lti/course/{courseId}/analytics
 async function getCourseAnalytics(courseId) {
+  try {
+    const platformData = await fetchPlatformTeacherData(`/api/lti/13/tools/${TOOL_ID}/courses/${courseId}/analytics`);
+    return response(200, platformData);
+  } catch (error) {
+    console.warn('[LTI Course Data] Platform analytics fallback:', error.message);
+  }
+
   const users = await getCourseUsers(courseId);
   const userIds = users.map(u => u.platformUserId);
   const progressMap = await getBatchProgress(userIds);
@@ -230,7 +354,16 @@ async function getCourseAnalytics(courseId) {
 }
 
 // GET /api/lti/student/{userId}/detail
-async function getStudentDetail(userId) {
+async function getStudentDetail(userId, courseId = null) {
+  if (courseId) {
+    try {
+      const platformData = await fetchPlatformTeacherData(`/api/lti/13/tools/${TOOL_ID}/courses/${courseId}/students/${userId}`);
+      return response(200, platformData);
+    } catch (error) {
+      console.warn('[LTI Course Data] Platform student detail fallback:', error.message);
+    }
+  }
+
   const progress = await getUserProgress(userId);
 
   // 取得用戶基本資料
@@ -290,10 +423,11 @@ export const handler = async (event) => {
     const path = event.path || '';
     const courseId = event.pathParameters?.courseId;
     const userId = event.pathParameters?.userId;
+    const detailCourseId = event.queryStringParameters?.courseId || courseId || null;
 
     // /api/lti/student/{userId}/detail
     if (userId && path.includes('/detail')) {
-      return await getStudentDetail(userId);
+      return await getStudentDetail(userId, detailCourseId);
     }
 
     if (!courseId) {
